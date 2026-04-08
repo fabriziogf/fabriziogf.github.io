@@ -119,9 +119,6 @@ author:
   location         : "Chicago, IL"
   email            : "fabriziogf@gmail.com"
   links:
-    - label: "Email"
-      icon: "fas fa-fw fa-envelope-square"
-      url: "mailto:fabriziogf@gmail.com"
     - label: "Linkedin"
       icon: "fab fa-fw fa-linkedin"
       url: "https://www.linkedin.com/in/fgiovanninifilho/"
