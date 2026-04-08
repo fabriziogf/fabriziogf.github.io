@@ -8,6 +8,7 @@
              alt="{% if s.image_alt %}{{ s.image_alt }}{% endif %}">
       {% endif %}
       {% if s.title %}<h3>{{ s.title }}</h3>{% endif %}
+      {% if s.html %}{{ s.html }}{% endif %}
       {% if s.text %}{{ s.text | markdownify }}{% endif %}
       {% if s.nav %}{% include nav_list nav=s.nav %}{% endif %}
     {% endfor %}
