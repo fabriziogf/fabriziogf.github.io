@@ -54,7 +54,3 @@ A former rower in college, I am not an elite amateur triathlete. I specialize in
 - Co-chair of the Booth Triathlon and Running Club
 - 2022 Ironman World Championships finisher
 - 4x Ironman 70.3 World Championships qualifier
-
-If you are on Strava, feel free to follow me!
-
-<iframe height='454' width='300' frameborder='0' allowtransparency='true' scrolling='no' src='https://www.strava.com/athletes/25618422/latest-rides/765dc067c3d8b73b0d6001d6a7cf1dc1cb388a57'></iframe>
