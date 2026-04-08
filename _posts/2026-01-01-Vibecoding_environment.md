@@ -2,11 +2,15 @@
 title: "My Vibe Coding Setup for AI Prototyping"
 ---
 
+## Why I wanted a setup like this
+
 Over the last few weeks, I’ve been trying to put together a coding setup that makes it easy to build AI projects quickly in my spare time without turning my laptop into a science experiment.
 
 My goal was not to create the most maximalist setup possible. I did not want fifteen half-configured tools, five overlapping agent frameworks, and a giant pile of MCP servers I would never use. I wanted something lean, practical, and technically serious enough to support the kinds of projects I actually want to build: agent workflows, eval tools, rapid prototypes, research copilots, and domain-specific assistants around things I genuinely care about, like triathlon, AI/ML learning, and sports.
 
 The result is what I think of as my “vibe coding” setup: a small stack that feels fast, modern, and flexible, but still grounded enough to build real things.
+
+## The core environment
 
 At the base of the setup, I use **Node.js** and **pnpm** for the JavaScript side of the world, and **Python 3.12** managed through **uv** for everything agentic, experimental, and model-related. I like this combination because it keeps both ecosystems available without making environment management painful. Node gives me access to the growing universe of MCP servers and browser tooling, while Python remains the easiest place to build agent workflows, eval harnesses, and experimentation pipelines.
 
@@ -15,6 +19,8 @@ For containerized tools and future extensibility, I also installed **Docker Desk
 The center of the setup is **Codex**, which I’m using as the main coding interface. Since Codex supports MCP, the real question became: which external tools are actually worth wiring in?
 
 I decided to keep that list intentionally short.
+
+## The MCP tools I chose
 
 The first MCP I added was the **OpenAI Developer Docs MCP**. This is the one that keeps me from constantly context-switching into browser tabs every time I need to double-check the latest syntax, SDK patterns, or agent guidance. If I’m building with the OpenAI stack, I want the docs available directly inside the coding workflow.
 
@@ -26,7 +32,11 @@ Next, I added the **Filesystem MCP**, but scoped to a specific projects director
 
 Finally, I added the **GitHub MCP**, which makes the whole setup feel much more real. Once GitHub is connected, the environment can reason about repositories, issues, PRs, and code in a way that is much closer to an actual working engineering workflow. That is useful both for building my own projects and for developing the kinds of habits that matter in real AI product and prototyping environments.
 
+## My main agent framework
+
 On the Python side, I chose to standardize on the **OpenAI Agents SDK** as my main framework. That was a deliberate decision to avoid framework sprawl. There are a lot of agent libraries right now, and it is easy to fall into the trap of collecting them instead of building with them. I wanted one primary framework that supports tools, handoffs, and structured agent workflows without adding too much abstraction too early.
+
+## The stack at a glance
 
 So the overall setup is pretty simple:
 
@@ -41,6 +51,8 @@ So the overall setup is pretty simple:
 * **GitHub MCP** for repository and development workflow integration
 * **OpenAI Agents SDK** as the main Python agent framework
 
+## What this setup lets me build
+
 What I like most about this stack is that it matches the kind of builder I want to become. It is not optimized for tutorials. It is optimized for making small, technically credible things quickly.
 
 With this setup, I can build:
@@ -50,6 +62,8 @@ With this setup, I can build:
 * a triathlon training copilot with structured planning logic
 * an NBA or NFL research assistant that combines data retrieval and analysis
 * a paper-to-experiment translator for ML and AI research workflows
+
+## Why this matters to me
 
 That is really the point of the setup. It is less about the tools themselves and more about reducing friction between idea and implementation. I want to be able to go from “this would be interesting to build” to a working prototype in a night or a weekend.
 
