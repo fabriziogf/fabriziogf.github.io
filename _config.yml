@@ -125,9 +125,6 @@ author:
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
       url: "https://github.com/fabriziogf"
-    - label: "Website"
-      icon: "fas fa-fw fa-link"
-      url: "https://fabriziogf.github.io/"
 
 # Site Footer
 footer:
