@@ -1,6 +1,17 @@
 {% if page.author_profile or layout.author_profile or page.sidebar %}
   <div class="sidebar sticky">
-  {% if page.author_profile or layout.author_profile %}{% include author-profile.html %}{% endif %}
+  {% if page.author_profile or layout.author_profile %}
+    {% include author-profile.html %}
+    <h3><span style="font-size: 0.9em;">Latest Strava Activities</span></h3>
+    <iframe
+      height="454"
+      width="260"
+      frameborder="0"
+      allowtransparency="true"
+      scrolling="no"
+      src="https://www.strava.com/athletes/25618422/latest-rides/765dc067c3d8b73b0d6001d6a7cf1dc1cb388a57">
+    </iframe>
+  {% endif %}
   {% if page.sidebar %}
     {% for s in page.sidebar %}
       {% if s.image %}
