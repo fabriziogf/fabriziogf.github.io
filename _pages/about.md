@@ -1,56 +1,78 @@
 ---
 permalink: /about/
-title: "About the author"
-excerpt: "Technical product leader and amateur triathlete"
+title: "About"
+excerpt: "AI/ML product leader, builder, and endurance sports enthusiast"
 layout: single
 author_profile: true
 toc: true
 ---
 
-Technical product leader with 8+ years of product management, consulting, data analytics, and economics experience.
+I’m an AI/ML product leader and builder with 8+ years of experience across product management, analytics, economics, and technical prototyping.
+
+Over the last several years, I’ve worked at the intersection of data, machine learning, and operations, helping build products that solve messy real-world problems and create measurable business impact. My work has included 0-to-1 product development, high-visibility organizational goals, products that reached 250M+ users, and initiatives that generated $255M+ in revenue.
+
+I created this site as a place to share what I’m learning and building, especially across AI, ML, product thinking, technical experimentation, and endurance sports.
 
 ---
 
 ## Highlights
 
-- **Product management:**	8+ years of product management and consulting experience. Thrive as a technical product leader at Amazon.
-- **Data analytics:**	5+ years of experience as analytics manager. Not afraid to deep dive into problems and independently prototype analytics solutions.
-- **Data Science and ML:**	3+ years of experience collaborating with DS and ML as a product manager, launching staffing optimization and science products at Amazon. Curious about a variety of DS and ML topics (see blog posts).
-- **Economics:**	Princeton BA in Economics (quantitative track) with 6 years of experience in economic consulting and economics product management.
-- **Computer science:**	MS in Computer Sciene from the University of Chicago, extensive CS coursework at Princeton, and 3+ years of technical experience at Amazon.
-- **Leadership:**	Lead by example and always seeking new challenges, be it professionally or otherwise. As a product manager, I use my hard working mentality to influence without authority.
+- **AI/ML product leadership:** 8+ years leading products across analytics, data science, machine learning, and operations-heavy environments.
+- **0-to-1 builder:** Built and launched products from concept to rollout, turning ambiguous problems into working systems and measurable outcomes.
+- **Technical fluency:** Comfortable across GenAI prototyping, LLM workflows, analytics, experimentation, and data and ML systems.
+- **Business impact:** Contributed to products reaching 250M+ users and initiatives generating $255M+ in revenue.
+- **Cross-functional leadership:** Partner closely with engineering, science, analytics, and business teams to define strategy, align stakeholders, and drive execution.
+- **Quantitative foundation:** Background spanning economics, analytics, and computer science, with formal training from Princeton and the University of Chicago.
+
+---
+
+## What I Work On
+
+I’m especially interested in AI/ML products, GenAI tooling, technical prototyping, decision systems, and products that sit between strong modeling and practical execution.
+
+A lot of what excites me lives in the space between strategy and building: shaping product direction, working closely with technical teams, and creating artifacts that make ideas more concrete. That includes writing, prototyping, experimenting with tools, and learning by shipping.
+
+---
+
+## Currently Focused On
+
+Right now, I’m especially interested in:
+- GenAI and LLM-enabled product experiences
+- AI prototyping workflows and agent-based tooling
+- Data and ML systems that support better operational decision-making
+- Building practical technical depth as a product leader
 
 ---
 
 ## Education
 
-**Bachelor of Arts in Economics** from Princeton University.
-- Minor in Finance.
-- Recipient of the Gordon G. Sikes Medal.
-- CS Coursework: General Computer Science, Algorithms and Data Structures, Computing for Physical and Social Sciences, Introduction to Programming Systems, Advanced Programming Techniques.
+**Master of Business Administration**, University of Chicago Booth School of Business
+- Concentrations in Entrepreneurship and Finance
+- Recipient of the John and Louise Wellemeyer Scholarship Fund
 
-**Masters in Business Administration** from Chicago Booth.
-- Concentrations in Entrepreneurship and Finance.
-- Recipient of the John and Louise Wellemeyer Scholarship Fund.
+**Master of Science in Computer Science**, University of Chicago
+- Coursework included algorithms, databases, computer systems, cloud computing, and applied software engineering
 
-**Masters of Science in Computer Science** from University of Chicago.
-- Coursework: Mathematics for Computer Science, Python Programming, Databases, Algorithms, Computer Systems, Applied Financial Technology, Cloud Computing, Applied Software Engineering, Lab in Developing New Products and Services.
+**Bachelor of Arts in Economics**, Princeton University
+- Quantitative track with a minor in Finance
+- Recipient of the Gordon G. Sikes Medal
+- Additional coursework in computer science, including algorithms, data structures, and programming systems
 
 ---
 
 ## CV
 
-- [Fabrizio's CV](https://fabriziogf.github.io//download/Fabrizio Giovannini Filho - Resume 20240325.pdf)
+- [Fabrizio's CV](https://fabriziogf.github.io//download/Fabrizio Giovannini Filho - Resume ML 20260407 AI.pdf)
 
 ---
 
 ## Triathlon and Rowing
 
-A former rower in college, I am not an elite amateur triathlete. I specialize in longer distances, such as 70.3 and Ironmans.
+Outside of work, I spend a lot of time training and racing endurance sports. I rowed at Princeton and now focus primarily on long-course triathlon, especially 70.3 and Ironman racing.
 
-- D1 rower as a member of the Princeton lightweight rowing team
+- Former Division I rower on the Princeton lightweight rowing team
 - National champion in the Men's Lightweight 4-
-- 2x Head of the Charles champion in the Men's Lightweight 8+
+- Two-time Head of the Charles champion in the Men's Lightweight 8+
 - Co-chair of the Booth Triathlon and Running Club
 - 2022 Ironman World Championships finisher
-- 4x Ironman 70.3 World Championships qualifier
+- Four-time Ironman 70.3 World Championship qualifier
