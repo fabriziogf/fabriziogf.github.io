@@ -16,25 +16,25 @@ At the base of the setup, I use **Node.js** and **pnpm** for the JavaScript side
 
 For containerized tools and future extensibility, I also installed **Docker Desktop**, although I am trying not to depend on it unless I need to. I prefer to keep the core workflow simple enough that I can open my laptop and start building immediately.
 
-The center of the setup is **Codex**, which I’m using as the main coding interface. Since Codex supports MCP, the real question became: which external tools are actually worth wiring in?
+The center of the setup is **Claude Code**, which I’m using as the main coding interface. Since Claude Code supports MCP natively and runs as a terminal-first agent with full filesystem and shell access, the real question became: which external tools are actually worth wiring in?
 
 I decided to keep that list intentionally short.
 
 ## The MCP tools I chose
 
-The first MCP I added was the **OpenAI Developer Docs MCP**. This is the one that keeps me from constantly context-switching into browser tabs every time I need to double-check the latest syntax, SDK patterns, or agent guidance. If I’m building with the OpenAI stack, I want the docs available directly inside the coding workflow.
+The first MCP I kept was **Context7**, which I think of as my “current docs” layer. One of the biggest problems with AI-assisted coding is that models are often directionally helpful but fuzzy on rapidly changing library details. Context7 helps close that gap by giving the agent access to fresher documentation for frameworks and packages. It makes rapid prototyping feel less brittle.
 
-The second was **Context7**, which I think of as my “current docs” layer. One of the biggest problems with AI-assisted coding is that models are often directionally helpful but fuzzy on rapidly changing library details. Context7 helps close that gap by giving the agent access to fresher documentation for frameworks and packages. It makes rapid prototyping feel less brittle.
+The second was **Playwright MCP** (or Claude in Chrome), which is probably the most important non-docs tool in the whole setup. I’m interested in building AI products that do things, not just talk. Browser control opens the door to richer prototypes, web agents, product demos, and lightweight testing workflows.
 
-The third was **Playwright MCP**, which is probably the most important non-docs tool in the whole setup. I’m interested in building AI products that do things, not just talk. Playwright gives the environment the ability to interact with web apps, navigate pages, and support browser-based workflows. That opens the door to richer prototypes, web agents, product demos, and lightweight testing.
+The third was the **Filesystem MCP**, scoped to a specific projects directory rather than my whole machine. That was an important design choice. I wanted the coding environment to be able to read, write, search, and organize project files, but I did not want to create a setup where an agent effectively has open-ended access to everything on my computer. Constraining it to a dedicated `~/ai-projects` folder keeps the workflow cleaner and safer.
 
-Next, I added the **Filesystem MCP**, but scoped to a specific projects directory rather than my whole machine. That was an important design choice for me. I wanted the coding environment to be able to read, write, search, and organize project files, but I did not want to create a setup where an agent effectively has open-ended access to everything on my computer. Constraining it to a dedicated `~/ai-projects` folder keeps the workflow cleaner and safer.
+The fourth was the **GitHub MCP**, which makes the whole setup feel much more real. Once GitHub is connected, the environment can reason about repositories, issues, PRs, and code in a way that is much closer to an actual working engineering workflow. That is useful both for building my own projects and for developing the kinds of habits that matter in real AI product and prototyping environments.
 
-Finally, I added the **GitHub MCP**, which makes the whole setup feel much more real. Once GitHub is connected, the environment can reason about repositories, issues, PRs, and code in a way that is much closer to an actual working engineering workflow. That is useful both for building my own projects and for developing the kinds of habits that matter in real AI product and prototyping environments.
+The fifth, and new to this setup, is the **Hugging Face MCP**. This one was an easy call given the kinds of projects I want to build. It gives Claude Code access to paper search, model and dataset discovery, and Spaces — so when I’m building a paper-to-experiment pipeline or exploring a new model family, I don’t have to break out of the workflow and hunt through browser tabs. It’s the research and ML layer I was missing.
 
 ## My main agent framework
 
-On the Python side, I chose to standardize on the **OpenAI Agents SDK** as my main framework. That was a deliberate decision to avoid framework sprawl. There are a lot of agent libraries right now, and it is easy to fall into the trap of collecting them instead of building with them. I wanted one primary framework that supports tools, handoffs, and structured agent workflows without adding too much abstraction too early.
+On the Python side, I chose to standardize on the **Anthropic SDK** and Claude's native tool-use and agent capabilities as my main framework. That was a deliberate decision to avoid framework sprawl. There are a lot of agent libraries right now, and it is easy to fall into the trap of collecting them instead of building with them. The Anthropic SDK is expressive enough for tool use, multi-turn workflows, and structured agents without requiring a heavy abstraction layer on top.
 
 ## The stack at a glance
 
@@ -43,13 +43,13 @@ So the overall setup is pretty simple:
 * **Node.js + pnpm** for JS tooling and MCP compatibility
 * **uv + Python 3.12** for agents, evals, and experiments
 * **Docker Desktop** for optional containerized tools
-* **Codex** as the main environment
-* **OpenAI Docs MCP** for first-party documentation
+* **Claude Code** as the main environment
 * **Context7** for up-to-date external library docs
 * **Playwright MCP** for browser control
 * **Filesystem MCP** for project-scoped file access
 * **GitHub MCP** for repository and development workflow integration
-* **OpenAI Agents SDK** as the main Python agent framework
+* **Hugging Face MCP** for paper search, model discovery, and ML research
+* **Anthropic SDK** as the main Python agent framework
 
 ## What this setup lets me build
 
@@ -67,7 +67,7 @@ With this setup, I can build:
 
 That is really the point of the setup. It is less about the tools themselves and more about reducing friction between idea and implementation. I want to be able to go from “this would be interesting to build” to a working prototype in a night or a weekend.
 
-I also like that this setup reflects a broader shift in how I think about technical depth. For a long time, showing technical ability as a product manager often meant talking about metrics, systems, prioritization, and cross-functional execution. Those things still matter. But in AI, I increasingly think technical depth also means being able to prototype quickly, wire tools together, reason about agents and evals, and build working artifacts that clarify product thinking.
+I also like that this setup reflects a broader shift in how I think about technical depth. For a long time, showing technical ability as a product manager often meant talking about metrics, systems, prioritization, and cross-functional execution. Those things still matter. But in AI, I increasingly think technical depth also means being able to prototype quickly, wire tools together, reason about agents and evals, and build working artifacts that clarify product thinking. Claude Code, in particular, has changed how fast that loop can actually move.
 
 That is what this setup is for.
 
