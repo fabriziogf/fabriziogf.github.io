@@ -40,14 +40,16 @@ The shape here is deliberate: two weeks of building, a sustained peak in week 3,
 
 ## Swim
 
-The swim sessions this block were structured around Ironman-specific intervals: repeated sets of 2,000m and 3,000m at Z3, targeting race-pace aerobic effort. These aren't sprint sessions — they're about building the ability to hold a sustainable, efficient pace for 3.8 km of open water, and then still get on a bike.
+Twelve swim sessions across the block — consistent weekly frequency at mostly A1/A2 aerobic effort, which is exactly right when the bike and run are carrying the heavy load.
 
 Key sessions:
-- **5 × 2,000m Z3–Z4** (twice across the block) — the hardest mental swim of the month. Staying patient on those last two reps is a skill.
-- **3 × 3,000m Z3** — lower intensity but higher total volume per rep. These hurt differently.
-- Weekly A1/A2 technique sets to keep the feel in the water without accumulating fatigue.
+- **A1 and A1>A2 sets**: the backbone of the swim block — aerobic technique work at controlled intensity, repeated across the month to build background fitness without adding fatigue
+- **12×150m varying intensity**: mixing speed and aerobic effort in the same set, training the ability to shift gears within a swim
+- **Lipolítico and Melhor Média + A2**: fat-metabolism training and pace-quality sets, building efficiency at low-to-moderate effort
+- **Progressivo A1→A2→A3**: effort-building sets reinforcing the feel of accelerating through the zones
+- **Lap Swimming**: straightforward aerobic volume sessions keeping the weekly tick-over
 
-The swim is always the sport I feel least confident about, but logging consistent weekly water time builds the background fitness that shows up on race day.
+The swim is always the sport I feel least confident about. But 12 sessions in a month with no missed weeks, all within prescribed zones, builds the background fitness that shows up on race day — even if the individual sessions don't feel dramatic.
 
 ---
 
@@ -74,12 +76,14 @@ Historically, increasing run volume and intensity simultaneously has been the fo
 Every session was executed at prescribed effort. The easy runs were genuinely easy. The Z2 runs didn't drift into Z3. The intervals were hard, but they stopped when they were supposed to stop. That adherence is boring to execute and hard to maintain when you're feeling good and want to push — but it's the only thing that makes volume sustainable.
 
 Key run sessions:
+- **Ironman> 5×2000m Z3>4** (three times across the block) — the defining run session of the month. 10 km of hard intervals at race-specific effort, repeated across three separate weeks. These are the sessions that build the top-end run fitness that holds when you're 30 km into an Ironman marathon.
+- **Ironman> 3×3000m Z3 and 4×3000m Z3** — longer reps at slightly lower intensity. Nine to twelve kilometers of sustained Z3 work teaches the body to hold pace under accumulating fatigue.
 - **Ritmo em Zona 2** (17 km) — long aerobic runs building race-specific endurance
-- **Progressivo A1→A2→A3** — progressive effort runs to sharpen pace sense
-- **Corridinha Fácil** sets — genuine recovery runs that protected the hard days
+- **2 horas bem levinho** (2 hours easy, ~24 km): genuine long runs at low intensity, the aerobic foundation beneath the interval work
+- **Corridinha Fácil** sets — recovery runs that protected the hard days
 - **Post-brick runs** after long bike sessions — the most specific Ironman prep you can do
 
-Total run volume: approximately 200 km.
+Total run volume: approximately 200 km across 19 sessions.
 
 ---
 

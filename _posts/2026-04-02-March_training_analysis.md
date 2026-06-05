@@ -41,14 +41,15 @@ Three consecutive weeks above 970 TSS is a proper loading block. The consistency
 
 ## Swim
 
-March's swim evolved the most of any discipline:
+March's swim stayed in the aerobic lane while the bike and run carried the intensity block — which is correct periodization. Piling Z3/Z4 swim work on top of a hard bike/run phase risks cumulative fatigue without proportional return.
 
-- **Completed the four-week Z3/Z4 intensity block** with corresponding swim sets at increasing difficulty each week (semana 1 → semana 4)
-- **Max effort tests**: at the end of March, a 1×200m all-out effort and a 1×400m all-out effort appeared in the schedule — benchmark tests to establish current swim fitness before the next training cycle
-- **Lap swimming sessions** (mid-week): consistent aerobic maintenance
-- **Progressivo A1→A2→A3**: progressive swim sets building through the zones, teaching pace management
+- **A1 and A2 maintenance sets**: the bulk of swim sessions stayed in the aerobic zone — consistent water time without digging a fatigue hole
+- **Lap swimming sessions** (mid-week): volume work to keep feel and technique sharp
+- **Progressivo A1→A2→A3**: progressive effort sets building through the zones, reinforcing pace sense
+- **Sessão Equipamento**: equipment-based sets (paddles, pull buoy) for upper-body strength and stroke mechanics
+- **Max effort tests** at month end: 1×200m and 1×400m all-out efforts — the first benchmark tests of the year. These establish calibrated training zones and give a reference point for the rest of the season
 
-The tests at month end are meaningful. Knowing your 200m and 400m times gives you calibrated training zones and tells you where you stand relative to race-pace targets. These numbers become the reference point for the rest of the season.
+The tests at month end are meaningful. Knowing your 200m and 400m times gives you calibrated training zones and tells you where you stand relative to race-pace targets. The fact that they came after a hard March rather than a fresh block makes them conservatively honest.
 
 ---
 

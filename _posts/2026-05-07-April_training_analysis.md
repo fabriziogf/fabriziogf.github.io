@@ -40,14 +40,15 @@ Week 4 hit 1,112 TSS — the highest single week of the year to this point. That
 
 ## Swim
 
-April's swim work reflected the sharper overall training theme:
+April's swim work reflected the sharper overall training theme — 13 sessions, the highest monthly swim volume of the year so far:
 
-- **Fartlek sets in the pool**: velocity and interval work — 12×150m varying intensity (Apr 10, Apr 22), Força e Velocidade (Apr 15, Apr 22), Fartlek (200m/200m) + Zona 2
-- **6×1,200m Z4 sets** (Apr 12, Apr 26): the longest sustained swim intervals of the year — 1,200m repeats at threshold effort. These are directly Ironman-relevant; the ability to hold Z4 for 1,200m repeatedly is close to what race pace demands across 3,800m
+- **Speed and quality sets**: 12×150m varying intensity (Apr 10, Apr 22), Força e Velocidade (Apr 15, Apr 22) — short fast efforts training the top end of the stroke
 - **Velocidade + A1** (Apr 8): speed work paired with aerobic maintenance — sharpening without burning out
-- **A1 and A2 sessions**: consistent technical/aerobic base work maintaining feel in the water
+- **A1 and A2 sessions**: consistent technical/aerobic base throughout the month, maintaining feel across the heavier bike and run load
+- **Equipment sets** (Sessão Equipamento): paddles and pull buoy work for upper-body strength and stroke mechanics
+- **Progressivo A1→A2→A3** (Apr 24): the month closed with a progressive effort set, a good signal that swim fitness was building
 
-The 6×1,200m sessions are the standout. They're hard, and they're specific. By the end of April, the swim was no longer a limiter being managed — it was a discipline actively being developed.
+By the end of April, swim frequency was consistent and the quality was improving — a discipline actively being developed rather than just maintained.
 
 ---
 
@@ -70,7 +71,7 @@ The Z4/Z5 work is what separates April from the previous months. January through
 April's run was the most demanding of the year:
 
 - **Fartlek sessions** (Fartlek 300m/200m, Fartlek 200m/200m + Zona 2): alternating fast and easy intervals — one of the most effective ways to build running speed without the injury risk of pure track work
-- **6×1,200m Z4** (Apr 12, Apr 26): the same threshold set appeared in both swimming and running this month. Six reps of 1,200m at Z4 pace on the run is genuinely hard — these were the sharpest run sessions of the year
+- **6×1,200m Z4** (Apr 12, Apr 26): six reps of 1,200m at Z4 pace — the sharpest run sessions of the year. Threshold run repeats of this length build the specific lactate tolerance that holds Ironman run pace together in the back half of the marathon
 - **Força e Velocidade** run sessions: short, sharp neuromuscular work — training the legs to turn over quickly
 - **Brick runs**: Apr 25 brick run off the long bike — specific Ironman race simulation
 - **Easy recovery runs**: multiple "Ritmo Fácil," "Corridinha Fácil" sessions keeping frequency high without digging fatigue holes
