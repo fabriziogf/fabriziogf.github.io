@@ -1,5 +1,5 @@
 ---
-title: "Building a Live Training Dashboard with Jekyll and TrainingPeaks"
+title: "Building a Daily-Updated Training Dashboard with Jekyll and TrainingPeaks"
 ---
 
 One of the things I wanted on this site was a way to see my current training load at a glance without having to open TrainingPeaks or Strava. A simple page that answers: what did I actually do this week, how fit am I right now, and how am I balancing load against recovery?
@@ -136,6 +136,6 @@ The charts use Chart.js 4.4.0 loaded from CDN. The data is injected from the YAM
 
 The dashboard is not a replacement for TrainingPeaks. TrainingPeaks has a real PMC, calendar view, structured workout builder, and everything else a serious training log needs.
 
-What this gives me is a public-facing snapshot that lives alongside the training analysis posts and makes the data tangible rather than abstract. When I write that a month ended with CTL 140 and TSB +22, there is now a page that shows what that looks like in real time rather than just a number in a table.
+What this gives me is a public-facing snapshot that lives alongside the training analysis posts and makes the data tangible rather than abstract. When I write that a month ended with CTL 140 and TSB +22, there is now a page that shows what that looks like — updated daily — rather than just a number in a table.
 
 It is also a useful exercise in building a constrained data pipeline: fetch, transform, serialize, commit, deploy — entirely automated, no moving parts visible to the user.
