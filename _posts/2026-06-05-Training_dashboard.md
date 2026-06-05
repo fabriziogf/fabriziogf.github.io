@@ -85,15 +85,15 @@ Building the page template exposed two non-obvious limitations of Jekyll 3 that 
 
 In Jekyll 4, you can write:
 
-```liquid
-{% for sport in "swim,bike,run,strength" | split: "," %}
+```
+{% raw %}{% for sport in "swim,bike,run,strength" | split: "," %}{% endraw %}
 ```
 
 In Jekyll 3 (which GitHub Pages still uses), this silently produces no iterations. No error, no warning — it just skips the loop entirely. The fix is to write explicit HTML for each sport rather than trying to loop over a static list. Tedious, but it works.
 
 **2. Liquid blocks inside Markdown tables break the table.**
 
-Conditionals like `{% if %}` inside a Markdown table row emit newlines that the Markdown parser treats as paragraph breaks, collapsing the table entirely. The fix is to use an HTML `<table>` instead of Markdown syntax for any table that needs Liquid logic inside its rows. HTML is whitespace-tolerant; Markdown is not.
+Conditionals like `{% raw %}{% if %}{% endraw %}` inside a Markdown table row emit newlines that the Markdown parser treats as paragraph breaks, collapsing the table entirely. The fix is to use an HTML `<table>` instead of Markdown syntax for any table that needs Liquid logic inside its rows. HTML is whitespace-tolerant; Markdown is not.
 
 Both of these issues are the kind of thing that fails quietly — the page renders without error but shows nothing. That makes them harder to diagnose than a loud crash would be.
 
