@@ -36,22 +36,33 @@ classes: wide
 ## 7-Day Summary
 
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
-{% for sport in "swim,bike,run,strength" | split: "," %}
-  {% assign s = td.totals[sport] %}
-  {% if sport == "swim"     %} {% assign icon = "🏊" %} {% assign color = "#4fc3f7" %} {% endif %}
-  {% if sport == "bike"     %} {% assign icon = "🚴" %} {% assign color = "#81c784" %} {% endif %}
-  {% if sport == "run"      %} {% assign icon = "🏃" %} {% assign color = "#ffb74d" %} {% endif %}
-  {% if sport == "strength" %} {% assign icon = "🏋️" %} {% assign color = "#ce93d8" %} {% endif %}
-  <div class="td-sport-card" style="border-top: 3px solid {{ color }};">
-    <div class="td-sport-title">{{ icon }} {{ sport | capitalize }}</div>
-    <div class="td-sport-row"><span>Sessions</span><strong>{{ s.sessions }}</strong></div>
-    <div class="td-sport-row"><span>Hours</span><strong>{{ s.hours }}h</strong></div>
-    {% if sport != "strength" %}
-    <div class="td-sport-row"><span>Distance</span><strong>{{ s.distance_km }} km</strong></div>
-    {% endif %}
-    <div class="td-sport-row"><span>TSS</span><strong>{{ s.tss }}</strong></div>
+  <div class="td-sport-card" style="border-top: 3px solid #4fc3f7;">
+    <div class="td-sport-title">🏊 Swim</div>
+    <div class="td-sport-row"><span>Sessions</span><strong>{{ td.totals.swim.sessions }}</strong></div>
+    <div class="td-sport-row"><span>Hours</span><strong>{{ td.totals.swim.hours }}h</strong></div>
+    <div class="td-sport-row"><span>Distance</span><strong>{{ td.totals.swim.distance_km }} km</strong></div>
+    <div class="td-sport-row"><span>TSS</span><strong>{{ td.totals.swim.tss }}</strong></div>
   </div>
-{% endfor %}
+  <div class="td-sport-card" style="border-top: 3px solid #81c784;">
+    <div class="td-sport-title">🚴 Bike</div>
+    <div class="td-sport-row"><span>Sessions</span><strong>{{ td.totals.bike.sessions }}</strong></div>
+    <div class="td-sport-row"><span>Hours</span><strong>{{ td.totals.bike.hours }}h</strong></div>
+    <div class="td-sport-row"><span>Distance</span><strong>{{ td.totals.bike.distance_km }} km</strong></div>
+    <div class="td-sport-row"><span>TSS</span><strong>{{ td.totals.bike.tss }}</strong></div>
+  </div>
+  <div class="td-sport-card" style="border-top: 3px solid #ffb74d;">
+    <div class="td-sport-title">🏃 Run</div>
+    <div class="td-sport-row"><span>Sessions</span><strong>{{ td.totals.run.sessions }}</strong></div>
+    <div class="td-sport-row"><span>Hours</span><strong>{{ td.totals.run.hours }}h</strong></div>
+    <div class="td-sport-row"><span>Distance</span><strong>{{ td.totals.run.distance_km }} km</strong></div>
+    <div class="td-sport-row"><span>TSS</span><strong>{{ td.totals.run.tss }}</strong></div>
+  </div>
+  <div class="td-sport-card" style="border-top: 3px solid #ce93d8;">
+    <div class="td-sport-title">🏋️ Strength</div>
+    <div class="td-sport-row"><span>Sessions</span><strong>{{ td.totals.strength.sessions }}</strong></div>
+    <div class="td-sport-row"><span>Hours</span><strong>{{ td.totals.strength.hours }}h</strong></div>
+    <div class="td-sport-row"><span>TSS</span><strong>{{ td.totals.strength.tss }}</strong></div>
+  </div>
 </div>
 
 **Total TSS:** {{ td.totals.swim.tss | plus: td.totals.bike.tss | plus: td.totals.run.tss | plus: td.totals.strength.tss }}
@@ -82,16 +93,31 @@ classes: wide
 
 ## Sessions This Week
 
-| Date | Sport | Session | Hours | Distance | TSS |
-|------|-------|---------|------:|----------:|----:|
-{% for w in td.workouts %}
-{% if w.sport == "swim"     %} {% assign sport_icon = "🏊" %} {% endif %}
-{% if w.sport == "bike"     %} {% assign sport_icon = "🚴" %} {% endif %}
-{% if w.sport == "run"      %} {% assign sport_icon = "🏃" %} {% endif %}
-{% if w.sport == "strength" %} {% assign sport_icon = "🏋️" %} {% endif %}
-{% if w.sport == "other"    %} {% assign sport_icon = "⚡" %} {% endif %}
-| {{ w.date }} | {{ sport_icon }} {{ w.sport | capitalize }} | {{ w.title }} | {{ w.hours }}h | {% if w.distance_km > 0 %}{{ w.distance_km }} km{% else %}—{% endif %} | {{ w.tss }} |
-{% endfor %}
+<table style="width:100%; border-collapse: collapse; font-size: 0.9em;">
+  <thead>
+    <tr>
+      <th style="text-align:left; padding: 0.4rem 0.6rem; border-bottom: 2px solid rgba(128,128,128,0.3);">Date</th>
+      <th style="text-align:left; padding: 0.4rem 0.6rem; border-bottom: 2px solid rgba(128,128,128,0.3);">Sport</th>
+      <th style="text-align:left; padding: 0.4rem 0.6rem; border-bottom: 2px solid rgba(128,128,128,0.3);">Session</th>
+      <th style="text-align:right; padding: 0.4rem 0.6rem; border-bottom: 2px solid rgba(128,128,128,0.3);">Hours</th>
+      <th style="text-align:right; padding: 0.4rem 0.6rem; border-bottom: 2px solid rgba(128,128,128,0.3);">Distance</th>
+      <th style="text-align:right; padding: 0.4rem 0.6rem; border-bottom: 2px solid rgba(128,128,128,0.3);">TSS</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for w in td.workouts %}
+    {% if w.sport == "swim"     %}{% assign sport_icon = "🏊" %}{% assign sport_color = "#4fc3f7" %}{% endif %}{% if w.sport == "bike"     %}{% assign sport_icon = "🚴" %}{% assign sport_color = "#81c784" %}{% endif %}{% if w.sport == "run"      %}{% assign sport_icon = "🏃" %}{% assign sport_color = "#ffb74d" %}{% endif %}{% if w.sport == "strength" %}{% assign sport_icon = "🏋️" %}{% assign sport_color = "#ce93d8" %}{% endif %}{% if w.sport == "other"    %}{% assign sport_icon = "⚡" %}{% assign sport_color = "#90a4ae" %}{% endif %}
+    <tr style="border-bottom: 1px solid rgba(128,128,128,0.15);">
+      <td style="padding: 0.4rem 0.6rem;">{{ w.date }}</td>
+      <td style="padding: 0.4rem 0.6rem;"><span style="color: {{ sport_color }}; font-weight: 600;">{{ sport_icon }} {{ w.sport | capitalize }}</span></td>
+      <td style="padding: 0.4rem 0.6rem;">{{ w.title }}</td>
+      <td style="padding: 0.4rem 0.6rem; text-align:right;">{{ w.hours }}h</td>
+      <td style="padding: 0.4rem 0.6rem; text-align:right;">{% if w.distance_km > 0 %}{{ w.distance_km }} km{% else %}—{% endif %}</td>
+      <td style="padding: 0.4rem 0.6rem; text-align:right;">{{ w.tss }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
 
 ---
 
