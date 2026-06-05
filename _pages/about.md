@@ -7,7 +7,7 @@ author_profile: true
 toc: true
 ---
 
-I’m an AI/ML product leader and builder with 8+ years of experience across product management, analytics, economics, and technical prototyping.
+I’m an AI/ML product leader and builder with 9+ years of experience across product management, analytics, economics, and technical prototyping.
 
 Over the last several years, I’ve worked at the intersection of data, machine learning, and operations, helping build products that solve messy real-world problems and create measurable business impact. My work has included 0-to-1 product development, high-visibility organizational goals, products that reached 250M+ users, and initiatives that generated $255M+ in revenue.
 
@@ -17,7 +17,7 @@ I created this site as a place to share what I’m learning and building, especi
 
 ## Highlights
 
-- **AI/ML product leadership:** 8+ years leading products across analytics, data science, machine learning, and operations-heavy environments.
+- **AI/ML product leadership:** 9+ years leading products across analytics, data science, machine learning, and operations-heavy environments.
 - **0-to-1 builder:** Built and launched products from concept to rollout, turning ambiguous problems into working systems and measurable outcomes.
 - **Technical fluency:** Comfortable across GenAI prototyping, LLM workflows, analytics, experimentation, and data and ML systems.
 - **Business impact:** Contributed to products reaching 250M+ users and initiatives generating $255M+ in revenue.
