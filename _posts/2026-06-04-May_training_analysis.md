@@ -1,5 +1,5 @@
 ---
-title: "May 2026 Training Analysis — The Block That Didn't Break Me"
+title: "May 2026 Training Analysis"
 ---
 
 This post covers May 4 through June 4, 2026 — the final big training block before Rockford 70.3 on June 14 and, ultimately, Ironman Lake Placid on July 19. After years of triathlon, I know exactly what gets me hurt: too much volume and intensity at the same time. This month I tested that boundary deliberately, and for the first time in a while, I came out the other side healthy.
