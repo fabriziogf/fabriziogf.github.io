@@ -137,3 +137,39 @@ workouts:   # individual sessions
 /Users/fabriziogiovanninifilho/ai-projects/trainingpeaks-mcp/.venv/bin/python3 \
   /Users/fabriziogiovanninifilho/Documents/fabriziogf_page/scripts/update_training_data.py
 ```
+
+---
+
+## Cowork Daily Job — Training Dashboard Updater
+
+### What it does
+Runs `scripts/update_training_data.py` once per day, which:
+1. Fetches the past 7 days of workouts from TrainingPeaks (using `workoutTypeValueId` for sport classification)
+2. Fetches CTL/ATL/TSB fitness metrics
+3. Overwrites `_data/training_data.yml`
+4. Commits and pushes to `main` → GitHub Pages rebuilds automatically
+
+### Cowork job configuration
+- **Schedule**: daily, any consistent time (e.g. 06:00 local)
+- **Command**:
+  ```
+  cd /Users/fabriziogiovanninifilho/Documents/fabriziogf_page && /Users/fabriziogiovanninifilho/ai-projects/trainingpeaks-mcp/.venv/bin/python3 scripts/update_training_data.py
+  ```
+- **Working directory**: `/Users/fabriziogiovanninifilho/Documents/fabriziogf_page`
+- **Python interpreter**: `/Users/fabriziogiovanninifilho/ai-projects/trainingpeaks-mcp/.venv/bin/python3`
+  - This venv has the `trainingpeaks-mcp` package and dependencies installed
+  - Do NOT use the system Python — it lacks the required packages
+
+### Window logic
+- `end = yesterday` (last fully completed day)
+- `start = yesterday − 6 days` (7-day rolling window)
+- Data is always one day behind real-time (yesterday's workouts are the freshest)
+
+### Authentication
+TrainingPeaks credentials are stored in the macOS keyring. The script inherits them as long as it runs as the same user. No env vars or secrets files needed.
+
+### Troubleshooting
+- If the script fails with `ModuleNotFoundError`: check that the venv path above is correct and the MCP package is installed (`pip show trainingpeaks-mcp`)
+- If `git push` fails: ensure the repo has a valid remote and the local branch is `main`
+- If fitness metrics return zeros: the `tp_get_fitness` endpoint may require a wider date range; check `tp_mcp/tools/fitness.py`
+- If sport classification looks wrong: verify `workoutTypeValueId` in the raw API response; the `TYPE_ID_TO_SPORT` dict in the script is the source of truth
