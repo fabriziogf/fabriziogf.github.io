@@ -20,42 +20,33 @@ from pathlib import Path
 TP_MCP = Path("/Users/fabriziogiovanninifilho/ai-projects/trainingpeaks-mcp")
 sys.path.insert(0, str(TP_MCP / "src"))
 
-from tp_mcp.tools.workouts import tp_get_workouts
 from tp_mcp.tools.fitness import tp_get_fitness
+from tp_mcp.client import TPClient
 
 REPO = Path(__file__).parent.parent
 OUT  = REPO / "_data" / "training_data.yml"
 
-# ── Sport classifier ────────────────────────────────────────────────────────
-SWIM_KEYS = [
-    'swim', 'lap swimming', 'a1', 'a2', 'a3', 'natação', 'paraquedas',
-    'crawl', '150m', '200m', '400m', '1200m', '2000m', '3000m',
-    'lipolítico', 'melhor média', 'progressivo a1', 'equipamento',
-]
-BIKE_KEYS = [
-    'zwift', 'cycling', 'ciclismo', 'pedal', 'bloco', 'road cycling',
-    'z2', 'z3', 'z4', 'zona 2', 'zona 3', 'zona 4', 'easy miles',
-    'big gear', 'girando', 'giro', 'sessão l2', 'l2/z4',
-    'circuito misto', 'volume 5', '5 horas',
-]
-RUN_KEYS = [
-    'corrida', 'running', 'corridinha', 'fartlek', 'ritmo',
-    'progressivo entre', 'progressão', 'esforço', 'muito fácil',
-    'após a bike', 'após final', 'após o ciclismo', 't2', 'brick',
-]
-STR_TITLES = {
-    'Strength', 'Treino A - BASE', 'Treino B - BASE',
-    'Treino B - Base', 'Base - Serie A',
+# ── Sport classifier using workoutTypeValueId (authoritative TP field) ──────
+# Mirrors SPORT_TYPE_MAP in tp_mcp/tools/workouts.py
+TYPE_ID_TO_SPORT: dict[int, str] = {
+    1:   'swim',
+    2:   'bike',
+    3:   'run',
+    4:   'bike',      # Brick — primary discipline is bike
+    5:   'other',     # Crosstrain
+    6:   'other',     # Race
+    7:   'other',     # Day Off
+    8:   'bike',      # MtnBike
+    9:   'strength',  # Strength
+    10:  'other',     # Custom
+    11:  'other',     # XCSki
+    12:  'other',     # Rowing
+    13:  'run',       # Walk
+    100: 'other',     # Other
 }
 
-def classify(title: str) -> str:
-    if title in STR_TITLES or 'strength' in (title or '').lower():
-        return 'strength'
-    t = (title or '').lower()
-    if any(k in t for k in SWIM_KEYS): return 'swim'
-    if any(k in t for k in RUN_KEYS):  return 'run'
-    if any(k in t for k in BIKE_KEYS): return 'bike'
-    return 'other'
+def classify(type_id: int | None) -> str:
+    return TYPE_ID_TO_SPORT.get(type_id, 'other')
 
 
 # ── YAML writer (no external deps) ─────────────────────────────────────────
@@ -119,11 +110,18 @@ async def main():
     start = end - timedelta(days=6)     # 7-day window
 
     print(f"Fetching {start} → {end} …")
-    workouts_res, fitness_res = await asyncio.gather(
-        tp_get_workouts(start.isoformat(), end.isoformat(), 'completed'),
-        tp_get_fitness(start_date=start.isoformat(), end_date=end.isoformat()),
-    )
-    workouts     = workouts_res.get('workouts', [])
+
+    # Fetch raw workouts directly so we have workoutTypeValueId
+    async with TPClient() as client:
+        athlete_id = await client.ensure_athlete_id()
+        endpoint   = f"/fitness/v6/athletes/{athlete_id}/workouts/{start}/{end}"
+        raw_resp   = await client.get(endpoint)
+    raw_workouts = [
+        w for w in (raw_resp.data or [])
+        if w.get('totalTime') or w.get('tssActual')   # completed only
+    ]
+
+    fitness_res   = await tp_get_fitness(start_date=start.isoformat(), end_date=end.isoformat())
     daily_fitness = {d['date']: d for d in fitness_res.get('daily_data', [])}
 
     totals = {s: {'sessions': 0, 'hours': 0.0, 'distance_km': 0.0, 'tss': 0.0}
@@ -135,8 +133,16 @@ async def main():
                    for s in ['swim', 'bike', 'run', 'strength', 'other']}
 
     workout_list = []
-    for w in workouts:
-        sport = classify(w['title'])
+    for w in raw_workouts:
+        sport = classify(w.get('workoutTypeValueId'))
+        # Normalize fields from raw API shape
+        w = {
+            'date':             (w.get('workoutDay') or '')[:10],
+            'title':            w.get('title', ''),
+            'tss':              w.get('tssActual'),
+            'duration_actual':  w.get('totalTime'),
+            'distance_actual_km': (w.get('distance') or 0) / 1000,
+        }
         tss   = round(w.get('tss') or 0, 1)
         hrs   = round(w.get('duration_actual') or 0, 2)
         dist  = round(w.get('distance_actual_km') or 0, 1)
