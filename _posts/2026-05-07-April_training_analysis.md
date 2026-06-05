@@ -2,8 +2,6 @@
 title: "April 2026 Training Analysis — Sharpening the Blade"
 ---
 
-## Context
-
 April started with an FTP test on day one. Not as a statement — as a tool. After three months of base building and a four-week threshold block, it was time to see where the fitness actually sat. The result would recalibrate every bike training zone for the rest of the season.
 
 From there, April became the sharpest month so far: fartlek runs, Z4/Z5 bike intervals, 4-hour mixed-terrain rides, brick sessions off long bikes. The CTL hit 133 by month end, and the training looked less like "building toward Lake Placid" and more like "getting ready to race."

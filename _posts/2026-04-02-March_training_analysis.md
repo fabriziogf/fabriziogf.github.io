@@ -2,8 +2,6 @@
 title: "March 2026 Training Analysis — Four Weeks of Fire"
 ---
 
-## Context
-
 March was defined by a four-week Z3/Z4 intensity block that started in the final days of February. Four consecutive weeks of structured intervals on the bike, progressive run sessions, and long weekend rides — all while keeping swim frequency consistent. By the end of the month the body was absorbing serious load, and the CTL kept climbing.
 
 There was also a half marathon somewhere in there. "Meia Chegando" (half marathon coming) appeared as a session tag mid-month, suggesting a race or time trial that added real intensity to an already demanding block. And at the end of March, max-effort swim tests appeared — 200m and 400m all-out efforts. The data-gathering phase.
