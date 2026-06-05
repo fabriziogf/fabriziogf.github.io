@@ -7,6 +7,8 @@ author_profile: true
 toc: true
 ---
 
+![Fabrizio Giovannini Filho](/assets/images/Giovannini Filho-Fabrizio-250709-2147-fave-final-crop.jpg){: .align-right style="width: 220px; border-radius: 6px;"}
+
 I’m an AI/ML product leader and builder with 9+ years of experience across product management, analytics, economics, and technical prototyping.
 
 Over the last several years, I’ve worked at the intersection of data, machine learning, and operations, helping build products that solve messy real-world problems and create measurable business impact. My work has included 0-to-1 product development, high-visibility organizational goals, products that reached 250M+ users, and initiatives that generated $255M+ in revenue.

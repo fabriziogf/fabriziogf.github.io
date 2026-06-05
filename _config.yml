@@ -114,7 +114,7 @@ analytics:
 # Site Author
 author:
   name             : "Fabrizio Giovannini Filho"
-  avatar           : "/assets/images/Giovannini Filho-Fabrizio-250709-2147-fave-final-crop.jpg"
+  avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
   bio              : "Technical product leader at Amazon and amateur triathlete."
   location         : "Chicago, IL"
   email            : "fabriziogf@gmail.com"
