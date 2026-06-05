@@ -1,5 +1,5 @@
 ---
-title: "February 2026 Training Analysis — The Base Gets Real"
+title: "February 2026 Training Analysis"
 ---
 
 February was where the training stopped being maintenance and started being construction. January built a floor; February built walls. The sessions got longer, the weekly TSS climbed, and by the end of the month the body was carrying real load — a CTL jump from 79 to 103 in four weeks is meaningful. You don't get that from going through the motions.

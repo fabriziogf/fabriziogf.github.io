@@ -1,5 +1,5 @@
 ---
-title: "January 2026 Training Analysis — Laying the Foundation"
+title: "January 2026 Training Analysis"
 ---
 
 This is the first in a series of monthly training analysis posts, where I look back at what actually happened — the numbers, the sessions, and what they mean for the bigger picture. The goal isn't just to log data; it's to understand patterns, catch drift early, and hold myself accountable to the process.

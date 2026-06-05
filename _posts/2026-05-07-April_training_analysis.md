@@ -1,5 +1,5 @@
 ---
-title: "April 2026 Training Analysis — Sharpening the Blade"
+title: "April 2026 Training Analysis"
 ---
 
 April started with an FTP test on day one. Not as a statement — as a tool. After three months of base building and a four-week threshold block, it was time to see where the fitness actually sat. The result would recalibrate every bike training zone for the rest of the season.

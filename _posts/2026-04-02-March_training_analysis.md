@@ -1,5 +1,5 @@
 ---
-title: "March 2026 Training Analysis — Four Weeks of Fire"
+title: "March 2026 Training Analysis"
 ---
 
 March was defined by a four-week Z3/Z4 intensity block that started in the final days of February. Four consecutive weeks of structured intervals on the bike, progressive run sessions, and long weekend rides — all while keeping swim frequency consistent. By the end of the month the body was absorbing serious load, and the CTL kept climbing.
