@@ -2,17 +2,17 @@
 title: "Building a Daily-Updated Training Dashboard with Jekyll and TrainingPeaks"
 ---
 
-One of the things I wanted on this site was a way to see my current training load at a glance without having to open TrainingPeaks or Strava. A simple page that answers: what did I actually do this week, how fit am I right now, and how am I balancing load against recovery?
+One of the things I wanted on this site was a way to see my current training load at a glance — without opening TrainingPeaks or Strava. A simple page that answers: what did I actually do this week, how fit am I right now, and how am I balancing load against recovery?
 
-The result is the [Training](/training/) tab — a rolling 7-day dashboard that shows swim, bike, run, and strength stats alongside Chart.js visualizations and PMC fitness metrics (CTL, ATL, TSB). It updates daily via an automated script that pulls from the TrainingPeaks API and pushes a data file to GitHub.
+The result is the [Training](/training/) tab — a rolling 7-day dashboard showing swim, bike, run, and strength stats alongside Chart.js visualizations and PMC fitness metrics (CTL, ATL, TSB). It updates daily via an automated script that pulls from the TrainingPeaks API and pushes a data file to GitHub.
 
-Here is how it was built, and the technical problems that came up along the way.
+Here's how it was built, and the technical problems that came up along the way.
 
 ---
 
 ## The architecture
 
-The site runs on Jekyll 3 (GitHub Pages), which means no server-side code and no database. Everything has to be static at build time. That constraint shaped the whole approach:
+The site runs on Jekyll 3 (GitHub Pages) — no server-side code, no database. Everything has to be static at build time. That constraint shaped the whole approach:
 
 1. A Python script runs daily, fetches the past 7 days of workouts from TrainingPeaks, and writes the results to `_data/training_data.yml`
 2. The script commits and pushes that file to GitHub, triggering a Pages rebuild
@@ -25,9 +25,9 @@ No API calls from the browser, no tokens exposed, no server needed. The page is 
 
 ## Getting data out of TrainingPeaks
 
-TrainingPeaks has an MCP server I use for Claude Code integrations, but the relevant detail here is a subtlety in how the API returns workout data.
+TrainingPeaks has an MCP server I use for Claude Code integrations. But the relevant detail here is a subtlety in how the API returns workout data.
 
-Every workout has a `workoutTypeValueId` field — an integer that maps to the actual sport type (1 = Swim, 2 = Bike, 3 = Run, 9 = Strength, etc.). There is also a `workoutTypeFamilyId` field that would be cleaner to use, but it is always `null` in the list endpoint. If you rely on the family ID or try to infer sport from the session title, you get misclassification.
+Every workout has a `workoutTypeValueId` field — an integer that maps to the actual sport type (1 = Swim, 2 = Bike, 3 = Run, 9 = Strength, etc.). There's also a `workoutTypeFamilyId` field that would be cleaner to use, but it's always `null` in the list endpoint. If you rely on the family ID or try to infer sport from session title, you get misclassification.
 
 The canonical lookup table:
 
@@ -40,15 +40,15 @@ The canonical lookup table:
 | 9 | Strength |
 | 13 | Run/Walk |
 
-This matters more than it sounds. Session titles like "Ironman> 5×2000m Z3>4" contain distance notation that looks like swim yardage if you are pattern-matching on strings. A keyword-based classifier will put that in the swim column. The type ID always puts it correctly in run. Every classification decision in the script goes through the ID lookup, never through the title.
+This matters more than it sounds. Session titles like "Ironman> 5×2000m Z3>4" contain distance notation that looks like swim yardage if you're pattern-matching on strings. A keyword-based classifier puts that in the swim column. The type ID always puts it correctly in run. Every classification decision in the script goes through the ID lookup, never through the title.
 
-The fitness metrics (CTL, ATL, TSB) come from a separate endpoint and are appended to the same YAML file so the dashboard can show the full performance management picture alongside the weekly workout data.
+The fitness metrics (CTL, ATL, TSB) come from a separate endpoint and get appended to the same YAML file so the dashboard can show the full picture alongside the weekly workout data.
 
 ---
 
 ## The data file
 
-`_data/training_data.yml` is the bridge between the Python script and the Jekyll page. It gets overwritten daily and is never edited by hand — the header of the file says so explicitly.
+`_data/training_data.yml` is the bridge between the Python script and the Jekyll page. It gets overwritten daily and is never edited by hand.
 
 The structure covers three things: the rolling window metadata, per-sport totals for the week, and a day-by-day breakdown for the charts:
 
@@ -89,13 +89,13 @@ In Jekyll 4, you can write:
 {% raw %}{% for sport in "swim,bike,run,strength" | split: "," %}{% endraw %}
 ```
 
-In Jekyll 3 (which GitHub Pages still uses), this silently produces no iterations. No error, no warning — it just skips the loop entirely. The fix is to write explicit HTML for each sport rather than trying to loop over a static list. Tedious, but it works.
+In Jekyll 3 (which GitHub Pages still uses), this silently produces no iterations. No error, no warning — it just skips the loop entirely. The fix is to write explicit HTML for each sport rather than looping over a static list.
 
 **2. Liquid blocks inside Markdown tables break the table.**
 
-Conditionals like `{% raw %}{% if %}{% endraw %}` inside a Markdown table row emit newlines that the Markdown parser treats as paragraph breaks, collapsing the table entirely. The fix is to use an HTML `<table>` instead of Markdown syntax for any table that needs Liquid logic inside its rows. HTML is whitespace-tolerant; Markdown is not.
+Conditionals like `{% raw %}{% if %}{% endraw %}` inside a Markdown table row emit newlines that the Markdown parser treats as paragraph breaks, collapsing the table entirely. The fix is to use an HTML `<table>` for any table that needs Liquid logic inside its rows. HTML is whitespace-tolerant; Markdown is not.
 
-Both of these issues are the kind of thing that fails quietly — the page renders without error but shows nothing. That makes them harder to diagnose than a loud crash would be.
+Both of these fail quietly — the page renders without error but shows nothing. That makes them harder to diagnose than a loud crash.
 
 ---
 
@@ -110,9 +110,9 @@ Both of these issues are the kind of thing that fails quietly — the page rende
 5. Writes the YAML file
 6. Runs `git add`, `git commit`, and `git push`
 
-The window ends at yesterday (not today) because today's workouts may not be complete yet. Using yesterday as the anchor guarantees a fully closed window.
+The window ends at yesterday — not today — because today's workouts may not be complete yet. Using yesterday as the anchor guarantees a fully closed window.
 
-Authentication is handled via the macOS keyring — the TrainingPeaks credentials are stored there and the script inherits them as long as it runs as the same user. No environment variables or secrets files are needed.
+Authentication is handled via the macOS keyring. The TrainingPeaks credentials are stored there and the script inherits them as long as it runs as the same user. No environment variables or secrets files needed.
 
 A Cowork recurring job runs the script once per day, keeps the dashboard current, and triggers a GitHub Pages rebuild automatically via the push.
 
@@ -122,7 +122,7 @@ A Cowork recurring job runs the script once per day, keeps the dashboard current
 
 The final page has four sections:
 
-- **PMC cards**: CTL (fitness), ATL (fatigue), TSB (form), color-coded so a positive TSB reads green and negative reads red
+- **PMC cards**: CTL (fitness), ATL (fatigue), TSB (form), color-coded so positive TSB reads green and negative reads red
 - **7-day sport summary**: sessions, hours, distance, and TSS per sport for the rolling window
 - **Stacked bar charts**: daily TSS by sport and daily hours by sport — useful for seeing how the week was distributed across disciplines
 - **TSS donut**: proportion of total load by sport for the week
@@ -134,8 +134,8 @@ The charts use Chart.js 4.4.0 loaded from CDN. The data is injected from the YAM
 
 ## What this is actually for
 
-The dashboard is not a replacement for TrainingPeaks. TrainingPeaks has a real PMC, calendar view, structured workout builder, and everything else a serious training log needs.
+The dashboard isn't a replacement for TrainingPeaks. TrainingPeaks has a real PMC, calendar view, structured workout builder, and everything else a serious training log needs.
 
-What this gives me is a public-facing snapshot that lives alongside the training analysis posts and makes the data tangible rather than abstract. When I write that a month ended with CTL 140 and TSB +22, there is now a page that shows what that looks like — updated daily — rather than just a number in a table.
+What this gives me is a public-facing snapshot that lives alongside the training analysis posts and makes the data tangible. When I write that a month ended with CTL 140 and TSB +22, there's now a page that shows what that looks like — updated daily — rather than just a number in a table.
 
-It is also a useful exercise in building a constrained data pipeline: fetch, transform, serialize, commit, deploy — entirely automated, no moving parts visible to the user.
+It's also a useful exercise in building a constrained data pipeline: fetch, transform, serialize, commit, deploy — fully automated, no moving parts visible to the user.

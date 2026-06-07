@@ -2,89 +2,85 @@
 title: "Building my personal website"
 ---
 
-I have wanted to build a personal website for a while, partly as a way to showcase some of my technical interests and partly as a forcing function to write and code more consistently.
+I've wanted a personal website for a while. Part of it was wanting a place to share technical projects. Part of it was wanting a reason to write and code more consistently.
 
-As a Product Manager, a lot of my day-to-day work is focused on strategy, prioritization, and execution across teams. I enjoy that work, but I also wanted a space that felt a little more personal and experimental. I wanted somewhere to share projects, write about things I am learning, and document ideas that sit at the intersection of product, data science, AI/ML, and sports.
+As a Product Manager, most of my day is strategy, prioritization, and execution across teams. I enjoy that work. But I also wanted something more personal — somewhere to share projects, write about things I'm learning, and document ideas at the intersection of product, data science, AI/ML, and sports.
 
-This site is my attempt to create that space.
+This site is that space.
 
 ## Why build a personal website?
 
-For me, the point of a personal website is not just to have an online resume. LinkedIn already does that well enough. What I wanted was something more flexible: a place where I could publish writing, share side projects, and gradually build a portfolio of things I have actually made.
+For me, a personal website isn't just an online resume. LinkedIn already does that. I wanted something more flexible: a place to publish writing, share side projects, and build a portfolio of things I've actually made.
 
-I also wanted a project that was small enough to finish, but open-ended enough to keep improving over time. A personal site is perfect for that. It lets me work on writing, design, lightweight frontend customization, and developer tooling all in one place.
+I also wanted a project small enough to finish but open-ended enough to keep improving. A personal site is good for that. It lets you work on writing, design, lightweight frontend customization, and developer tooling all in one place.
 
-Another motivation was simply to get back into the habit of making things in public.
+Another reason: I wanted to get back into the habit of making things in public.
 
-## Building a GitHub Pages site with Jekyll
+## Building it with GitHub Pages and Jekyll
 
-I decided to build the site with GitHub Pages, Jekyll, and the Minimal Mistakes theme.
+I built the site with GitHub Pages, Jekyll, and the Minimal Mistakes theme.
 
-That combination appealed to me for a few reasons:
+That combination made sense for a few reasons:
 
-1. It is simple and lightweight.
-2. It is easy to host and update through GitHub.
-3. Jekyll has a straightforward content model for pages and posts.
-4. Minimal Mistakes has strong documentation and enough structure to look polished without forcing me to build everything from scratch.
+1. It's simple and lightweight.
+2. It's easy to host and update through GitHub.
+3. Jekyll has a clean content model for pages and posts.
+4. Minimal Mistakes is well-documented and looks polished without requiring me to build everything from scratch.
 
-I liked this particular theme because it gave me a clean starting point while still letting me customize the homepage, About page, sidebar, social links, and overall formatting.
-
-I also used VS Code as part of the process, partly because I wanted to explore some of the newer AI-assisted coding workflows. Even on a relatively small project like this one, it was helpful to move quickly through configuration files, markdown pages, theme includes, and small styling changes without constantly switching contexts.
+I used VS Code to work through configuration files, markdown pages, theme includes, and small styling changes. Even on a small project like this, having good tooling made a difference.
 
 ## What I changed
 
-Once the site was up and running, I started customizing it to make it feel more like my own.
+Once the site was running, I started customizing it.
 
-Some of the first changes were basic but important:
+The basics first:
 
 1. Configuring the author profile
-2. Adding links to relevant social media accounts
+2. Adding links to social accounts
 3. Adding a resume link
-4. Updating the homepage and About page copy
-5. Making small formatting and layout tweaks across the site
+4. Updating the homepage and About page
+5. Small formatting and layout tweaks
 
-From there, I started making more personalized changes. I wanted the site to reflect both my professional background and some of the interests that take up a lot of my free time.
+Then more personal changes. One feature I liked adding was the Strava widget. I spend a lot of time biking, running, and swimming, so it made sense to include that on the site. It makes it feel less like a static resume and more like an actual homepage.
 
-One feature I especially liked adding was the Strava widget. I spend way too much time biking, running, and swimming, so it felt fitting to include that on the site as well. It makes the site feel a little less like a static resume and a little more like an actual personal homepage.
+You can see it on the [About page](/about/).
 
-You can see that on the [About page](/about/).
+## What I learned
 
-## What I learned while building it
+This project was simple enough to finish quickly, but it taught me a lot about how Jekyll works.
 
-One of the nice things about this project is that it was simple enough to get working quickly, but still gave me a chance to learn the structure of a Jekyll site in more detail.
+A few things that became clear once I started editing directly:
 
-A few things became much clearer once I started editing the site directly:
-
-1. How Jekyll uses YAML front matter to control page metadata and layout behavior
+1. How Jekyll uses YAML front matter to control page metadata and layout
 2. How the site separates posts, pages, layouts, includes, and configuration
-3. How much of the site behavior is driven by `_config.yml`
-4. How themes like Minimal Mistakes make it easy to customize a site without writing everything from scratch
+3. How much behavior is driven by `_config.yml`
+4. How themes like Minimal Mistakes make it easy to customize without starting from scratch
 
-Even small edits, like changing sidebar links or adjusting homepage content, required understanding where the text actually lived and how Jekyll assembles the final site. That made the project feel like a good introduction to static-site customization rather than just a writing exercise.
+Even small edits — changing sidebar links, adjusting homepage content — required understanding where things actually lived and how Jekyll builds the final site. That made it feel like a real introduction to static-site development, not just a writing exercise.
 
-One thing that surprised me was how much polish comes from small changes. Updating a few sidebar links, tightening spacing, and improving page structure can make a website feel much more intentional.
+One thing that surprised me: how much polish comes from small changes. Updating a few links, tightening spacing, and cleaning up the page structure can make a site feel much more intentional.
 
 ## Writing this first post
 
 Writing this post was part of the project too.
 
-It forced me to learn how posts are structured, how filenames and front matter work, and how content gets rendered into the site. It also made the site feel real. Until there is actual writing on a personal website, it is easy for it to feel like an unfinished shell.
+It forced me to learn how posts are structured, how filenames and front matter work, and how content gets rendered. It also made the site feel real. Until there's actual writing on a personal website, it's easy for it to feel like an unfinished shell.
 
-Publishing even one post changes that. It turns the site from a setup project into an ongoing habit.
+Publishing one post changes that.
 
-## What is next
+## What's next
 
-Over time, I want this site to become a mix of technical writing, project notes, experiments, and personal interests.
+Over time, I want this site to be a mix of technical writing, project notes, experiments, and personal interests.
 
-Some of the topics I expect to write about include:
+Some topics I expect to write about:
 
-1. AI and ML tools that I am experimenting with
+1. AI and ML tools I'm experimenting with
 2. Data science and analytics ideas
 3. Product development and technical prototyping
-4. Endurance sports and side projects that are personally interesting to me
+4. Endurance sports and side projects
 
-I do not want the site to be overly polished or overly corporate. I want it to be a place to think in public, share work, and keep building.
+I don't want the site to be overly polished or corporate. I want it to be a place to think in public, share work, and keep building.
 
-That is really the point of the site: not just to present a finished version of myself, but to document what I am learning as I go.
+That's really the point — not to present a finished version of myself, but to document what I'm learning as I go.
 
 You can explore the repository here: [fabriziogf/fabriziogf.github.io](https://github.com/fabriziogf/fabriziogf.github.io)
