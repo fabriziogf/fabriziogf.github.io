@@ -6,6 +6,8 @@ main:
     url: /year-archive/
   - title: "Training"
     url: /training/
+  - title: "Projects"
+    url: /projects/
   # - title: "Sample Collections"
   #   url: /collection-archive/
   # - title: "Sitemap"
