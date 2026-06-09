@@ -11,16 +11,17 @@ toc: true
 
 I’m an AI/ML product leader and builder with 9+ years of experience across product management, analytics, economics, and technical prototyping.
 
-Over the last several years, I’ve worked at the intersection of data, machine learning, and operations, helping build products that solve messy real-world problems and create measurable business impact. My work has included 0-to-1 product development, high-visibility organizational goals, products that reached 250M+ users, and initiatives that generated $255M+ in revenue.
+Over the last few years, I’ve worked at the intersection of data, machine learning, and operations, helping build products that solve complex real-world problems and create measurable business impact. My work has included 0-to-1 product development, high-visibility organizational goals, products that reached 250M+ users, and initiatives that generated $255M+ in revenue.
 
-I created this site as a place to share what I’m learning and building, especially across AI, ML, product thinking, technical experimentation, and endurance sports.
+I created this site as a place to share what I’m learning and building, especially across AI, ML, product thinking, and endurance sports.
 
 ---
 
 ## Highlights
 
-- **AI/ML product leadership:** 9+ years leading products across analytics, data science, machine learning, and operations-heavy environments.
+- **AI/ML product leadership:** 9+ years leading products across analytics, data science, machine learning, and data-heavy environments.
 - **0-to-1 builder:** Built and launched products from concept to rollout, turning ambiguous problems into working systems and measurable outcomes.
+- **GenAI Prototyping:** Developed hands-on GenAI prototypes including agents, LLM pipelines, and data tools.
 - **Technical fluency:** Comfortable across GenAI prototyping, LLM workflows, analytics, experimentation, and data and ML systems.
 - **Business impact:** Contributed to products reaching 250M+ users and initiatives generating $255M+ in revenue.
 - **Cross-functional leadership:** Partner closely with engineering, science, analytics, and business teams to define strategy, align stakeholders, and drive execution.
@@ -30,9 +31,9 @@ I created this site as a place to share what I’m learning and building, especi
 
 ## What I Work On
 
-I’m especially interested in AI/ML products, GenAI tooling, technical prototyping, decision systems, and products that sit between strong modeling and practical execution.
+I’m especially interested in AI/ML products, GenAI tooling, technical prototyping, decision systems, and products that sit between strong modeling and practical impact.
 
-A lot of what excites me lives in the space between strategy and building: shaping product direction, working closely with technical teams, and creating artifacts that make ideas more concrete. That includes writing, prototyping, experimenting with tools, and learning by shipping.
+I'm excited by a mix of strategy and building: shaping product direction, working closely with technical teams, and creating artifacts that make ideas more concrete. That includes writing, prototyping, experimenting with tools, and learning by shipping.
 
 ---
 
