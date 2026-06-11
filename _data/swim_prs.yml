@@ -1,0 +1,41 @@
+# Swim Personal Records — update manually (TrainingPeaks API does not expose swim PRs).
+# pace format: "M:SS" per 100m (e.g. "1:25" = 1 min 25 sec per 100m)
+pace50m:
+  label: "50 m"
+  unit: "min/100m"
+  all_time: null
+  all_time_date: ""
+  this_year: null
+  this_year_date: ""
+
+pace100m:
+  label: "100 m"
+  unit: "min/100m"
+  all_time: null
+  all_time_date: ""
+  this_year: null
+  this_year_date: ""
+
+pace200m:
+  label: "200 m"
+  unit: "min/100m"
+  all_time: null
+  all_time_date: ""
+  this_year: null
+  this_year_date: ""
+
+pace400m:
+  label: "400 m"
+  unit: "min/100m"
+  all_time: null
+  all_time_date: ""
+  this_year: null
+  this_year_date: ""
+
+pace1500m:
+  label: "1500 m"
+  unit: "min/100m"
+  all_time: null
+  all_time_date: ""
+  this_year: null
+  this_year_date: ""

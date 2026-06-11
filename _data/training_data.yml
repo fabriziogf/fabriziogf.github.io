@@ -82,13 +82,281 @@ daily:
     other   : { hours: 0.0  , distance_km: 0.0   , tss: 0.0   , sessions: 0 }
 
 workouts:
-  - { date: "2026-06-04", sport: bike    , title: "Sessão L2/Z4", hours: 1.72, distance_km: 67.3, tss: 117.1 }
-  - { date: "2026-06-05", sport: swim    , title: "12x150m variando intensidade", hours: 0.87, distance_km: 3.0, tss: 53.1 }
-  - { date: "2026-06-05", sport: run     , title: "Progressivo", hours: 1.15, distance_km: 16.0, tss: 167.5 }
-  - { date: "2026-06-06", sport: bike    , title: "Zona 2 baixa>moderada !!!", hours: 4.31, distance_km: 146.6, tss: 198.8 }
-  - { date: "2026-06-06", sport: run     , title: "T2 Corrida Leve", hours: 1.17, distance_km: 14.6, tss: 130.6 }
-  - { date: "2026-06-08", sport: swim    , title: "Intensidade reduzida !", hours: 0.79, distance_km: 2.7, tss: 47.4 }
-  - { date: "2026-06-09", sport: bike    , title: "Descanso Ativo !", hours: 0.88, distance_km: 32.1, tss: 32.2 }
-  - { date: "2026-06-09", sport: run     , title: "Fechando o dia, corrida leve", hours: 0.53, distance_km: 5.9, tss: 53.2 }
-  - { date: "2026-06-10", sport: bike    , title: "Cadencia Baixa", hours: 1.51, distance_km: 57.8, tss: 76.4 }
-  - { date: "2026-06-10", sport: run     , title: "Após a bike 4 x 2 km race pace meia maratona", hours: 0.75, distance_km: 9.8, tss: 104.1 }
+  - date: "2026-06-04"
+    sport: bike
+    title: "Sessão L2/Z4"
+    hours: 1.72
+    distance_km: 67.3
+    tss: 117.1
+    hr_avg: 139
+    power_avg: 239
+  - date: "2026-06-05"
+    sport: swim
+    title: "12x150m variando intensidade"
+    hours: 0.87
+    distance_km: 3.0
+    tss: 53.1
+    hr_avg: 109
+    power_avg: null
+  - date: "2026-06-05"
+    sport: run
+    title: "Progressivo"
+    hours: 1.15
+    distance_km: 16.0
+    tss: 167.5
+    hr_avg: 156
+    power_avg: 389
+  - date: "2026-06-06"
+    sport: bike
+    title: "Zona 2 baixa>moderada !!!"
+    hours: 4.31
+    distance_km: 146.6
+    tss: 198.8
+    hr_avg: null
+    power_avg: 213
+  - date: "2026-06-06"
+    sport: run
+    title: "T2 Corrida Leve"
+    hours: 1.17
+    distance_km: 14.6
+    tss: 130.6
+    hr_avg: 135
+    power_avg: 344
+  - date: "2026-06-08"
+    sport: swim
+    title: "Intensidade reduzida !"
+    hours: 0.79
+    distance_km: 2.7
+    tss: 47.4
+    hr_avg: 108
+    power_avg: null
+  - date: "2026-06-09"
+    sport: bike
+    title: "Descanso Ativo !"
+    hours: 0.88
+    distance_km: 32.1
+    tss: 32.2
+    hr_avg: null
+    power_avg: 193
+  - date: "2026-06-09"
+    sport: run
+    title: "Fechando o dia, corrida leve"
+    hours: 0.53
+    distance_km: 5.9
+    tss: 53.2
+    hr_avg: 125
+    power_avg: 320
+  - date: "2026-06-10"
+    sport: bike
+    title: "Cadencia Baixa"
+    hours: 1.51
+    distance_km: 57.8
+    tss: 76.4
+    hr_avg: 132
+    power_avg: 218
+  - date: "2026-06-10"
+    sport: run
+    title: "Após a bike 4 x 2 km race pace meia maratona"
+    hours: 0.75
+    distance_km: 9.8
+    tss: 104.1
+    hr_avg: 152
+    power_avg: 356
+
+monthly:
+  - month: "2025-06"
+    swim    : { sessions: 9, hours: 5.9   , distance_km: 20.8   , tss: 377 }
+    bike    : { sessions: 14, hours: 16.4  , distance_km: 572.1  , tss: 791 }
+    run     : { sessions: 13, hours: 9.1   , distance_km: 114.6  , tss: 1154 }
+    strength: { sessions: 2, hours: 1.0   , distance_km: 0.0    , tss: 15 }
+    other   : { sessions: 0, hours: 0.0   , distance_km: 0.0    , tss: 0 }
+  - month: "2025-07"
+    swim    : { sessions: 15, hours: 9.8   , distance_km: 34.5   , tss: 642 }
+    bike    : { sessions: 21, hours: 41.7  , distance_km: 1432.1 , tss: 1968 }
+    run     : { sessions: 17, hours: 14.5  , distance_km: 187.5  , tss: 1838 }
+    strength: { sessions: 7, hours: 4.6   , distance_km: 0.0    , tss: 70 }
+    other   : { sessions: 0, hours: 0.0   , distance_km: 0.0    , tss: 0 }
+  - month: "2025-08"
+    swim    : { sessions: 7, hours: 6.5   , distance_km: 22.5   , tss: 401 }
+    bike    : { sessions: 16, hours: 30.5  , distance_km: 1058.7 , tss: 1450 }
+    run     : { sessions: 5, hours: 5.7   , distance_km: 75.3   , tss: 770 }
+    strength: { sessions: 7, hours: 5.2   , distance_km: 0.0    , tss: 70 }
+    other   : { sessions: 4, hours: 3.0   , distance_km: 0.0    , tss: 105 }
+  - month: "2025-09"
+    swim    : { sessions: 0, hours: 0.0   , distance_km: 0.0    , tss: 0 }
+    bike    : { sessions: 16, hours: 18.5  , distance_km: 669.5  , tss: 663 }
+    run     : { sessions: 1, hours: 0.4   , distance_km: 4.7    , tss: 42 }
+    strength: { sessions: 0, hours: 0.0   , distance_km: 0.0    , tss: 0 }
+    other   : { sessions: 0, hours: 0.0   , distance_km: 0.0    , tss: 0 }
+  - month: "2025-10"
+    swim    : { sessions: 0, hours: 0.0   , distance_km: 0.0    , tss: 0 }
+    bike    : { sessions: 20, hours: 30.7  , distance_km: 1141.4 , tss: 1281 }
+    run     : { sessions: 11, hours: 7.4   , distance_km: 86.1   , tss: 787 }
+    strength: { sessions: 0, hours: 0.0   , distance_km: 0.0    , tss: 0 }
+    other   : { sessions: 0, hours: 0.0   , distance_km: 0.0    , tss: 0 }
+  - month: "2025-11"
+    swim    : { sessions: 0, hours: 0.0   , distance_km: 0.0    , tss: 0 }
+    bike    : { sessions: 20, hours: 34.7  , distance_km: 1302.5 , tss: 1651 }
+    run     : { sessions: 14, hours: 13.8  , distance_km: 171.2  , tss: 1789 }
+    strength: { sessions: 1, hours: 0.7   , distance_km: 0.0    , tss: 20 }
+    other   : { sessions: 0, hours: 0.0   , distance_km: 0.0    , tss: 0 }
+  - month: "2025-12"
+    swim    : { sessions: 1, hours: 0.5   , distance_km: 1.5    , tss: 20 }
+    bike    : { sessions: 16, hours: 24.8  , distance_km: 926.7  , tss: 1034 }
+    run     : { sessions: 8, hours: 6.9   , distance_km: 82.5   , tss: 798 }
+    strength: { sessions: 3, hours: 1.5   , distance_km: 0.0    , tss: 35 }
+    other   : { sessions: 0, hours: 0.0   , distance_km: 0.0    , tss: 0 }
+  - month: "2026-01"
+    swim    : { sessions: 6, hours: 4.3   , distance_km: 14.3   , tss: 230 }
+    bike    : { sessions: 16, hours: 29.3  , distance_km: 1090.0 , tss: 1194 }
+    run     : { sessions: 10, hours: 8.3   , distance_km: 99.9   , tss: 1085 }
+    strength: { sessions: 6, hours: 5.2   , distance_km: 0.0    , tss: 155 }
+    other   : { sessions: 0, hours: 0.0   , distance_km: 0.0    , tss: 0 }
+  - month: "2026-02"
+    swim    : { sessions: 10, hours: 8.1   , distance_km: 27.3   , tss: 450 }
+    bike    : { sessions: 14, hours: 27.8  , distance_km: 1058.6 , tss: 1302 }
+    run     : { sessions: 14, hours: 13.4  , distance_km: 164.1  , tss: 1589 }
+    strength: { sessions: 7, hours: 6.4   , distance_km: 0.0    , tss: 135 }
+    other   : { sessions: 0, hours: 0.0   , distance_km: 0.0    , tss: 0 }
+  - month: "2026-03"
+    swim    : { sessions: 12, hours: 9.2   , distance_km: 30.8   , tss: 498 }
+    bike    : { sessions: 14, hours: 32.6  , distance_km: 1246.7 , tss: 1560 }
+    run     : { sessions: 14, hours: 14.6  , distance_km: 183.3  , tss: 2001 }
+    strength: { sessions: 8, hours: 7.1   , distance_km: 0.0    , tss: 150 }
+    other   : { sessions: 0, hours: 0.0   , distance_km: 0.0    , tss: 0 }
+  - month: "2026-04"
+    swim    : { sessions: 13, hours: 10.9  , distance_km: 37.6   , tss: 655 }
+    bike    : { sessions: 15, hours: 30.5  , distance_km: 1161.7 , tss: 1644 }
+    run     : { sessions: 17, hours: 15.3  , distance_km: 192.0  , tss: 1953 }
+    strength: { sessions: 6, hours: 5.4   , distance_km: 0.0    , tss: 135 }
+    other   : { sessions: 0, hours: 0.0   , distance_km: 0.0    , tss: 0 }
+  - month: "2026-05"
+    swim    : { sessions: 10, hours: 9.0   , distance_km: 30.4   , tss: 514 }
+    bike    : { sessions: 17, hours: 43.1  , distance_km: 1522.4 , tss: 1953 }
+    run     : { sessions: 18, hours: 20.9  , distance_km: 260.6  , tss: 2580 }
+    strength: { sessions: 5, hours: 4.3   , distance_km: 0.0    , tss: 115 }
+    other   : { sessions: 0, hours: 0.0   , distance_km: 0.0    , tss: 0 }
+  - month: "2026-06"
+    swim    : { sessions: 4, hours: 3.1   , distance_km: 10.5   , tss: 180 }
+    bike    : { sessions: 6, hours: 11.7  , distance_km: 416.9  , tss: 564 }
+    run     : { sessions: 5, hours: 5.0   , distance_km: 62.0   , tss: 595 }
+    strength: { sessions: 1, hours: 1.0   , distance_km: 0.0    , tss: 30 }
+    other   : { sessions: 0, hours: 0.0   , distance_km: 0.0    , tss: 0 }
+
+ctl_trend:
+  - { month: "2025-06", ctl: 124.1, atl: 104.3, tsb: 27.5 }
+  - { month: "2025-07", ctl: 135.8, atl: 144.5, tsb: -5.3 }
+  - { month: "2025-08", ctl: 105.1, atl: 34.2, tsb: 73.5 }
+  - { month: "2025-09", ctl: 65.1, atl: 44.4, tsb: 21.6 }
+  - { month: "2025-10", ctl: 66.2, atl: 71.1, tsb: -4.1 }
+  - { month: "2025-11", ctl: 90.7, atl: 102.0, tsb: -18.8 }
+  - { month: "2025-12", ctl: 78.3, atl: 93.0, tsb: -11.2 }
+  - { month: "2026-01", ctl: 79.2, atl: 50.6, tsb: 32.8 }
+  - { month: "2026-02", ctl: 103.0, atl: 140.1, tsb: -30.3 }
+  - { month: "2026-03", ctl: 118.8, atl: 119.6, tsb: -11.5 }
+  - { month: "2026-04", ctl: 133.6, atl: 155.6, tsb: -20.1 }
+  - { month: "2026-05", ctl: 151.1, atl: 169.9, tsb: -15.2 }
+  - { month: "2026-06", ctl: 147.9, atl: 141.1, tsb: 12.6 }
+
+prs:
+  bike:
+    power5sec:
+      label:            "5 sec"
+      unit:             "W"
+      all_time:         922.0
+      all_time_date:    "2021-05-26"
+      all_time_workout: "Road Cycling"
+      this_year:        806.0
+      this_year_date:   "2026-05-30"
+      this_year_workout:"5 horas Easy Miles"
+    power1min:
+      label:            "1 min"
+      unit:             "W"
+      all_time:         500.0
+      all_time_date:    "2023-05-20"
+      all_time_workout: "Pedal Estruturado mais plano"
+      this_year:        430.0
+      this_year_date:   "2026-04-01"
+      this_year_workout:"TESTE MÁXIMO !"
+    power5min:
+      label:            "5 min"
+      unit:             "W"
+      all_time:         380.0
+      all_time_date:    "2026-04-01"
+      all_time_workout: "TESTE MÁXIMO !"
+      this_year:        380.0
+      this_year_date:   "2026-04-01"
+      this_year_workout:"TESTE MÁXIMO !"
+    power10min:
+      label:            "10 min"
+      unit:             "W"
+      all_time:         365.0
+      all_time_date:    "2026-04-01"
+      all_time_workout: "TESTE MÁXIMO !"
+      this_year:        365.0
+      this_year_date:   "2026-04-01"
+      this_year_workout:"TESTE MÁXIMO !"
+    power20min:
+      label:            "20 min"
+      unit:             "W"
+      all_time:         350.0
+      all_time_date:    "2026-04-01"
+      all_time_workout: "TESTE MÁXIMO !"
+      this_year:        350.0
+      this_year_date:   "2026-04-01"
+      this_year_workout:"TESTE MÁXIMO !"
+    power60min:
+      label:            "60 min"
+      unit:             "W"
+      all_time:         301.0
+      all_time_date:    "2021-07-07"
+      all_time_workout: "Dia duro chegando - FTP (2o Limiar)"
+      this_year:        268.0
+      this_year_date:   "2026-05-12"
+      this_year_workout:"L2/Z4"
+  run:
+    speed1K:
+      label:            "1 km"
+      unit:             "min/km"
+      all_time:         2:29
+      all_time_date:    "2025-05-08"
+      all_time_workout: "Running"
+      this_year:        3:37
+      this_year_date:   "2026-05-15"
+      this_year_workout:"Ironman> 5 x 2000m Z3>4"
+    speed5K:
+      label:            "5 km"
+      unit:             "min/km"
+      all_time:         3:17
+      all_time_date:    "2025-05-08"
+      all_time_workout: "Running"
+      this_year:        3:49
+      this_year_date:   "2026-04-04"
+      this_year_workout:"Running"
+    speed10K:
+      label:            "10 km"
+      unit:             "min/km"
+      all_time:         3:41
+      all_time_date:    "2025-05-18"
+      all_time_workout: "Running"
+      this_year:        3:57
+      this_year_date:   "2026-04-04"
+      this_year_workout:"Running"
+    speedHalfMarathon:
+      label:            "Half Marathon"
+      unit:             "min/km"
+      all_time:         3:44
+      all_time_date:    "2025-05-18"
+      all_time_workout: "Running"
+      this_year:        4:48
+      this_year_date:   "2026-03-08"
+      this_year_workout:"Longo em Pace Fácil"
+    speedMarathon:
+      label:            "Marathon"
+      unit:             "min/km"
+      all_time:         5:17
+      all_time_date:    "2022-10-08"
+      all_time_workout: "Running"
+      this_year:        null
+      this_year_date:   ""
+      this_year_workout:""
