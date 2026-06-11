@@ -318,43 +318,43 @@ prs:
     speed1K:
       label:            "1 km"
       unit:             "min/km"
-      all_time:         2:29
+      all_time:         "2:29"
       all_time_date:    "2025-05-08"
       all_time_workout: "Running"
-      this_year:        3:37
+      this_year:        "3:37"
       this_year_date:   "2026-05-15"
       this_year_workout: "Ironman> 5 x 2000m Z3>4"
     speed5K:
       label:            "5 km"
       unit:             "min/km"
-      all_time:         3:17
+      all_time:         "3:17"
       all_time_date:    "2025-05-08"
       all_time_workout: "Running"
-      this_year:        3:49
+      this_year:        "3:49"
       this_year_date:   "2026-04-04"
       this_year_workout: "Running"
     speed10K:
       label:            "10 km"
       unit:             "min/km"
-      all_time:         3:41
+      all_time:         "3:41"
       all_time_date:    "2025-05-18"
       all_time_workout: "Running"
-      this_year:        3:57
+      this_year:        "3:57"
       this_year_date:   "2026-04-04"
       this_year_workout: "Running"
     speedHalfMarathon:
       label:            "Half Marathon"
       unit:             "min/km"
-      all_time:         3:44
+      all_time:         "3:44"
       all_time_date:    "2025-05-18"
       all_time_workout: "Running"
-      this_year:        4:48
+      this_year:        "4:48"
       this_year_date:   "2026-03-08"
       this_year_workout: "Longo em Pace Fácil"
     speedMarathon:
       label:            "Marathon"
       unit:             "min/km"
-      all_time:         5:17
+      all_time:         "5:17"
       all_time_date:    "2022-10-08"
       all_time_workout: "Running"
       this_year:        null
