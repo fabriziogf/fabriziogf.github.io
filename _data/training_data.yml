@@ -318,8 +318,8 @@ prs:
     speed1K:
       label:            "1 km"
       unit:             "min/km"
-      all_time:         "2:29"
-      all_time_date:    "2025-05-08"
+      all_time:         "3:12"
+      all_time_date:    "2023-11-05"
       all_time_workout: "Running"
       this_year:        "3:37"
       this_year_date:   "2026-05-15"
