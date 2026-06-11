@@ -268,7 +268,7 @@ prs:
       all_time_workout: "Road Cycling"
       this_year:        806.0
       this_year_date:   "2026-05-30"
-      this_year_workout:"5 horas Easy Miles"
+      this_year_workout: "5 horas Easy Miles"
     power1min:
       label:            "1 min"
       unit:             "W"
@@ -277,7 +277,7 @@ prs:
       all_time_workout: "Pedal Estruturado mais plano"
       this_year:        430.0
       this_year_date:   "2026-04-01"
-      this_year_workout:"TESTE MÁXIMO !"
+      this_year_workout: "TESTE MÁXIMO !"
     power5min:
       label:            "5 min"
       unit:             "W"
@@ -286,7 +286,7 @@ prs:
       all_time_workout: "TESTE MÁXIMO !"
       this_year:        380.0
       this_year_date:   "2026-04-01"
-      this_year_workout:"TESTE MÁXIMO !"
+      this_year_workout: "TESTE MÁXIMO !"
     power10min:
       label:            "10 min"
       unit:             "W"
@@ -295,7 +295,7 @@ prs:
       all_time_workout: "TESTE MÁXIMO !"
       this_year:        365.0
       this_year_date:   "2026-04-01"
-      this_year_workout:"TESTE MÁXIMO !"
+      this_year_workout: "TESTE MÁXIMO !"
     power20min:
       label:            "20 min"
       unit:             "W"
@@ -304,7 +304,7 @@ prs:
       all_time_workout: "TESTE MÁXIMO !"
       this_year:        350.0
       this_year_date:   "2026-04-01"
-      this_year_workout:"TESTE MÁXIMO !"
+      this_year_workout: "TESTE MÁXIMO !"
     power60min:
       label:            "60 min"
       unit:             "W"
@@ -313,7 +313,7 @@ prs:
       all_time_workout: "Dia duro chegando - FTP (2o Limiar)"
       this_year:        268.0
       this_year_date:   "2026-05-12"
-      this_year_workout:"L2/Z4"
+      this_year_workout: "L2/Z4"
   run:
     speed1K:
       label:            "1 km"
@@ -323,7 +323,7 @@ prs:
       all_time_workout: "Running"
       this_year:        3:37
       this_year_date:   "2026-05-15"
-      this_year_workout:"Ironman> 5 x 2000m Z3>4"
+      this_year_workout: "Ironman> 5 x 2000m Z3>4"
     speed5K:
       label:            "5 km"
       unit:             "min/km"
@@ -332,7 +332,7 @@ prs:
       all_time_workout: "Running"
       this_year:        3:49
       this_year_date:   "2026-04-04"
-      this_year_workout:"Running"
+      this_year_workout: "Running"
     speed10K:
       label:            "10 km"
       unit:             "min/km"
@@ -341,7 +341,7 @@ prs:
       all_time_workout: "Running"
       this_year:        3:57
       this_year_date:   "2026-04-04"
-      this_year_workout:"Running"
+      this_year_workout: "Running"
     speedHalfMarathon:
       label:            "Half Marathon"
       unit:             "min/km"
@@ -350,7 +350,7 @@ prs:
       all_time_workout: "Running"
       this_year:        4:48
       this_year_date:   "2026-03-08"
-      this_year_workout:"Longo em Pace Fácil"
+      this_year_workout: "Longo em Pace Fácil"
     speedMarathon:
       label:            "Marathon"
       unit:             "min/km"
@@ -359,4 +359,4 @@ prs:
       all_time_workout: "Running"
       this_year:        null
       this_year_date:   ""
-      this_year_workout:""
+      this_year_workout: ""
