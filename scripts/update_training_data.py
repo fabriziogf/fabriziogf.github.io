@@ -1,18 +1,17 @@
 #!/usr/bin/env python3
 """
-Update _data/training_data.yml with the rolling 7-day training window.
+Update _data/training_data.yml with rolling 7-day window, 12-month trends,
+CTL trend, personal records (bike + run), and enhanced workout fields.
 
 Run daily via Cowork:
   cd /Users/fabriziogiovanninifilho/Documents/fabriziogf_page
   /Users/fabriziogiovanninifilho/ai-projects/trainingpeaks-mcp/.venv/bin/python3 scripts/update_training_data.py
-
-The script fetches yesterday's completed window (yesterday - 6 days → yesterday),
-writes _data/training_data.yml, then commits and pushes.
 """
 
 import asyncio
 import sys
 import os
+from collections import defaultdict
 from datetime import date, timedelta
 from pathlib import Path
 
@@ -21,41 +20,99 @@ TP_MCP = Path("/Users/fabriziogiovanninifilho/ai-projects/trainingpeaks-mcp")
 sys.path.insert(0, str(TP_MCP / "src"))
 
 from tp_mcp.tools.fitness import tp_get_fitness
+from tp_mcp.tools.peaks import tp_get_peaks
 from tp_mcp.client import TPClient
 
-REPO = Path(__file__).parent.parent
-OUT  = REPO / "_data" / "training_data.yml"
+REPO     = Path(__file__).parent.parent
+OUT      = REPO / "_data" / "training_data.yml"
+SWIM_PRS = REPO / "_data" / "swim_prs.yml"
 
-# ── Sport classifier using workoutTypeValueId (authoritative TP field) ──────
-# Mirrors SPORT_TYPE_MAP in tp_mcp/tools/workouts.py
+# ── Sport classifier ─────────────────────────────────────────────────────────
 TYPE_ID_TO_SPORT: dict[int, str] = {
     1:   'swim',
     2:   'bike',
     3:   'run',
-    4:   'bike',      # Brick — primary discipline is bike
-    5:   'other',     # Crosstrain
-    6:   'other',     # Race
-    7:   'other',     # Day Off
-    8:   'bike',      # MtnBike
-    9:   'strength',  # Strength
-    10:  'other',     # Custom
-    11:  'other',     # XCSki
-    12:  'other',     # Rowing
-    13:  'run',       # Walk
-    100: 'other',     # Other
+    4:   'bike',
+    5:   'other',
+    6:   'other',
+    7:   'other',
+    8:   'bike',
+    9:   'strength',
+    10:  'other',
+    11:  'other',
+    12:  'other',
+    13:  'run',
+    100: 'other',
 }
 
-def classify(type_id: int | None) -> str:
+def classify(type_id) -> str:
     return TYPE_ID_TO_SPORT.get(type_id, 'other')
 
 
-# ── YAML writer (no external deps) ─────────────────────────────────────────
-def q(s):
-    """Quote a string for YAML."""
-    return f'"{s}"'
+# ── Pace conversion (m/s → "M:SS /km") ──────────────────────────────────────
+def mps_to_pace(speed_ms) -> str | None:
+    """Convert m/s to min:sec per km string, e.g. '3:49'."""
+    if not speed_ms or speed_ms <= 0:
+        return None
+    pace_sec = 1000 / speed_ms
+    mins = int(pace_sec // 60)
+    secs = int(pace_sec % 60)
+    return f"{mins}:{secs:02d}"
 
+
+# ── YAML helpers ─────────────────────────────────────────────────────────────
+def q(s):
+    return f'"{str(s)}"'
+
+def yn(v):
+    """Null-safe YAML value — emits null for None."""
+    if v is None:
+        return "null"
+    return str(v)
+
+
+# ── PR fetcher ───────────────────────────────────────────────────────────────
+async def fetch_prs(year_days: int) -> dict:
+    """Fetch bike and run PRs — all-time and this year."""
+    bike_types = ['power5sec', 'power1min', 'power5min', 'power10min', 'power20min', 'power60min']
+    run_types  = ['speed1K', 'speed5K', 'speed10K', 'speedHalfMarathon', 'speedMarathon']
+
+    prs = {'bike': {}, 'run': {}}
+
+    for pr_type in bike_types:
+        at = await tp_get_peaks(sport='Bike', pr_type=pr_type, days=3650)
+        ty = await tp_get_peaks(sport='Bike', pr_type=pr_type, days=year_days)
+        at_top = at.get('records', [{}])[0] if at.get('records') else {}
+        ty_top = ty.get('records', [{}])[0] if ty.get('records') else {}
+        prs['bike'][pr_type] = {
+            'all_time':          at_top.get('value'),
+            'all_time_date':     at_top.get('date', ''),
+            'all_time_workout':  at_top.get('workout_title', ''),
+            'this_year':         ty_top.get('value'),
+            'this_year_date':    ty_top.get('date', ''),
+            'this_year_workout': ty_top.get('workout_title', ''),
+        }
+
+    for pr_type in run_types:
+        at = await tp_get_peaks(sport='Run', pr_type=pr_type, days=3650)
+        ty = await tp_get_peaks(sport='Run', pr_type=pr_type, days=year_days)
+        at_top = at.get('records', [{}])[0] if at.get('records') else {}
+        ty_top = ty.get('records', [{}])[0] if ty.get('records') else {}
+        prs['run'][pr_type] = {
+            'all_time':          mps_to_pace(at_top.get('value')),
+            'all_time_date':     at_top.get('date', ''),
+            'all_time_workout':  at_top.get('workout_title', ''),
+            'this_year':         mps_to_pace(ty_top.get('value')),
+            'this_year_date':    ty_top.get('date', ''),
+            'this_year_workout': ty_top.get('workout_title', ''),
+        }
+
+    return prs
+
+
+# ── YAML builder ─────────────────────────────────────────────────────────────
 def build_yaml(data: dict) -> str:
-    td = data
+    td    = data
     lines = [
         "# Auto-generated by scripts/update_training_data.py",
         "# Do not edit manually — overwritten daily by the Cowork job.",
@@ -81,6 +138,8 @@ def build_yaml(data: dict) -> str:
             f"    distance_km: {t['distance_km']}",
             f"    tss:         {t['tss']}",
         ]
+
+    # ── Daily (7-day window) ──────────────────────────────────────────────────
     lines += ["", "daily:"]
     for d in td['daily']:
         lines.append(f"  - date: {q(d['date'])}")
@@ -91,73 +150,215 @@ def build_yaml(data: dict) -> str:
                 f"{{ hours: {v['hours']:<5}, distance_km: {v['distance_km']:<6}, "
                 f"tss: {v['tss']:<6}, sessions: {v['sessions']} }}"
             )
+
+    # ── Workouts (with hr_avg + power_avg) ───────────────────────────────────
     lines += ["", "workouts:"]
     for w in td['workouts']:
-        dist_str = str(w['distance_km'])
         lines.append(
-            f"  - {{ date: {q(w['date'])}, sport: {w['sport']:<8}, "
-            f"title: {q(w['title'])}, "
-            f"hours: {w['hours']}, distance_km: {dist_str}, tss: {w['tss']} }}"
+            f"  - date: {q(w['date'])}\n"
+            f"    sport: {w['sport']}\n"
+            f"    title: {q(w['title'])}\n"
+            f"    hours: {w['hours']}\n"
+            f"    distance_km: {w['distance_km']}\n"
+            f"    tss: {w['tss']}\n"
+            f"    hr_avg: {yn(w['hr_avg'])}\n"
+            f"    power_avg: {yn(w['power_avg'])}"
         )
+
+    # ── Monthly trends (12 months) ────────────────────────────────────────────
+    lines += ["", "monthly:"]
+    for m in td['monthly']:
+        lines.append(f"  - month: {q(m['month'])}")
+        for s in sports:
+            v = m[s]
+            lines.append(
+                f"    {s:<8}: "
+                f"{{ sessions: {v['sessions']}, hours: {v['hours']:<6}, "
+                f"distance_km: {v['distance_km']:<7}, tss: {v['tss']} }}"
+            )
+
+    # ── CTL trend (end-of-month snapshots) ───────────────────────────────────
+    lines += ["", "ctl_trend:"]
+    for c in td['ctl_trend']:
+        lines.append(f"  - {{ month: {q(c['month'])}, ctl: {c['ctl']}, atl: {c['atl']}, tsb: {c['tsb']} }}")
+
+    # ── Personal Records — Bike ───────────────────────────────────────────────
+    lines += ["", "prs:", "  bike:"]
+    bike_labels = {
+        'power5sec':   '5 sec',
+        'power1min':   '1 min',
+        'power5min':   '5 min',
+        'power10min':  '10 min',
+        'power20min':  '20 min',
+        'power60min':  '60 min',
+    }
+    for k, label in bike_labels.items():
+        pr = td['prs']['bike'].get(k, {})
+        lines.append(f"    {k}:")
+        lines.append(f"      label:            {q(label)}")
+        lines.append(f"      unit:             {q('W')}")
+        lines.append(f"      all_time:         {yn(pr.get('all_time'))}")
+        lines.append(f"      all_time_date:    {q(pr.get('all_time_date',''))}")
+        lines.append(f"      all_time_workout: {q(pr.get('all_time_workout',''))}")
+        lines.append(f"      this_year:        {yn(pr.get('this_year'))}")
+        lines.append(f"      this_year_date:   {q(pr.get('this_year_date',''))}")
+        lines.append(f"      this_year_workout: {q(pr.get('this_year_workout',''))}")
+
+    # ── Personal Records — Run ────────────────────────────────────────────────
+    lines += ["  run:"]
+    run_labels = {
+        'speed1K':           '1 km',
+        'speed5K':           '5 km',
+        'speed10K':          '10 km',
+        'speedHalfMarathon': 'Half Marathon',
+        'speedMarathon':     'Marathon',
+    }
+    for k, label in run_labels.items():
+        pr = td['prs']['run'].get(k, {})
+        lines.append(f"    {k}:")
+        lines.append(f"      label:            {q(label)}")
+        lines.append(f"      unit:             {q('min/km')}")
+        lines.append(f"      all_time:         {q(pr['all_time']) if pr.get('all_time') else 'null'}")
+        lines.append(f"      all_time_date:    {q(pr.get('all_time_date',''))}")
+        lines.append(f"      all_time_workout: {q(pr.get('all_time_workout',''))}")
+        lines.append(f"      this_year:        {q(pr['this_year']) if pr.get('this_year') else 'null'}")
+        lines.append(f"      this_year_date:   {q(pr.get('this_year_date',''))}")
+        lines.append(f"      this_year_workout: {q(pr.get('this_year_workout',''))}")
+
     lines.append("")
     return "\n".join(lines)
 
 
-# ── Main ────────────────────────────────────────────────────────────────────
+# ── Swim PRs bootstrap (manual — TP API does not expose swim PRs) ─────────────
+SWIM_PRS_TEMPLATE = """\
+# Swim Personal Records — update manually (TrainingPeaks API does not expose swim PRs).
+# pace format: "M:SS" per 100m (e.g. "1:25" = 1 min 25 sec per 100m)
+pace50m:
+  label: "50 m"
+  unit: "min/100m"
+  all_time: null
+  all_time_date: ""
+  this_year: null
+  this_year_date: ""
+
+pace100m:
+  label: "100 m"
+  unit: "min/100m"
+  all_time: null
+  all_time_date: ""
+  this_year: null
+  this_year_date: ""
+
+pace200m:
+  label: "200 m"
+  unit: "min/100m"
+  all_time: null
+  all_time_date: ""
+  this_year: null
+  this_year_date: ""
+
+pace400m:
+  label: "400 m"
+  unit: "min/100m"
+  all_time: null
+  all_time_date: ""
+  this_year: null
+  this_year_date: ""
+
+pace1500m:
+  label: "1500 m"
+  unit: "min/100m"
+  all_time: null
+  all_time_date: ""
+  this_year: null
+  this_year_date: ""
+"""
+
+
+# ── Main ─────────────────────────────────────────────────────────────────────
 async def main():
-    today = date.today()
-    end   = today - timedelta(days=1)   # yesterday = last complete day
-    start = end - timedelta(days=6)     # 7-day window
+    today     = date.today()
+    end       = today - timedelta(days=1)
+    start     = end - timedelta(days=6)
+    trend_start = today - timedelta(days=365)
+    year_days   = (today - date(today.year, 1, 1)).days
 
-    print(f"Fetching {start} → {end} …")
+    print(f"7-day window: {start} → {end}")
+    print(f"12-month window: {trend_start} → {end}")
 
-    # Fetch raw workouts directly so we have workoutTypeValueId
+    # ── Fetch workouts ────────────────────────────────────────────────────────
     async with TPClient() as client:
         athlete_id = await client.ensure_athlete_id()
-        endpoint   = f"/fitness/v6/athletes/{athlete_id}/workouts/{start}/{end}"
-        raw_resp   = await client.get(endpoint)
-    raw_workouts = [
-        w for w in (raw_resp.data or [])
-        if w.get('totalTime') or w.get('tssActual')   # completed only
-    ]
 
-    fitness_res   = await tp_get_fitness(start_date=start.isoformat(), end_date=end.isoformat())
+        # 7-day window
+        resp7 = await client.get(
+            f"/fitness/v6/athletes/{athlete_id}/workouts/{start}/{end}"
+        )
+        raw_7day = [
+            w for w in (resp7.data or [])
+            if w.get('totalTime') or w.get('tssActual')
+        ]
+
+        # 12-month window for trends
+        resp12 = await client.get(
+            f"/fitness/v6/athletes/{athlete_id}/workouts/{trend_start}/{end}"
+        )
+        raw_12mo = [
+            w for w in (resp12.data or [])
+            if w.get('totalTime') or w.get('tssActual')
+        ]
+
+    # ── Fetch fitness (CTL/ATL/TSB) ───────────────────────────────────────────
+    fitness_res   = await tp_get_fitness(
+        start_date=start.isoformat(), end_date=end.isoformat()
+    )
     daily_fitness = {d['date']: d for d in fitness_res.get('daily_data', [])}
 
+    trend_fitness = await tp_get_fitness(
+        start_date=trend_start.isoformat(), end_date=end.isoformat()
+    )
+    trend_daily = trend_fitness.get('daily_data', [])
+
+    # ── Fetch PRs ─────────────────────────────────────────────────────────────
+    print("Fetching PRs…")
+    prs = await fetch_prs(year_days)
+
+    # ── Build 7-day totals + daily breakdown ──────────────────────────────────
+    sports = ['swim', 'bike', 'run', 'strength', 'other']
     totals = {s: {'sessions': 0, 'hours': 0.0, 'distance_km': 0.0, 'tss': 0.0}
-              for s in ['swim', 'bike', 'run', 'strength', 'other']}
+              for s in sports}
     days = {}
     for i in range(7):
         d = (start + timedelta(days=i)).isoformat()
         days[d] = {s: {'hours': 0.0, 'distance_km': 0.0, 'tss': 0.0, 'sessions': 0}
-                   for s in ['swim', 'bike', 'run', 'strength', 'other']}
+                   for s in sports}
 
     workout_list = []
-    for w in raw_workouts:
+    for w in raw_7day:
         sport = classify(w.get('workoutTypeValueId'))
-        # Normalize fields from raw API shape
-        w = {
-            'date':             (w.get('workoutDay') or '')[:10],
-            'title':            w.get('title', ''),
-            'tss':              w.get('tssActual'),
-            'duration_actual':  w.get('totalTime'),
-            'distance_actual_km': (w.get('distance') or 0) / 1000,
-        }
-        tss   = round(w.get('tss') or 0, 1)
-        hrs   = round(w.get('duration_actual') or 0, 2)
-        dist  = round(w.get('distance_actual_km') or 0, 1)
+        wdate = (w.get('workoutDay') or '')[:10]
+        tss   = round(w.get('tssActual') or 0, 1)
+        hrs   = round(w.get('totalTime') or 0, 2)
+        dist  = round((w.get('distance') or 0) / 1000, 1)
+        hr    = w.get('heartRateAverage')
+        pwr   = w.get('powerAverage')
+
         totals[sport]['sessions']    += 1
         totals[sport]['hours']       += hrs
         totals[sport]['distance_km'] += dist
         totals[sport]['tss']         += tss
-        if w['date'] in days:
-            days[w['date']][sport]['hours']       += hrs
-            days[w['date']][sport]['distance_km'] += dist
-            days[w['date']][sport]['tss']         += tss
-            days[w['date']][sport]['sessions']    += 1
+
+        if wdate in days:
+            days[wdate][sport]['hours']    += hrs
+            days[wdate][sport]['distance_km'] += dist
+            days[wdate][sport]['tss']      += tss
+            days[wdate][sport]['sessions'] += 1
+
         workout_list.append({
-            'date': w['date'], 'title': w['title'], 'sport': sport,
+            'date': wdate, 'title': w.get('title', ''), 'sport': sport,
             'hours': hrs, 'distance_km': dist, 'tss': tss,
+            'hr_avg': int(hr) if hr else None,
+            'power_avg': int(pwr) if pwr else None,
         })
 
     for s in totals:
@@ -165,6 +366,7 @@ async def main():
         totals[s]['distance_km'] = round(totals[s]['distance_km'], 1)
         totals[s]['tss']         = int(round(totals[s]['tss'], 0))
 
+    # ── Last fitness values ───────────────────────────────────────────────────
     last_fitness = {'ctl': 0.0, 'atl': 0.0, 'tsb': 0.0}
     if daily_fitness:
         last = sorted(daily_fitness.keys())[-1]
@@ -178,10 +380,48 @@ async def main():
     daily_list = []
     for d in sorted(days.keys()):
         entry = {'date': d}
-        for s in ['swim', 'bike', 'run', 'strength', 'other']:
+        for s in sports:
             entry[s] = {k: round(v, 1) for k, v in days[d][s].items()}
         daily_list.append(entry)
 
+    # ── Build monthly aggregates ──────────────────────────────────────────────
+    monthly_map = defaultdict(lambda: {
+        s: {'sessions': 0, 'hours': 0.0, 'distance_km': 0.0, 'tss': 0.0}
+        for s in sports
+    })
+    for w in raw_12mo:
+        sport = classify(w.get('workoutTypeValueId'))
+        month = (w.get('workoutDay') or '')[:7]
+        if not month:
+            continue
+        monthly_map[month][sport]['sessions']    += 1
+        monthly_map[month][sport]['hours']       += round(w.get('totalTime') or 0, 2)
+        monthly_map[month][sport]['distance_km'] += round((w.get('distance') or 0) / 1000, 1)
+        monthly_map[month][sport]['tss']         += round(w.get('tssActual') or 0, 1)
+
+    monthly_list = []
+    for month in sorted(monthly_map.keys()):
+        entry = {'month': month}
+        for s in sports:
+            v = monthly_map[month][s]
+            entry[s] = {
+                'sessions':    v['sessions'],
+                'hours':       round(v['hours'], 1),
+                'distance_km': round(v['distance_km'], 1),
+                'tss':         int(round(v['tss'], 0)),
+            }
+        monthly_list.append(entry)
+
+    # ── CTL trend: last entry per month ──────────────────────────────────────
+    ctl_by_month = {}
+    for d in trend_daily:
+        m = d['date'][:7]
+        ctl_by_month[m] = {'ctl': d['ctl'], 'atl': d['atl'], 'tsb': d['tsb']}
+    ctl_trend = [
+        {'month': m, **v} for m, v in sorted(ctl_by_month.items())
+    ]
+
+    # ── Assemble ─────────────────────────────────────────────────────────────
     data = {
         'generated_at': today.isoformat(),
         'window_start': start.isoformat(),
@@ -190,14 +430,22 @@ async def main():
         'totals':       totals,
         'daily':        daily_list,
         'workouts':     workout_list,
+        'monthly':      monthly_list,
+        'ctl_trend':    ctl_trend,
+        'prs':          prs,
     }
 
     OUT.write_text(build_yaml(data), encoding='utf-8')
     print(f"Written → {OUT}")
 
-    # Commit and push
+    # Bootstrap swim_prs.yml if missing
+    if not SWIM_PRS.exists():
+        SWIM_PRS.write_text(SWIM_PRS_TEMPLATE, encoding='utf-8')
+        print(f"Created swim PRs template → {SWIM_PRS}")
+
+    # ── Commit and push ───────────────────────────────────────────────────────
     os.chdir(REPO)
-    os.system(f'git add _data/training_data.yml')
+    os.system('git add _data/training_data.yml _data/swim_prs.yml')
     os.system(f'git commit -m "chore: update training dashboard [{today}]"')
     os.system('git push origin main')
     print("Pushed.")
