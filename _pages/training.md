@@ -7,7 +7,6 @@ classes: wide
 ---
 
 {% assign td = site.data.training_data %}
-{% assign sp = site.data.swim_prs %}
 
 <p style="color: var(--global-font-color, #888); font-size: 0.85em; margin-top: -0.5em;">
   Rolling 7-day window: <strong>{{ td.window_start }}</strong> → <strong>{{ td.window_end }}</strong> &nbsp;·&nbsp; Updated: {{ td.generated_at }}
@@ -175,61 +174,6 @@ classes: wide
     <button class="td-pr-toggle td-pr-toggle-active" onclick="tdPRToggle('this_year',this)">2026 (This Year)</button>
     <button class="td-pr-toggle" onclick="tdPRToggle('all_time',this)">All-Time</button>
   </div>
-
-  <!-- ── Swim ── -->
-  <h3 style="color:#4fc3f7;margin-bottom:.6rem;">🏊 Swim — Pace</h3>
-  <p style="font-size:.8em;color:#888;margin-top:-.4em;">
-    TrainingPeaks does not expose swim PRs via API. Update <code>_data/swim_prs.yml</code> manually.
-  </p>
-
-  <table class="td-pr-table">
-    <thead>
-      <tr>
-        <th>Distance</th>
-        <th class="pr-this-year">2026 Best</th>
-        <th class="pr-this-year">Date</th>
-        <th class="pr-all-time" style="display:none">All-Time Best</th>
-        <th class="pr-all-time" style="display:none">Date</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>{{ sp.pace50m.label }}</td>
-        <td class="pr-this-year td-pr-value">{% if sp.pace50m.this_year %}{{ sp.pace50m.this_year }}/100m{% else %}<span class="td-pr-null">—</span>{% endif %}</td>
-        <td class="pr-this-year td-pr-date">{{ sp.pace50m.this_year_date }}</td>
-        <td class="pr-all-time td-pr-value" style="display:none">{% if sp.pace50m.all_time %}{{ sp.pace50m.all_time }}/100m{% else %}<span class="td-pr-null">—</span>{% endif %}</td>
-        <td class="pr-all-time td-pr-date" style="display:none">{{ sp.pace50m.all_time_date }}</td>
-      </tr>
-      <tr>
-        <td>{{ sp.pace100m.label }}</td>
-        <td class="pr-this-year td-pr-value">{% if sp.pace100m.this_year %}{{ sp.pace100m.this_year }}/100m{% else %}<span class="td-pr-null">—</span>{% endif %}</td>
-        <td class="pr-this-year td-pr-date">{{ sp.pace100m.this_year_date }}</td>
-        <td class="pr-all-time td-pr-value" style="display:none">{% if sp.pace100m.all_time %}{{ sp.pace100m.all_time }}/100m{% else %}<span class="td-pr-null">—</span>{% endif %}</td>
-        <td class="pr-all-time td-pr-date" style="display:none">{{ sp.pace100m.all_time_date }}</td>
-      </tr>
-      <tr>
-        <td>{{ sp.pace200m.label }}</td>
-        <td class="pr-this-year td-pr-value">{% if sp.pace200m.this_year %}{{ sp.pace200m.this_year }}/100m{% else %}<span class="td-pr-null">—</span>{% endif %}</td>
-        <td class="pr-this-year td-pr-date">{{ sp.pace200m.this_year_date }}</td>
-        <td class="pr-all-time td-pr-value" style="display:none">{% if sp.pace200m.all_time %}{{ sp.pace200m.all_time }}/100m{% else %}<span class="td-pr-null">—</span>{% endif %}</td>
-        <td class="pr-all-time td-pr-date" style="display:none">{{ sp.pace200m.all_time_date }}</td>
-      </tr>
-      <tr>
-        <td>{{ sp.pace400m.label }}</td>
-        <td class="pr-this-year td-pr-value">{% if sp.pace400m.this_year %}{{ sp.pace400m.this_year }}/100m{% else %}<span class="td-pr-null">—</span>{% endif %}</td>
-        <td class="pr-this-year td-pr-date">{{ sp.pace400m.this_year_date }}</td>
-        <td class="pr-all-time td-pr-value" style="display:none">{% if sp.pace400m.all_time %}{{ sp.pace400m.all_time }}/100m{% else %}<span class="td-pr-null">—</span>{% endif %}</td>
-        <td class="pr-all-time td-pr-date" style="display:none">{{ sp.pace400m.all_time_date }}</td>
-      </tr>
-      <tr>
-        <td>{{ sp.pace1500m.label }}</td>
-        <td class="pr-this-year td-pr-value">{% if sp.pace1500m.this_year %}{{ sp.pace1500m.this_year }}/100m{% else %}<span class="td-pr-null">—</span>{% endif %}</td>
-        <td class="pr-this-year td-pr-date">{{ sp.pace1500m.this_year_date }}</td>
-        <td class="pr-all-time td-pr-value" style="display:none">{% if sp.pace1500m.all_time %}{{ sp.pace1500m.all_time }}/100m{% else %}<span class="td-pr-null">—</span>{% endif %}</td>
-        <td class="pr-all-time td-pr-date" style="display:none">{{ sp.pace1500m.all_time_date }}</td>
-      </tr>
-    </tbody>
-  </table>
 
   <!-- ── Bike ── -->
   <h3 style="color:#81c784;margin-top:2rem;margin-bottom:.6rem;">🚴 Bike — Peak Power</h3>

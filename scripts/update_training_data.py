@@ -71,9 +71,83 @@ def yn(v):
     return str(v)
 
 
+# 3:00/km in m/s — anything faster is a GPS artifact, excluded from run PRs
+MAX_VALID_RUN_SPEED_MS = 1000 / 180
+
+# Minimum distance (m) to count as a marathon effort (handles Garmin under-recording)
+MARATHON_MIN_M = 41_500
+
+
+def marathon_best_from_workouts(raw_workouts: list, year_days: int) -> tuple[dict, dict]:
+    """
+    Scan raw workouts for runs >= MARATHON_MIN_M and return the best avg pace,
+    split into (all_time_record, this_year_record). Each record is a dict with
+    keys: value (pace str), date, workout_title — or {} if none found.
+    """
+    RUN_TYPES = {3, 13}
+    year_start = date.today() - timedelta(days=year_days)
+
+    best_all: tuple | None = None   # (speed_ms, date_str, title)
+    best_ty:  tuple | None = None
+
+    for w in raw_workouts:
+        if w.get('workoutTypeValueId') not in RUN_TYPES:
+            continue
+        dist_m = w.get('distance') or 0
+        if dist_m < MARATHON_MIN_M:
+            continue
+        hrs = w.get('totalTime') or 0
+        if hrs <= 0:
+            continue
+        speed_ms = dist_m / (hrs * 3600)
+        if speed_ms > MAX_VALID_RUN_SPEED_MS:   # too fast → skip
+            continue
+
+        wdate_str = (w.get('workoutDay') or '')[:10]
+        title     = w.get('title', '')
+
+        if best_all is None or speed_ms > best_all[0]:
+            best_all = (speed_ms, wdate_str, title)
+
+        try:
+            if date.fromisoformat(wdate_str) >= year_start:
+                if best_ty is None or speed_ms > best_ty[0]:
+                    best_ty = (speed_ms, wdate_str, title)
+        except (ValueError, TypeError):
+            pass
+
+    def to_rec(tup):
+        if not tup:
+            return {}
+        spd, dt, ttl = tup
+        return {'value': mps_to_pace(spd), 'date': dt, 'workout_title': ttl}
+
+    return to_rec(best_all), to_rec(best_ty)
+
+
+def _better_run_record(a: dict, b: dict) -> dict:
+    """Return whichever run record has the faster (higher speed) pace, or the non-empty one."""
+    if not a:
+        return b
+    if not b:
+        return a
+    # pace strings like "3:49" — shorter minutes + shorter seconds = faster
+    def pace_to_sec(p):
+        try:
+            m, s = p.split(':')
+            return int(m) * 60 + int(s)
+        except Exception:
+            return 9999
+    return a if pace_to_sec(a['value']) <= pace_to_sec(b['value']) else b
+
+
 # ── PR fetcher ───────────────────────────────────────────────────────────────
-async def fetch_prs(year_days: int) -> dict:
-    """Fetch bike and run PRs — all-time and this year."""
+async def fetch_prs(year_days: int, raw_workouts: list) -> dict:
+    """Fetch bike and run PRs — all-time and this year.
+
+    raw_workouts is the 12-month window used as a fallback for marathon distance
+    (handles Garmin under-recording < 42.195 km but >= 41.5 km).
+    """
     bike_types = ['power5sec', 'power1min', 'power5min', 'power10min', 'power20min', 'power60min']
     run_types  = ['speed1K', 'speed5K', 'speed10K', 'speedHalfMarathon', 'speedMarathon']
 
@@ -93,18 +167,46 @@ async def fetch_prs(year_days: int) -> dict:
             'this_year_workout': ty_top.get('workout_title', ''),
         }
 
+    # Pre-compute marathon fallback from raw workouts
+    mara_at_wkt, mara_ty_wkt = marathon_best_from_workouts(raw_workouts, year_days)
+
     for pr_type in run_types:
         at = await tp_get_peaks(sport='Run', pr_type=pr_type, days=3650)
         ty = await tp_get_peaks(sport='Run', pr_type=pr_type, days=year_days)
-        at_top = at.get('records', [{}])[0] if at.get('records') else {}
-        ty_top = ty.get('records', [{}])[0] if ty.get('records') else {}
+
+        # Filter out any record faster than 3:00/km (GPS artifact)
+        at_records = [r for r in at.get('records', [])
+                      if (r.get('value') or 0) <= MAX_VALID_RUN_SPEED_MS]
+        ty_records = [r for r in ty.get('records', [])
+                      if (r.get('value') or 0) <= MAX_VALID_RUN_SPEED_MS]
+
+        at_top = at_records[0] if at_records else {}
+        ty_top = ty_records[0] if ty_records else {}
+
+        at_rec = {
+            'value':          mps_to_pace(at_top.get('value')),
+            'date':           at_top.get('date', ''),
+            'workout_title':  at_top.get('workout_title', ''),
+        } if at_top else {}
+
+        ty_rec = {
+            'value':          mps_to_pace(ty_top.get('value')),
+            'date':           ty_top.get('date', ''),
+            'workout_title':  ty_top.get('workout_title', ''),
+        } if ty_top else {}
+
+        # For marathon: also consider workout scan (handles Garmin-short recordings)
+        if pr_type == 'speedMarathon':
+            at_rec = _better_run_record(at_rec, mara_at_wkt)
+            ty_rec = _better_run_record(ty_rec, mara_ty_wkt)
+
         prs['run'][pr_type] = {
-            'all_time':          mps_to_pace(at_top.get('value')),
-            'all_time_date':     at_top.get('date', ''),
-            'all_time_workout':  at_top.get('workout_title', ''),
-            'this_year':         mps_to_pace(ty_top.get('value')),
-            'this_year_date':    ty_top.get('date', ''),
-            'this_year_workout': ty_top.get('workout_title', ''),
+            'all_time':          at_rec.get('value'),
+            'all_time_date':     at_rec.get('date', ''),
+            'all_time_workout':  at_rec.get('workout_title', ''),
+            'this_year':         ty_rec.get('value'),
+            'this_year_date':    ty_rec.get('date', ''),
+            'this_year_workout': ty_rec.get('workout_title', ''),
         }
 
     return prs
@@ -321,7 +423,7 @@ async def main():
 
     # ── Fetch PRs ─────────────────────────────────────────────────────────────
     print("Fetching PRs…")
-    prs = await fetch_prs(year_days)
+    prs = await fetch_prs(year_days, raw_12mo)
 
     # ── Build 7-day totals + daily breakdown ──────────────────────────────────
     sports = ['swim', 'bike', 'run', 'strength', 'other']
