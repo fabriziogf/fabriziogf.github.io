@@ -11,7 +11,7 @@ toc: true
 
 I’m an AI/ML product leader and builder with 9+ years of experience across product management, analytics, economics, and technical prototyping.
 
-Over the last few years, I’ve worked at the intersection of data, machine learning, and operations, helping build products that solve complex real-world problems and create measurable business impact. My work has included 0-to-1 product development, high-visibility organizational goals, products that reached 250M+ users, and initiatives that generated $255M+ in revenue.
+Over the last few years, I’ve worked at the intersection of data, machine learning, and operations, helping build products that solve complex real-world problems and create measurable business impact. My work has included 0-to-1 product development, large-scale experimentation, high-visibility organizational goals, products that reached 250M+ users, and initiatives that generated $255M+ in revenue.
 
 I created this site as a place to share what I’m learning and building, especially across AI, ML, product thinking, and endurance sports.
 
