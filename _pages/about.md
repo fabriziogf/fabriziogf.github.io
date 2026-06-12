@@ -7,7 +7,7 @@ author_profile: true
 toc: true
 ---
 
-![Fabrizio Giovannini Filho](/assets/images/Giovannini Filho-Fabrizio-250709-2147-fave-final-crop.jpg){: .align-right style="width: 220px; border-radius: 6px;"}
+<img src="/assets/images/Giovannini Filho-Fabrizio-250709-2147-fave-final-crop.jpg" alt="Fabrizio Giovannini Filho" style="float: right; width: 220px; border-radius: 6px; margin: 0 0 1em 1.5em;" />
 
 I’m an AI/ML product leader and builder with 9+ years of experience across product management, analytics, economics, and technical prototyping.
 
@@ -71,7 +71,7 @@ Right now, I’m especially interested in:
 
 ## Life Outside Work
 
-![Fabrizio, Emily, and Ralphie](/assets/images/family_pic.jpg){: .align-right style="width: 260px; border-radius: 6px;"}
+<img src="/assets/images/family_pic.jpg" alt="Fabrizio, Emily, and Ralphie" style="float: right; width: 260px; border-radius: 6px; margin: 0 0 1em 1.5em;" />
 
 Outside of training, I also love going on long walks with my wife Emily and our dog Ralphie. It's a good excuse to slow down, explore new neighborhoods, and spend time together away from screens.
 
