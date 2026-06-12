@@ -7,7 +7,7 @@ author_profile: true
 toc: true
 ---
 
-<img src="/assets/images/Giovannini Filho-Fabrizio-250709-2147-fave-final-crop.jpg" alt="Fabrizio Giovannini Filho" style="float: right; width: 250px; border-radius: 6px; margin: 0 2em 1em 1.5em;" />
+<img src="/assets/images/Giovannini Filho-Fabrizio-250709-2147-fave-final-crop.jpg" alt="Fabrizio Giovannini Filho" style="float: right; width: 260px; border-radius: 6px; margin: 0 2em 1em 1.5em;" />
 
 I’m an AI/ML product leader and builder with 9+ years of experience across product management, analytics, economics, and technical prototyping.
 
