@@ -1,6 +1,6 @@
 ---
 permalink: /projects/
-title: "Projects [Work in Progress]"
+title: "Projects"
 layout: single
 author_profile: true
 classes: wide
@@ -10,7 +10,7 @@ classes: wide
   This page collects the <strong>live outputs</strong> of projects I'm actively building — tools, models, dashboards, and experiments. Each card links directly to the finished artifact.
 </p>
 <p style="color: var(--global-font-color, #888); font-size: 0.88em; margin-bottom: 2rem;">
-  I work across AI/ML, GenAI tooling, sports analytics, and decision systems. Projects here range from polished prototypes to early releases — all are real and usable.
+  I work across AI/ML, GenAI tooling, sports analytics, and decision systems. Projects here range from polished prototypes to early releases.
 </p>
 
 ---
