@@ -31,7 +31,10 @@ classes: wide
     <div class="proj-meta">
       <span>Python · Monte Carlo · Dixon-Coles</span>
     </div>
-    <a href="#" class="proj-cta">View output →</a>
+    <div class="proj-links">
+      <a href="/World_Cup_prediction_model_part10/" class="proj-cta">Read the writeup →</a>
+      <a href="https://github.com/fabriziogf/world_cup_model" class="proj-cta" target="_blank" rel="noopener">View code →</a>
+    </div>
   </div>
 
   <div class="proj-card proj-status-active">
@@ -156,6 +159,13 @@ classes: wide
   font-family: monospace;
 }
 
+.proj-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+  margin-top: 0.4rem;
+}
+
 .proj-cta {
   display: inline-block;
   margin-top: 0.4rem;
@@ -166,6 +176,10 @@ classes: wide
   border-bottom: 1px solid transparent;
   transition: border-color 0.15s;
   align-self: flex-start;
+}
+
+.proj-links .proj-cta {
+  margin-top: 0;
 }
 
 .proj-cta:hover {
