@@ -4,10 +4,10 @@ main:
     url: https://fabriziogf.github.io/about/
   - title: "Posts"
     url: /year-archive/
-  - title: "Training"
-    url: /training/
   - title: "Projects"
     url: /projects/
+  - title: "Training"
+    url: /training/
   # - title: "Sample Collections"
   #   url: /collection-archive/
   # - title: "Sitemap"
