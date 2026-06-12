@@ -69,6 +69,14 @@ Right now, I’m especially interested in:
 
 ---
 
+## Life Outside Work
+
+![Fabrizio, Emily, and Ralphie](/assets/images/family_pic.jpg){: .align-right style="width: 260px; border-radius: 6px;"}
+
+Outside of training, I also love going on long walks with my wife Emily and our dog Ralphie. It's a good excuse to slow down, explore new neighborhoods, and spend time together away from screens.
+
+---
+
 ## Triathlon and Rowing
 
 Outside of work, I spend a lot of time training and racing endurance sports. I rowed at Princeton and now focus primarily on long-course triathlon, especially 70.3 and Ironman racing.
