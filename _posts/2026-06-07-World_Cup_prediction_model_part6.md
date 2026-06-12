@@ -2,7 +2,7 @@
 title: "Building a World Cup Prediction Model — Part 6: First Predictions (And Why They're Wrong)"
 ---
 
-Five parts in, the pipeline is complete and — after the [Part 5](/2026/06/10/World_Cup_prediction_model_part5/) performance fix — actually runnable. So I ran it.
+Five parts in, the pipeline is complete and — after the [Part 5](/World_Cup_prediction_model_part5/) performance fix — actually runnable. So I ran it.
 
 The results are interesting, but not in the way you'd want from a finished model. Japan comes out as the tournament favourite. Germany gets tipped for a group-stage exit. These numbers are what the model produces, and they're also clearly off. This post documents the first predictions, explains exactly why they don't make sense, and lays out the fixes currently in progress.
 
@@ -116,11 +116,11 @@ A model is only as honest as its caveats. The headline result — Japan as tourn
 
 The project already contains the tools to address the biggest flaws, and both fixes are currently in progress.
 
-**Match-importance weighting in the fit.** The `MATCH_WEIGHTS` table used by the Elo system and the `tournament_weight` feature from [Part 2](/2026/06/07/World_Cup_prediction_model_part2/) already encode that a World Cup match matters more than a friendly. Feeding those weights into `fit_fast()` will down-weight the friendly-padded records that currently distort the ratings. This is the most direct fix for the confederation bias problem.
+**Match-importance weighting in the fit.** The `MATCH_WEIGHTS` table used by the Elo system and the `tournament_weight` feature from [Part 2](/World_Cup_prediction_model_part2/) already encode that a World Cup match matters more than a friendly. Feeding those weights into `fit_fast()` will down-weight the friendly-padded records that currently distort the ratings. This is the most direct fix for the confederation bias problem.
 
 **The XGBoost layer.** The whole point of the feature pipeline was to blend Elo (which does update by match importance and captures strength of schedule through its zero-sum dynamics), recent form, rest, and head-to-head history into a learned classifier. That ensemble will temper Dixon-Coles' confederation blind spot with Elo's relative-strength signal.
 
-Neither of these is guesswork. The [Part 3 evaluator](/2026/06/08/World_Cup_prediction_model_part3/) lets us backtest any new model against the 2014, 2018, and 2022 World Cups and compare Brier scores directly. The fixes either improve the numbers or they don't — we'll know.
+Neither of these is guesswork. The [Part 3 evaluator](/World_Cup_prediction_model_part3/) lets us backtest any new model against the 2014, 2018, and 2022 World Cups and compare Brier scores directly. The fixes either improve the numbers or they don't — we'll know.
 
 ---
 

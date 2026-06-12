@@ -2,7 +2,7 @@
 title: "Building a World Cup Prediction Model — Part 2: Feature Engineering"
 ---
 
-In [Part 1](/2026/06/06/World_Cup_prediction_model_part1/) I built the Monte Carlo tournament simulator — the engine that runs thousands of bracket simulations and returns championship probabilities. That simulator uses the Dixon-Coles Poisson model to resolve individual match outcomes.
+In [Part 1](/World_Cup_prediction_model_part1/) I built the Monte Carlo tournament simulator — the engine that runs thousands of bracket simulations and returns championship probabilities. That simulator uses the Dixon-Coles Poisson model to resolve individual match outcomes.
 
 This part is about making that prediction layer richer. The goal of the feature engineering pipeline is to describe each match numerically — not just "Brazil vs. France" but "Brazil going in with a 120-point Elo advantage, 4 days of rest, 2.1 weighted points per game, at a neutral venue in a World Cup qualifier." Those features feed into an XGBoost layer that sits on top of the Poisson base.
 

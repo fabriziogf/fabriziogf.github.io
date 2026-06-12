@@ -2,7 +2,7 @@
 title: "Building a World Cup Prediction Model — Part 3: Evaluation & Calibration"
 ---
 
-In [Part 1](/2026/06/06/World_Cup_prediction_model_part1/) I built the Monte Carlo tournament simulator. In [Part 2](/2026/06/07/World_Cup_prediction_model_part2/) I built the feature engineering pipeline that enriches each match with Elo ratings, form, rest days, and head-to-head history.
+In [Part 1](/World_Cup_prediction_model_part1/) I built the Monte Carlo tournament simulator. In [Part 2](/World_Cup_prediction_model_part2/) I built the feature engineering pipeline that enriches each match with Elo ratings, form, rest days, and head-to-head history.
 
 Both of those produce predictions. But a model you can't measure is a model you can't trust. Part 3 is about closing that loop — building a backtesting and calibration framework that tells you objectively how well the models would have performed on past World Cups.
 

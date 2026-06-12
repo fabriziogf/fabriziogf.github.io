@@ -2,7 +2,7 @@
 title: "Building a World Cup Prediction Model — Part 5: Making It Actually Run"
 ---
 
-By the end of [Part 4](/2026/06/09/World_Cup_prediction_model_part4/) every module was built and tested: Elo ratings, the Dixon-Coles scoreline model, the Monte Carlo simulator, the feature pipeline, the evaluator, and 25 passing tests. The pipeline was correct.
+By the end of [Part 4](/World_Cup_prediction_model_part4/) every module was built and tested: Elo ratings, the Dixon-Coles scoreline model, the Monte Carlo simulator, the feature pipeline, the evaluator, and 25 passing tests. The pipeline was correct.
 
 Then I tried to use it for real — fit Dixon-Coles on ~12,000 historical matches and simulate a tournament — and the job ran for **over 10 hours before being killed**.
 

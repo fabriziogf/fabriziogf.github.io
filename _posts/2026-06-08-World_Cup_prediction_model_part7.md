@@ -2,7 +2,7 @@
 title: "Building a World Cup Prediction Model — Part 7: Fixing the Favourite"
 ---
 
-[Part 6](/2026/06/11/World_Cup_prediction_model_part6/) produced the first real prediction — and a suspicious one. The model crowned Japan the favourite at 11.6% and tipped four-time champion Germany for a group-stage exit. The simulator wasn't broken. It was faithfully propagating a strength estimate from a Dixon-Coles model with two known blind spots: it weighted every match equally, and it had no notion of strength of schedule.
+[Part 6](/World_Cup_prediction_model_part6/) produced the first real prediction — and a suspicious one. The model crowned Japan the favourite at 11.6% and tipped four-time champion Germany for a group-stage exit. The simulator wasn't broken. It was faithfully propagating a strength estimate from a Dixon-Coles model with two known blind spots: it weighted every match equally, and it had no notion of strength of schedule.
 
 This part covers the fixes. None of them were cosmetic, and one of them taught a lesson about why you should never tune a model by squinting at its output.
 

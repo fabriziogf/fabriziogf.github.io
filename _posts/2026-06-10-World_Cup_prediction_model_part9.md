@@ -2,7 +2,7 @@
 title: "Building a World Cup Prediction Model — Part 9: The Ensemble"
 ---
 
-[Part 8](/2026/06/10/World_Cup_prediction_model_part8/) ended with a diagnosis, not a fix. Even after vectorising the fit, adding match-importance and confederation weighting, and tuning those weights by backtest, the Dixon-Coles model still crowned Japan favourite ahead of Brazil, France, and England. The problem was structural: a model that reduces each team to a goals-based attack/defense pair is too thin to express football strength, and no amount of reweighting fixes a feature that weak.
+[Part 8](/World_Cup_prediction_model_part8/) ended with a diagnosis, not a fix. Even after vectorising the fit, adding match-importance and confederation weighting, and tuning those weights by backtest, the Dixon-Coles model still crowned Japan favourite ahead of Brazil, France, and England. The problem was structural: a model that reduces each team to a goals-based attack/defense pair is too thin to express football strength, and no amount of reweighting fixes a feature that weak.
 
 The prescription was an **Elo + gradient-boosted-trees ensemble**: replace the goals signal with opponent-adjusted Elo ratings, and let a learned classifier combine many features instead of two. This part builds it — and finds out whether the diagnosis was right.
 
@@ -18,7 +18,7 @@ The Elo system was built back in the project's foundations and has sat unused in
 
 ### Layer 2: Boosted trees — many features, learned weights
 
-On top of Elo, a gradient-boosted-trees classifier predicts a three-way outcome (home win / draw / away win) from the feature pipeline built in [Part 2](/2026/06/04/World_Cup_prediction_model_part2/):
+On top of Elo, a gradient-boosted-trees classifier predicts a three-way outcome (home win / draw / away win) from the feature pipeline built in [Part 2](/World_Cup_prediction_model_part2/):
 
 - `elo_diff`, `elo_home`, `elo_away` — opponent-adjusted strength
 - `form_home`, `form_away` — exponentially weighted recent points-per-game

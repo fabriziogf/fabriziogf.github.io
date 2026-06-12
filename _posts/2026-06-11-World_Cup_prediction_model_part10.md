@@ -2,7 +2,7 @@
 title: "Building a World Cup Prediction Model — Part 10: The Final Prediction, and Measuring What Matters"
 ---
 
-After nine parts of building, breaking, and rebuilding, here is the model's final forecast for the 2026 World Cup — the Elo + gradient-boosted-trees ensemble from [Part 9](/2026/06/11/World_Cup_prediction_model_part9/), fit on 49,411 international matches and run through 100,000 Monte Carlo simulations of the official 48-team draw.
+After nine parts of building, breaking, and rebuilding, here is the model's final forecast for the 2026 World Cup — the Elo + gradient-boosted-trees ensemble from [Part 9](/World_Cup_prediction_model_part9/), fit on 49,411 international matches and run through 100,000 Monte Carlo simulations of the official 48-team draw.
 
 | Rank | Team | Win % | Reach final | Reach semis |
 |------|------|-------|-------------|-------------|
@@ -28,7 +28,7 @@ A few things worth noting beyond the headline:
 - **The toughest group is E** — Germany (86.6% to advance) and Ecuador (83.4%) are strong, but Ivory Coast (69.2%) makes it genuinely competitive.
 - **Dark horses:** Mexico (2.9%), Colombia (2.9%), Morocco (2.8%), and Croatia (2.6%) all carry real semi-final equity.
 
-If you read [Part 6](/2026/06/08/World_Cup_prediction_model_part6/), you'll feel the difference immediately. That first prediction crowned Japan and buried England in 21st. This one needs no apology. But the more interesting story isn't what the model now predicts — it's how we know it's better. That turned out to be the hardest problem in the whole project.
+If you read [Part 6](/World_Cup_prediction_model_part6/), you'll feel the difference immediately. That first prediction crowned Japan and buried England in 21st. This one needs no apology. But the more interesting story isn't what the model now predicts — it's how we know it's better. That turned out to be the hardest problem in the whole project.
 
 ---
 

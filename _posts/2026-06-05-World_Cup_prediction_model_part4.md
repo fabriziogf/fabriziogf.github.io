@@ -2,7 +2,7 @@
 title: "Building a World Cup Prediction Model — Part 4: Testing the Models"
 ---
 
-Over the first three parts of this series I built the full predictive pipeline: the [Monte Carlo tournament simulator](/2026/06/06/World_Cup_prediction_model_part1/), the [feature engineering pipeline](/2026/06/07/World_Cup_prediction_model_part2/), and the [backtesting and calibration framework](/2026/06/08/World_Cup_prediction_model_part3/).
+Over the first three parts of this series I built the full predictive pipeline: the [Monte Carlo tournament simulator](/World_Cup_prediction_model_part1/), the [feature engineering pipeline](/World_Cup_prediction_model_part2/), and the [backtesting and calibration framework](/World_Cup_prediction_model_part3/).
 
 Every one of those modules came with an ad-hoc smoke test — a one-off script to confirm it runs and the numbers look sane. That's fine for initial development. But it doesn't protect against regressions. The moment someone tweaks a K-factor or refactors the bracket seeding, those smoke tests are gone and nothing catches the break.
 

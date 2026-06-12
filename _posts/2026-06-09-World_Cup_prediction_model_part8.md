@@ -2,7 +2,7 @@
 title: "Building a World Cup Prediction Model — Part 8: Why It Still Doesn't Make Sense"
 ---
 
-[Part 7](/2026/06/12/World_Cup_prediction_model_part7/) ended on a cliffhanger. We'd stopped hand-tuning the model's weights and handed the decision to a backtest, letting Brier score on the 2014/2018/2022 World Cups pick the best configuration. The grid search returned its verdict, we baked it in, and ran the final prediction against the official 2026 draw.
+[Part 7](/World_Cup_prediction_model_part7/) ended on a cliffhanger. We'd stopped hand-tuning the model's weights and handed the decision to a backtest, letting Brier score on the 2014/2018/2022 World Cups pick the best configuration. The grid search returned its verdict, we baked it in, and ran the final prediction against the official 2026 draw.
 
 Here's what the principled, backtest-validated model produced:
 
@@ -81,7 +81,7 @@ Elo would rate Brazil, France, and England far more sensibly than a goals-based 
 
 ### XGBoost — many features, learned weights
 
-The [feature pipeline from Part 2](/2026/06/07/World_Cup_prediction_model_part2/) was built for exactly this moment. Instead of a single attack/defense number, an XGBoost classifier can learn from:
+The [feature pipeline from Part 2](/World_Cup_prediction_model_part2/) was built for exactly this moment. Instead of a single attack/defense number, an XGBoost classifier can learn from:
 
 - `elo_diff` — the opponent-adjusted strength gap
 - `form_home` / `form_away` — recent results, exponentially weighted
@@ -93,7 +93,7 @@ A gradient-boosted model learns how to weight these from data, rather than us gu
 
 ### A better way to judge it
 
-When we wire in the ensemble, we should evaluate it not only on per-match Brier but on its **tournament-level** output: does the champion ranking pass the football-fan smell test, and how does it score against the actual winners of 2014/2018/2022? The [evaluator from Part 3](/2026/06/08/World_Cup_prediction_model_part3/) gives us the backtesting harness. We just need to point it at the right target.
+When we wire in the ensemble, we should evaluate it not only on per-match Brier but on its **tournament-level** output: does the champion ranking pass the football-fan smell test, and how does it score against the actual winners of 2014/2018/2022? The [evaluator from Part 3](/World_Cup_prediction_model_part3/) gives us the backtesting harness. We just need to point it at the right target.
 
 ---
 
