@@ -62,9 +62,12 @@ classes: wide
       An AI agent that helps a candidate run a full job search end-to-end — resume, cover letter, networking, interview prep, application tracking, and offer negotiation — with advice grounded in a concrete playbook rather than generic LLM intuition.
     </p>
     <div class="proj-meta">
-      <span>Python · LLM Agents · RAG</span>
+      <span>Python · Anthropic SDK · Claude Code</span>
     </div>
-    <a href="https://github.com/fabriziogf/job-hunt-assistant" class="proj-cta" target="_blank" rel="noopener">View code →</a>
+    <div class="proj-links">
+      <a href="/Building_a_job_hunting_agent/" class="proj-cta">Read the writeup →</a>
+      <a href="https://github.com/fabriziogf/job-hunt-assistant" class="proj-cta" target="_blank" rel="noopener">View code →</a>
+    </div>
   </div>
 
 </div>
