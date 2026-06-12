@@ -57,14 +57,14 @@ classes: wide
       <span class="proj-tag">GenAI</span>
       <span class="proj-status-badge proj-badge-wip">In progress</span>
     </div>
-    <h3 class="proj-title">Project Title</h3>
+    <h3 class="proj-title">Job Hunting Agent</h3>
     <p class="proj-desc">
-      Short description of what the project does and what problem it solves. Keep it to 2–3 sentences.
+      An AI agent that helps a candidate run a full job search end-to-end — resume, cover letter, networking, interview prep, application tracking, and offer negotiation — with advice grounded in a concrete playbook rather than generic LLM intuition.
     </p>
     <div class="proj-meta">
-      <span>Tech · Stack · Here</span>
+      <span>Python · LLM Agents · RAG</span>
     </div>
-    <a href="#" class="proj-cta proj-cta-disabled">Coming soon</a>
+    <a href="https://github.com/fabriziogf/job-hunt-assistant" class="proj-cta" target="_blank" rel="noopener">View code →</a>
   </div>
 
 </div>
