@@ -65,7 +65,7 @@ classes: wide
       <span>Python · Anthropic SDK · Claude Code</span>
     </div>
     <div class="proj-links">
-      <a href="/Building_a_job_hunting_agent/" class="proj-cta">Read the writeup →</a>
+      <a href="/Job_hunting_agent_technical_implementation/" class="proj-cta">Read the writeup →</a>
       <a href="https://github.com/fabriziogf/job-hunt-assistant" class="proj-cta" target="_blank" rel="noopener">View code →</a>
     </div>
   </div>
