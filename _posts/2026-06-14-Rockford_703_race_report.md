@@ -57,15 +57,15 @@ Running power averaged 388W with normalized 401W — both consistent with what I
 
 Feeling flat at a tune-up race five weeks before your target is a known phenomenon, not a crisis. Here is what is happening physiologically:
 
-CTL at 140 means the body is carrying a large accumulated training load. ATL had been dropping through the taper leading into today, but not enough to fully offset five months of progressive overload. The legs know they are in the middle of something larger than this race, and they perform accordingly.
+CTL at 140 means the body is carrying a large accumulated training load. ATL had been dropping through the one-week taper leading into today, but one week is not enough to fully offset five months of progressive overload — especially with an Ironman five weeks away. A longer taper was not an option. The legs know they are in the middle of something larger than this race, and they perform accordingly.
 
-The personal records across bike and run segments are the counter-evidence to any concern about fitness. A flat body that still sets PRs is a fit body. The difference between how I felt today and how I will feel at Lake Placid is three weeks of progressive taper — ATL dropping while CTL holds, fatigue shedding while fitness stays.
+The personal records across bike and run segments are the counter-evidence to any concern about fitness. A flat body that still sets PRs is a fit body. The difference between how I felt today and how I will feel at Lake Placid is two weeks of proper taper — ATL dropping while CTL holds, fatigue shedding while fitness stays.
 
 ---
 
 ## Going Into Lake Placid
 
-Five weeks out. The training block continues this week, then the volume starts to come down deliberately. The last big training week is around June 28, with a structured taper beginning in early July.
+Five weeks out. The training block resumes this week — no extended recovery from Rockford. The plan is to keep building through the week of July 4th, which will be the last big training week, then taper properly for two weeks into race day on July 19.
 
 What I am taking from today: the fitness is there, execution was clean, and the flatness was expected and manageable. I raced at controlled effort, did not blow up, set personal records, and finished without any injury concern. That is exactly what a tune-up race is supposed to do.
 
