@@ -4,7 +4,7 @@ title: "Rockford 70.3 Race Report"
 
 Rockford was always going to be a complicated race to read. Five weeks out from Ironman Lake Placid, with CTL at 140 and a training block that peaked two weeks ago, the goal was never to peak here. It was to execute cleanly at controlled effort and come out the other side with fitness intact.
 
-That is mostly what happened. I had a good race — solid across all three disciplines, personal records on the bike and run, and a finish that felt like a credible effort rather than a blow-up. But I also felt flat for most of it, in the specific way that a body mid-Ironman build feels flat: legs that are fit but not fresh, a mental edge that takes more work to find than it should. That is a training state, not a fitness problem.
+That is mostly what happened. 4:08:01, 4th in my age group, 12th overall. Solid across all three disciplines, personal records on the bike and run, and a finish that felt like a credible effort rather than a blow-up. But I also felt flat for most of it, in the specific way that a body mid-Ironman build feels flat: legs that are fit but not fresh, a mental edge that takes more work to find than it should. That is a training state, not a fitness problem.
 
 ---
 
@@ -15,7 +15,7 @@ That is mostly what happened. I had a good race — solid across all three disci
 | Swim | 1,900 m | 22:19 | 1:10/100m avg |
 | Bike | 90.4 km | 2:15:08 | 257W avg / 261W NP / IF 0.80 |
 | Run | 21.0 km | 1:28:50 | 4:14/km avg / HR 148 |
-| **Total** | **~113 km** | **~4:10** | **TSS: 419** |
+| **Total** | **~113 km** | **4:08:01** | **TSS: 419** |
 
 Total TSS of 419 in a single morning is a significant stimulus — roughly equivalent to a very hard training week compressed into one event.
 
