@@ -223,7 +223,8 @@ def build_yaml(data: dict) -> str:
             f"    distance_km: {w['distance_km']}\n"
             f"    tss: {w['tss']}\n"
             f"    hr_avg: {yn(w['hr_avg'])}\n"
-            f"    power_avg: {yn(w['power_avg'])}"
+            f"    power_avg: {yn(w['power_avg'])}\n"
+            f"    strava_id: {yn(w.get('strava_id'))}"
         )
 
     # ── Monthly trends (12 months) ────────────────────────────────────────────
@@ -451,6 +452,7 @@ async def main():
             'hours': hrs, 'distance_km': dist, 'tss': tss,
             'hr_avg': int(hr) if hr else None,
             'power_avg': int(pwr) if pwr else None,
+            'strava_id': a.get('id'),
         })
 
         # Fold new runs into the PR cache (best_efforts live on the detail object)

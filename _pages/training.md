@@ -41,7 +41,7 @@ classes: wide
     </div>
   </div>
 
-  ---
+  <hr class="td-divider" />
 
   <h2>7-Day Summary</h2>
 
@@ -79,24 +79,24 @@ classes: wide
   &nbsp;·&nbsp;
   **Total Hours:** {{ td.totals.swim.hours | plus: td.totals.bike.hours | plus: td.totals.run.hours | plus: td.totals.strength.hours }}h
 
-  ---
+  <hr class="td-divider" />
 
   <h2>Daily TSS by Sport</h2>
   <canvas id="chartDailyTSS" height="90"></canvas>
 
-  ---
+  <hr class="td-divider" />
 
   <h2>Daily Hours by Sport</h2>
   <canvas id="chartDailyHours" height="90"></canvas>
 
-  ---
+  <hr class="td-divider" />
 
   <h2>TSS Distribution</h2>
   <div style="max-width: 340px; margin: 0 auto 2rem;">
     <canvas id="chartTSSDonut"></canvas>
   </div>
 
-  ---
+  <hr class="td-divider" />
 
   <h2>Sessions This Week</h2>
 
@@ -124,7 +124,7 @@ classes: wide
           onclick="tdToggleRow(this)">
         <td style="padding:.4rem .6rem;">{{ w.date }}</td>
         <td style="padding:.4rem .6rem;"><span style="color:{{ sport_color }};font-weight:600;">{{ sport_icon }} {{ w.sport | capitalize }}</span></td>
-        <td style="padding:.4rem .6rem;">{{ w.title }}</td>
+        <td style="padding:.4rem .6rem;">{% if w.strava_id %}<a class="td-session-link" href="https://www.strava.com/activities/{{ w.strava_id }}" target="_blank" rel="noopener" onclick="event.stopPropagation()">{{ w.title }}</a>{% else %}{{ w.title }}{% endif %}</td>
         <td style="padding:.4rem .6rem;text-align:right;">{{ w.hours }}h</td>
         <td style="padding:.4rem .6rem;text-align:right;">{% if w.distance_km > 0 %}{{ w.distance_km }} km{% else %}—{% endif %}</td>
         <td style="padding:.4rem .6rem;text-align:right;">{{ w.tss }}</td>
@@ -146,18 +146,18 @@ classes: wide
   <h2 style="margin-top:1.5rem">Monthly TSS by Sport</h2>
   <canvas id="chartMonthlyTSS" height="100"></canvas>
 
-  ---
+  <hr class="td-divider" />
 
   <h2>Monthly Hours by Sport</h2>
   <canvas id="chartMonthlyHours" height="100"></canvas>
 
-  ---
+  <hr class="td-divider" />
 
   <h2>CTL / ATL Trend</h2>
   <p style="font-size:.85em;color:#888;margin-top:-.5em;">End-of-day values, one per calendar day over the past 12 months.</p>
   <canvas id="chartCTL" height="90"></canvas>
 
-  ---
+  <hr class="td-divider" />
 
   <h2>Monthly Volume Heatmap</h2>
   <div id="heatmap-container" style="overflow-x:auto;margin-bottom:2rem;"></div>
@@ -716,6 +716,18 @@ function tdPRToggle(mode, btn) {
 .td-pr-workout { font-size: .82em; opacity: .65; font-style: italic; }
 .td-pr-null    { opacity: .35; }
 
+/* ── Section divider ────────────────────────────────────────────────────── */
+.td-divider {
+  border: 0;
+  height: 1px;
+  background: rgba(128,128,128,.25);
+  margin: 2rem 0;
+}
+
 /* ── Session row hover ──────────────────────────────────────────────────── */
 .session-row:hover { background: rgba(128,128,128,.07); }
+
+/* ── Session activity link ──────────────────────────────────────────────── */
+.td-session-link { color: inherit; text-decoration: none; border-bottom: 1px dotted rgba(128,128,128,.5); }
+.td-session-link:hover { color: #fc4c02; border-bottom-color: #fc4c02; }
 </style>
