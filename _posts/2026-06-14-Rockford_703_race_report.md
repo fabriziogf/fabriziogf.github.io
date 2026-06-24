@@ -2,11 +2,14 @@
 title: "Rockford 70.3 Race Report"
 ---
 
-![Rockford 70.3](/assets/images/DIGITAL_HIGHRES_10254_031610.JPG)
+<img src="/assets/images/DIGITAL_HIGHRES_10254_031610.JPG" alt="Rockford 70.3"
+     style="float:right; width:300px; max-width:45%; margin:0 0 1rem 1.5rem; border-radius:6px;" />
 
 I went into Rockford knowing it wasn't a target race. Five weeks out from Ironman Lake Placid, with a big training block still in progress, the goal was to race clean and come out healthy. No heroics.
 
 I finished in 4:08:01 — 4th in my age group, 12th overall. Good race. But I felt flat the whole way through, which I expected. More on that below.
+
+<div style="clear:both"></div>
 
 ---
 
