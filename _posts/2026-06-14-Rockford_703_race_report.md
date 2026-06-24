@@ -30,6 +30,8 @@ A TSS of 419 in one morning is a lot. Roughly what a hard training week produces
 
 22:19 for 1,900m — 1:10/100m average. Fast downriver swim, but happy with the sighting and techinique. My exit was also clean and felt in control during T1, where focus is to breath and get some circulation in the legs.
 
+<div class="strava-embed-placeholder" data-embed-type="activity" data-embed-id="19048605650" data-style="standard"></div>
+
 ---
 
 ## Bike
@@ -39,6 +41,8 @@ A TSS of 419 in one morning is a lot. Roughly what a hard training week produces
 The IF could have been higher (in the 0.83–0.88 range), but legs were not used to that intensity with the Ironman training I have been doing. Ten personal records on bike segments despite the conservative effort. That's a good sign. The fitness is there even when I'm not chasing it.
 
 Cadence averaged 87 rpm, heart rate 132–156 (avg 146). Temperature was 19.7°C with 15-25mph winds. At some points it was hard to control the bike, but good conditions overall.
+
+<div class="strava-embed-placeholder" data-embed-type="activity" data-embed-id="18921765029" data-style="standard"></div>
 
 ---
 
@@ -50,6 +54,8 @@ Cadence averaged 87 rpm, heart rate 132–156 (avg 146). Temperature was 19.7°C
 That RPE is the most honest number from the day. A 9 to run 4:14/km pace means the legs were working harder than they should for that speed. That's the flatness showing up. Fresh, that pace should feel more like an 8.
 
 Positive signs when looking at the cadence (174 spm) and running power (consistent, 388W avg, 401W normalized), and no fade later in the race. The normalized pace adjusts to about 4:02/km equivalent, which shows the effort held through the finish. 
+
+<div class="strava-embed-placeholder" data-embed-type="activity" data-embed-id="18921681928" data-style="standard"></div>
 
 ---
 
@@ -68,3 +74,5 @@ Training resumes this week. The plan is to keep building through the week of Jul
 Today confirmed what I needed to confirm: execution was clean, no injuries, fitness is there.
 
 Lake Placid is a different beast — 2,500m of bike climbing and a full marathon off the back. But the work from January through June is in the legs. Time to see what it adds up to.
+
+<script src="https://strava-embed.com/embed.js"></script>
