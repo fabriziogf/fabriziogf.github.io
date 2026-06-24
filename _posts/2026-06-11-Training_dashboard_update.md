@@ -99,6 +99,44 @@ Runtime is a little longer — more API calls — but still finishes in well und
 
 ---
 
+## Moving the activity source to Strava
+
+A couple of weeks after the rebuild above, I moved the dashboard's activity data off TrainingPeaks and onto Strava. Not a full switch — a deliberate split. TrainingPeaks still owns the things only it computes; Strava becomes the source of truth for what actually happened in each session.
+
+The reasoning: Strava is where the activity record really lives — distance, moving time, heart rate, power, and clean per-distance best efforts. TrainingPeaks is the only place with a Performance Management Chart (CTL/ATL/TSB) and TSS. So rather than pick one, the updater now talks to both.
+
+### What comes from where
+
+- **Strava** — the session feed, sessions/hours/distance, average HR and power, and run pace PRs.
+- **TrainingPeaks** — CTL, ATL, TSB, the CTL trend, TSS (totals, daily, monthly, and per-session), and bike peak-power PRs. Strava's API has no power-curve endpoint, so the bike power numbers have to stay on TrainingPeaks.
+
+The YAML schema didn't change at all, so the three-tab page needed zero edits — only where each field is sourced changed.
+
+### A stdlib-only Strava client
+
+Strava uses OAuth2 with a rotating refresh token. I kept the client dependency-free — `urllib` for HTTP, and the macOS keyring for credentials (`client_id`, `client_secret`, `refresh_token`), mirroring how the TrainingPeaks side already stores secrets. Each run exchanges the refresh token for a short-lived access token and persists the new refresh token, since Strava rotates it on every refresh.
+
+### Attaching TSS to Strava activities
+
+TSS only exists on the TrainingPeaks side, so each Strava activity is matched to a TrainingPeaks workout by date + sport + nearest duration, and that workout's TSS gets attached. Aggregate TSS (daily, monthly, totals) is summed straight from TrainingPeaks keyed by date/month and sport, so the charts stay accurate even when the two services disagree slightly on a session's exact length.
+
+### Run PRs without blowing the rate limit
+
+Strava returns per-distance best efforts (1K, 5K, 10K, half, marathon) — but only on the *detailed* activity endpoint, one call per activity. With nearly 1,000 runs in my history and Strava's 1,000-requests-per-day cap, scanning everything in a single pass isn't realistic.
+
+So run PRs work in two layers. TrainingPeaks provides the full-history baseline (it already had accurate all-time bests). Strava best efforts are merged on top — faster pace wins per distance — and the Strava side is an incremental cache that only fetches detail for runs it hasn't seen yet. A handful of new runs a day stays comfortably under the limit, and the cache takes over from the baseline naturally as it fills in. A one-time backfill script exists for full history, but the baseline makes it optional.
+
+---
+
+## A few rendering fixes
+
+Two small Jekyll gotchas surfaced once the dashboard had more content packed into the HTML tab panels:
+
+- **Section dividers** — the markdown `---` rules were rendering as literal `---` text. kramdown doesn't process markdown inside a raw HTML block, and each tab panel is one big `<div>`. Replacing them with explicit `<hr>` elements fixed it. The same bit me on the bold **Total TSS / Total Hours** line in the weekly summary — the `**…**` showed its asterisks until I switched to `<strong>`.
+- **Linking sessions to Strava** — now that activities come from Strava, each row in the weekly sessions table links to its activity on Strava. The updater records the Strava activity ID per session, and the table wraps the title in a link (with the click isolated so it doesn't also trigger the row's expand toggle).
+
+---
+
 ## What's still missing
 
 A few things I'd eventually want:

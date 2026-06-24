@@ -75,9 +75,11 @@ classes: wide
     </div>
   </div>
 
-  **Total TSS:** {{ td.totals.swim.tss | plus: td.totals.bike.tss | plus: td.totals.run.tss | plus: td.totals.strength.tss }}
-  &nbsp;·&nbsp;
-  **Total Hours:** {{ td.totals.swim.hours | plus: td.totals.bike.hours | plus: td.totals.run.hours | plus: td.totals.strength.hours }}h
+  <p style="margin:.5rem 0 0;">
+    <strong>Total TSS:</strong> {{ td.totals.swim.tss | plus: td.totals.bike.tss | plus: td.totals.run.tss | plus: td.totals.strength.tss }}
+    &nbsp;·&nbsp;
+    <strong>Total Hours:</strong> {{ td.totals.swim.hours | plus: td.totals.bike.hours | plus: td.totals.run.hours | plus: td.totals.strength.hours }}h
+  </p>
 
   <hr class="td-divider" />
 

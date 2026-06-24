@@ -44,10 +44,10 @@ classes: wide
     </div>
     <h3 class="proj-title">Training Dashboard</h3>
     <p class="proj-desc">
-      Live 7-day rolling window of swim, bike, run, and strength training. Pulls from TrainingPeaks daily and displays CTL, ATL, TSB, and session-level detail.
+      Live 7-day rolling window of swim, bike, run, and strength training. Activity data is pulled from Strava daily, with fitness metrics (CTL, ATL, TSB) and training load (TSS) from TrainingPeaks. Shows session-level detail, 12-month trends, and personal records.
     </p>
     <div class="proj-meta">
-      <span>Python · Jekyll · TrainingPeaks API</span>
+      <span>Python · Jekyll · Strava API · TrainingPeaks API</span>
     </div>
     <a href="/training/" class="proj-cta">View dashboard →</a>
   </div>
