@@ -3,3 +3,7 @@ _site
 .jekyll-cache
 .jekyll-metadata
 vendor
+
+# Strava run-PR incremental cache (machine-local state)
+scripts/.strava_pr_cache.json
+scripts/__pycache__/

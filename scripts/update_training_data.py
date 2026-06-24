@@ -12,16 +12,42 @@ import asyncio
 import sys
 import os
 from collections import defaultdict
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime as _dt, time as _time
 from pathlib import Path
 
-# Add TrainingPeaks MCP to path
+# Add TrainingPeaks MCP to path (fitness + TSS + bike PRs)
 TP_MCP = Path("/Users/fabriziogiovanninifilho/ai-projects/trainingpeaks-mcp")
 sys.path.insert(0, str(TP_MCP / "src"))
 
 from tp_mcp.tools.fitness import tp_get_fitness
 from tp_mcp.tools.peaks import tp_get_peaks
 from tp_mcp.client import TPClient
+
+# Add this scripts/ dir to path (Strava client + run PRs)
+sys.path.insert(0, str(Path(__file__).parent))
+from strava_client import StravaClient, classify as strava_classify
+from strava_prs import load_cache, save_cache, process_run, build_run_prs
+
+
+def _epoch(d: date) -> int:
+    """Local-midnight epoch seconds for a date (Strava after/before filter)."""
+    return int(_dt.combine(d, _time.min).timestamp())
+
+
+def match_tp_tss(tp_sessions: list, wdate: str, sport: str, moving_s: float) -> float:
+    """Attach a TrainingPeaks TSS to a Strava activity by date+sport, nearest
+    duration. Each TP session is consumed once so two activities don't share one."""
+    best, best_diff = None, None
+    for s in tp_sessions:
+        if s["used"] or s["date"] != wdate or s["sport"] != sport:
+            continue
+        diff = abs(s["dur_s"] - moving_s)
+        if best_diff is None or diff < best_diff:
+            best, best_diff = s, diff
+    if best is not None:
+        best["used"] = True
+        return round(best["tss"], 1)
+    return 0.0
 
 REPO     = Path(__file__).parent.parent
 OUT      = REPO / "_data" / "training_data.yml"
@@ -49,17 +75,6 @@ def classify(type_id) -> str:
     return TYPE_ID_TO_SPORT.get(type_id, 'other')
 
 
-# ── Pace conversion (m/s → "M:SS /km") ──────────────────────────────────────
-def mps_to_pace(speed_ms) -> str | None:
-    """Convert m/s to min:sec per km string, e.g. '3:49'."""
-    if not speed_ms or speed_ms <= 0:
-        return None
-    pace_sec = 1000 / speed_ms
-    mins = int(pace_sec // 60)
-    secs = int(pace_sec % 60)
-    return f"{mins}:{secs:02d}"
-
-
 # ── YAML helpers ─────────────────────────────────────────────────────────────
 def q(s):
     return f'"{str(s)}"'
@@ -71,94 +86,18 @@ def yn(v):
     return str(v)
 
 
-# 3:00/km in m/s — anything faster is a GPS artifact, excluded from run PRs
-MAX_VALID_RUN_SPEED_MS = 1000 / 180
-
-# Minimum distance (m) to count as a marathon effort (handles Garmin under-recording)
-MARATHON_MIN_M = 41_500
-
-
-def marathon_best_from_workouts(raw_workouts: list, year_days: int) -> tuple[dict, dict]:
-    """
-    Scan raw workouts for runs >= MARATHON_MIN_M and return the best avg pace,
-    split into (all_time_record, this_year_record). Each record is a dict with
-    keys: value (pace str), date, workout_title — or {} if none found.
-    """
-    RUN_TYPES = {3, 13}
-    year_start = date.today() - timedelta(days=year_days)
-
-    best_all: tuple | None = None   # (speed_ms, date_str, title)
-    best_ty:  tuple | None = None
-
-    for w in raw_workouts:
-        if w.get('workoutTypeValueId') not in RUN_TYPES:
-            continue
-        dist_m = w.get('distance') or 0
-        if dist_m < MARATHON_MIN_M:
-            continue
-        hrs = w.get('totalTime') or 0
-        if hrs <= 0:
-            continue
-        speed_ms = dist_m / (hrs * 3600)
-        if speed_ms > MAX_VALID_RUN_SPEED_MS:   # too fast → skip
-            continue
-
-        wdate_str = (w.get('workoutDay') or '')[:10]
-        title     = w.get('title', '')
-
-        if best_all is None or speed_ms > best_all[0]:
-            best_all = (speed_ms, wdate_str, title)
-
-        try:
-            if date.fromisoformat(wdate_str) >= year_start:
-                if best_ty is None or speed_ms > best_ty[0]:
-                    best_ty = (speed_ms, wdate_str, title)
-        except (ValueError, TypeError):
-            pass
-
-    def to_rec(tup):
-        if not tup:
-            return {}
-        spd, dt, ttl = tup
-        return {'value': mps_to_pace(spd), 'date': dt, 'workout_title': ttl}
-
-    return to_rec(best_all), to_rec(best_ty)
-
-
-def _better_run_record(a: dict, b: dict) -> dict:
-    """Return whichever run record has the faster (higher speed) pace, or the non-empty one."""
-    if not a:
-        return b
-    if not b:
-        return a
-    # pace strings like "3:49" — shorter minutes + shorter seconds = faster
-    def pace_to_sec(p):
-        try:
-            m, s = p.split(':')
-            return int(m) * 60 + int(s)
-        except Exception:
-            return 9999
-    return a if pace_to_sec(a['value']) <= pace_to_sec(b['value']) else b
-
-
-# ── PR fetcher ───────────────────────────────────────────────────────────────
-async def fetch_prs(year_days: int, raw_workouts: list) -> dict:
-    """Fetch bike and run PRs — all-time and this year.
-
-    raw_workouts is the 12-month window used as a fallback for marathon distance
-    (handles Garmin under-recording < 42.195 km but >= 41.5 km).
-    """
+# ── Bike PR fetcher (TrainingPeaks — Strava has no power-curve API) ───────────
+async def fetch_bike_prs(year_days: int) -> dict:
+    """Fetch bike peak-power PRs — all-time and this year — from TrainingPeaks.
+    Run PRs come from Strava best-efforts (see strava_prs.py)."""
     bike_types = ['power5sec', 'power1min', 'power5min', 'power10min', 'power20min', 'power60min']
-    run_types  = ['speed1K', 'speed5K', 'speed10K', 'speedHalfMarathon', 'speedMarathon']
-
-    prs = {'bike': {}, 'run': {}}
-
+    bike: dict = {}
     for pr_type in bike_types:
         at = await tp_get_peaks(sport='Bike', pr_type=pr_type, days=3650)
         ty = await tp_get_peaks(sport='Bike', pr_type=pr_type, days=year_days)
         at_top = at.get('records', [{}])[0] if at.get('records') else {}
         ty_top = ty.get('records', [{}])[0] if ty.get('records') else {}
-        prs['bike'][pr_type] = {
+        bike[pr_type] = {
             'all_time':          at_top.get('value'),
             'all_time_date':     at_top.get('date', ''),
             'all_time_workout':  at_top.get('workout_title', ''),
@@ -166,50 +105,70 @@ async def fetch_prs(year_days: int, raw_workouts: list) -> dict:
             'this_year_date':    ty_top.get('date', ''),
             'this_year_workout': ty_top.get('workout_title', ''),
         }
+    return bike
 
-    # Pre-compute marathon fallback from raw workouts
-    mara_at_wkt, mara_ty_wkt = marathon_best_from_workouts(raw_workouts, year_days)
 
+# 3:00/km in m/s — anything faster is a GPS artifact, excluded from run PRs
+MAX_VALID_RUN_SPEED_MS = 1000 / 180
+
+
+def _mps_to_pace(speed_ms) -> str | None:
+    """m/s → 'M:SS' per km, or None."""
+    if not speed_ms or speed_ms <= 0:
+        return None
+    sec = 1000 / speed_ms
+    return f"{int(sec // 60)}:{int(sec % 60):02d}"
+
+
+async def fetch_run_prs_tp(year_days: int) -> dict:
+    """Run pace PRs from TrainingPeaks — used as the full-history baseline that
+    Strava best-efforts are merged on top of (see merge_run_prs)."""
+    run_types = ['speed1K', 'speed5K', 'speed10K', 'speedHalfMarathon', 'speedMarathon']
+    run: dict = {}
     for pr_type in run_types:
         at = await tp_get_peaks(sport='Run', pr_type=pr_type, days=3650)
         ty = await tp_get_peaks(sport='Run', pr_type=pr_type, days=year_days)
-
-        # Filter out any record faster than 3:00/km (GPS artifact)
-        at_records = [r for r in at.get('records', [])
-                      if (r.get('value') or 0) <= MAX_VALID_RUN_SPEED_MS]
-        ty_records = [r for r in ty.get('records', [])
-                      if (r.get('value') or 0) <= MAX_VALID_RUN_SPEED_MS]
-
-        at_top = at_records[0] if at_records else {}
-        ty_top = ty_records[0] if ty_records else {}
-
-        at_rec = {
-            'value':          mps_to_pace(at_top.get('value')),
-            'date':           at_top.get('date', ''),
-            'workout_title':  at_top.get('workout_title', ''),
-        } if at_top else {}
-
-        ty_rec = {
-            'value':          mps_to_pace(ty_top.get('value')),
-            'date':           ty_top.get('date', ''),
-            'workout_title':  ty_top.get('workout_title', ''),
-        } if ty_top else {}
-
-        # For marathon: also consider workout scan (handles Garmin-short recordings)
-        if pr_type == 'speedMarathon':
-            at_rec = _better_run_record(at_rec, mara_at_wkt)
-            ty_rec = _better_run_record(ty_rec, mara_ty_wkt)
-
-        prs['run'][pr_type] = {
-            'all_time':          at_rec.get('value'),
-            'all_time_date':     at_rec.get('date', ''),
-            'all_time_workout':  at_rec.get('workout_title', ''),
-            'this_year':         ty_rec.get('value'),
-            'this_year_date':    ty_rec.get('date', ''),
-            'this_year_workout': ty_rec.get('workout_title', ''),
+        at_recs = [r for r in at.get('records', []) if (r.get('value') or 0) <= MAX_VALID_RUN_SPEED_MS]
+        ty_recs = [r for r in ty.get('records', []) if (r.get('value') or 0) <= MAX_VALID_RUN_SPEED_MS]
+        at_top = at_recs[0] if at_recs else {}
+        ty_top = ty_recs[0] if ty_recs else {}
+        run[pr_type] = {
+            'all_time':          _mps_to_pace(at_top.get('value')),
+            'all_time_date':     at_top.get('date', ''),
+            'all_time_workout':  at_top.get('workout_title', ''),
+            'this_year':         _mps_to_pace(ty_top.get('value')),
+            'this_year_date':    ty_top.get('date', ''),
+            'this_year_workout': ty_top.get('workout_title', ''),
         }
+    return run
 
-    return prs
+
+def _pace_sec(p) -> float:
+    """'M:SS' → seconds, inf if missing/unparseable (so it never wins a min())."""
+    try:
+        m, s = str(p).split(':')
+        return int(m) * 60 + int(s)
+    except (ValueError, AttributeError):
+        return float('inf')
+
+
+def merge_run_prs(strava_run: dict, tp_run: dict) -> dict:
+    """Per distance, keep whichever source has the faster pace for all_time and
+    this_year independently. Strava wins ties (preferred source going forward)."""
+    out: dict = {}
+    for key in set(strava_run) | set(tp_run):
+        sv = strava_run.get(key, {})
+        tv = tp_run.get(key, {})
+        merged = {}
+        for span in ('all_time', 'this_year'):
+            s_pace, t_pace = sv.get(span), tv.get(span)
+            use_strava = s_pace is not None and _pace_sec(s_pace) <= _pace_sec(t_pace)
+            src = sv if use_strava else tv
+            merged[span]               = src.get(span)
+            merged[f'{span}_date']     = src.get(f'{span}_date', '')
+            merged[f'{span}_workout']  = src.get(f'{span}_workout', '')
+        out[key] = merged
+    return out
 
 
 # ── YAML builder ─────────────────────────────────────────────────────────────
@@ -421,12 +380,44 @@ async def main():
     )
     trend_daily = trend_fitness.get('daily_data', [])
 
-    # ── Fetch PRs ─────────────────────────────────────────────────────────────
-    print("Fetching PRs…")
-    prs = await fetch_prs(year_days, raw_12mo)
-
-    # ── Build 7-day totals + daily breakdown ──────────────────────────────────
     sports = ['swim', 'bike', 'run', 'strength', 'other']
+
+    # ── TrainingPeaks TSS aggregations (load stays on TP) ─────────────────────
+    tp_tss_total = defaultdict(float)            # sport            -> tss (7-day)
+    tp_tss_daily = defaultdict(float)            # (date, sport)    -> tss (7-day)
+    tp_tss_month = defaultdict(float)            # (month, sport)   -> tss (12-mo)
+    tp_sessions  = []                            # 7-day window, for per-row matching
+    win_lo, win_hi = start.isoformat(), end.isoformat()
+    for w in raw_7day:
+        sport = classify(w.get('workoutTypeValueId'))
+        wdate = (w.get('workoutDay') or '')[:10]
+        tss   = round(w.get('tssActual') or 0, 1)
+        tp_tss_total[sport]         += tss
+        tp_tss_daily[(wdate, sport)] += tss
+        tp_sessions.append({'date': wdate, 'sport': sport, 'tss': tss,
+                            'dur_s': (w.get('totalTime') or 0) * 3600, 'used': False})
+    for w in raw_12mo:
+        sport = classify(w.get('workoutTypeValueId'))
+        month = (w.get('workoutDay') or '')[:7]
+        if month:
+            tp_tss_month[(month, sport)] += round(w.get('tssActual') or 0, 1)
+
+    # ── PRs: bike + run baseline from TP (Strava overlaid on run below) ───────
+    print("Fetching PRs from TrainingPeaks…")
+    bike_prs   = await fetch_bike_prs(year_days)
+    tp_run_prs = await fetch_run_prs_tp(year_days)
+
+    # ── Strava activities ─────────────────────────────────────────────────────
+    print("Fetching activities from Strava…")
+    sclient   = StravaClient()
+    before    = _epoch(end + timedelta(days=1))
+    strava_7day = sclient.activities(after=_epoch(start),       before=before)
+    strava_12mo = sclient.activities(after=_epoch(trend_start), before=before)
+
+    pr_cache = load_cache()
+    new_runs = 0
+
+    # ── Build 7-day totals + daily breakdown + workout feed (Strava) ──────────
     totals = {s: {'sessions': 0, 'hours': 0.0, 'distance_km': 0.0, 'tss': 0.0}
               for s in sports}
     days = {}
@@ -436,37 +427,58 @@ async def main():
                    for s in sports}
 
     workout_list = []
-    for w in raw_7day:
-        sport = classify(w.get('workoutTypeValueId'))
-        wdate = (w.get('workoutDay') or '')[:10]
-        tss   = round(w.get('tssActual') or 0, 1)
-        hrs   = round(w.get('totalTime') or 0, 2)
-        dist  = round((w.get('distance') or 0) / 1000, 1)
-        hr    = w.get('heartRateAverage')
-        pwr   = w.get('powerAverage')
+    for a in sorted(strava_7day, key=lambda x: x.get('start_date_local', '')):
+        sport   = strava_classify(a)
+        wdate   = (a.get('start_date_local') or '')[:10]
+        moving  = a.get('moving_time') or 0
+        hrs     = round(moving / 3600, 2)
+        dist    = round((a.get('distance') or 0) / 1000, 1)
+        hr      = a.get('average_heartrate')
+        pwr     = a.get('average_watts')
+        tss     = match_tp_tss(tp_sessions, wdate, sport, moving)
 
         totals[sport]['sessions']    += 1
         totals[sport]['hours']       += hrs
         totals[sport]['distance_km'] += dist
-        totals[sport]['tss']         += tss
 
         if wdate in days:
-            days[wdate][sport]['hours']    += hrs
+            days[wdate][sport]['hours']       += hrs
             days[wdate][sport]['distance_km'] += dist
-            days[wdate][sport]['tss']      += tss
-            days[wdate][sport]['sessions'] += 1
+            days[wdate][sport]['sessions']    += 1
 
         workout_list.append({
-            'date': wdate, 'title': w.get('title', ''), 'sport': sport,
+            'date': wdate, 'title': a.get('name', ''), 'sport': sport,
             'hours': hrs, 'distance_km': dist, 'tss': tss,
             'hr_avg': int(hr) if hr else None,
             'power_avg': int(pwr) if pwr else None,
         })
 
+        # Fold new runs into the PR cache (best_efforts live on the detail object)
+        if sport == 'run' and a.get('id') not in pr_cache['processed_ids']:
+            try:
+                if process_run(sclient.activity_detail(a['id']), pr_cache):
+                    new_runs += 1
+            except Exception as e:  # noqa: BLE001
+                print(f"  PR detail fetch failed for {a.get('id')}: {e}")
+
+    # TSS (load) for totals + daily comes from TrainingPeaks
+    for s in sports:
+        totals[s]['tss'] = tp_tss_total.get(s, 0.0)
+    for d in days:
+        for s in sports:
+            days[d][s]['tss'] = tp_tss_daily.get((d, s), 0.0)
+
     for s in totals:
         totals[s]['hours']       = round(totals[s]['hours'], 1)
         totals[s]['distance_km'] = round(totals[s]['distance_km'], 1)
         totals[s]['tss']         = int(round(totals[s]['tss'], 0))
+
+    # ── Run PRs (Strava best-efforts cache) ───────────────────────────────────
+    if new_runs:
+        print(f"  folded {new_runs} new run(s) into PR cache")
+    save_cache(pr_cache)
+    strava_run_prs = build_run_prs(pr_cache, str(today.year))
+    prs = {'bike': bike_prs, 'run': merge_run_prs(strava_run_prs, tp_run_prs)}
 
     # ── Last fitness values ───────────────────────────────────────────────────
     last_fitness = {'ctl': 0.0, 'atl': 0.0, 'tsb': 0.0}
@@ -486,20 +498,21 @@ async def main():
             entry[s] = {k: round(v, 1) for k, v in days[d][s].items()}
         daily_list.append(entry)
 
-    # ── Build monthly aggregates ──────────────────────────────────────────────
+    # ── Build monthly aggregates (volume from Strava, TSS from TP) ────────────
     monthly_map = defaultdict(lambda: {
         s: {'sessions': 0, 'hours': 0.0, 'distance_km': 0.0, 'tss': 0.0}
         for s in sports
     })
-    for w in raw_12mo:
-        sport = classify(w.get('workoutTypeValueId'))
-        month = (w.get('workoutDay') or '')[:7]
+    for a in strava_12mo:
+        sport = strava_classify(a)
+        month = (a.get('start_date_local') or '')[:7]
         if not month:
             continue
         monthly_map[month][sport]['sessions']    += 1
-        monthly_map[month][sport]['hours']       += round(w.get('totalTime') or 0, 2)
-        monthly_map[month][sport]['distance_km'] += round((w.get('distance') or 0) / 1000, 1)
-        monthly_map[month][sport]['tss']         += round(w.get('tssActual') or 0, 1)
+        monthly_map[month][sport]['hours']       += (a.get('moving_time') or 0) / 3600
+        monthly_map[month][sport]['distance_km'] += (a.get('distance') or 0) / 1000
+    for (month, sport), tss in tp_tss_month.items():
+        monthly_map[month][sport]['tss'] += tss
 
     monthly_list = []
     for month in sorted(monthly_map.keys()):
@@ -546,6 +559,9 @@ async def main():
         print(f"Created swim PRs template → {SWIM_PRS}")
 
     # ── Commit and push ───────────────────────────────────────────────────────
+    if os.environ.get('DASHBOARD_DRY_RUN'):
+        print("DRY_RUN set — skipping git commit/push.")
+        return
     os.chdir(REPO)
     os.system('git add _data/training_data.yml _data/swim_prs.yml')
     os.system(f'git commit -m "chore: update training dashboard [{today}]"')

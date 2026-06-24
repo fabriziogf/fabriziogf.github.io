@@ -117,6 +117,41 @@ workouts:   # individual sessions
     tss: N
 ```
 
+### Data sources (HYBRID — Strava + TrainingPeaks)
+The dashboard is fed by **two** APIs. The YAML schema above is unchanged; only
+where each field comes from changed.
+
+| Field group | Source | Why |
+|-------------|--------|-----|
+| `fitness` (CTL/ATL/TSB), `ctl_trend` | TrainingPeaks | Strava has no PMC |
+| `*.tss` (totals / daily / monthly / per-workout) | TrainingPeaks | Strava has no TSS |
+| `*.sessions / hours / distance_km`, `workouts[]` feed, `hr_avg`, `power_avg` | **Strava** | activity source of truth |
+| `prs.bike` (peak power) | TrainingPeaks | Strava API has no power-curve endpoint |
+| `prs.run` (pace) | **Strava best-efforts**, merged over a TP baseline | see below |
+
+- **TSS attach**: each Strava activity is matched to a TP workout by date + sport +
+  nearest duration (`match_tp_tss`) to fill its `tss`. Aggregate TSS (totals/daily/
+  monthly) is summed straight from TP, keyed by date/month + sport.
+- **Run PRs**: TP gives the full-history baseline; Strava `best_efforts` are merged on
+  top via `merge_run_prs` (faster pace wins per distance). The Strava side is an
+  *incremental* cache (`scripts/.strava_pr_cache.json`, gitignored) — the updater only
+  fetches detail for runs it hasn't seen, so it stays under Strava's rate limit.
+  Run `scripts/strava_backfill_prs.py` once for full history (≈997 runs / ~3 h /
+  near the 1000-req daily cap — usually unnecessary since the TP baseline covers it).
+
+### Strava setup
+- Scripts: `scripts/strava_client.py` (stdlib-only OAuth client + sport map),
+  `scripts/strava_auth.py` (one-time OAuth bootstrap), `scripts/strava_prs.py`
+  (run-PR cache logic), `scripts/strava_backfill_prs.py` (one-time history seed).
+- Credentials live in the macOS keyring under service **`fabriziogf-strava`**
+  (`client_id`, `client_secret`, `refresh_token`). Refresh token auto-rotates.
+- Re-auth: register an app at https://www.strava.com/settings/api (callback domain
+  `localhost`), then run `scripts/strava_auth.py`.
+- **Strava sport map** lives in `strava_client.py::SPORT_MAP` (keyed by `sport_type`,
+  falling back to `type`). e.g. `Swim→swim`, `Ride/VirtualRide/…→bike`,
+  `Run/TrailRun/Walk/Hike→run`, `WeightTraining/Workout/Crossfit→strength`.
+- `DASHBOARD_DRY_RUN=1` env var on the updater writes the YAML but skips git commit/push.
+
 ### Jekyll 3 Liquid gotchas
 - **No `for` loop with inline filter**: `{% for x in "a,b" | split: "," %}` silently fails in Jekyll 3. Write explicit per-sport HTML instead.
 - **Markdown tables + Liquid**: `{% if %}` blocks inside Markdown table rows emit newlines that break parsing. Use HTML `<table>` for any table that contains Liquid logic.
