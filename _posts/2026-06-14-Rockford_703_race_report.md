@@ -75,4 +75,4 @@ Today confirmed what I needed to confirm: execution was clean, no injuries, fitn
 
 Lake Placid is a different beast — 2,500m of bike climbing and a full marathon off the back. But the work from January through June is in the legs. Time to see what it adds up to.
 
-<script src="https://strava-embed.com/embed.js"></script>
+<script src="https://strava-embeds.com/embed.js"></script>
