@@ -2,7 +2,7 @@
 title: "Inside the Job-Hunting Agent: How It's Built"
 ---
 
-A while back I wrote about [turning Laszlo Bock's *Apply Within* playbook into an agent](/Building_a_job_hunting_agent/) — the idea being that a job hunt can be distilled down to a set of repeatable, learnable moves.. That is what an agent should be good at.
+A while back I wrote about [turning Laszlo Bock's *Apply Within* playbook into an agent](/Building_a_job_hunting_agent/) — the idea being that a job hunt can be distilled down to a set of repeatable, learnable moves. That is what an agent should be good at.
 
 Given that idea, I built it: seven skills, plus job discovery, an orchestrator, live web search, persistence, and a command-line tool. This blog describes the underlying tech.
 
