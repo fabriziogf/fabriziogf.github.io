@@ -81,11 +81,15 @@ Outside of training, I also love going on long walks with my wife Emily and our 
 
 ## Triathlon and Rowing
 
+<img src="/assets/images/Foto_Fa_Primeira_Corrida_cropped.jpg" alt="Fabrizio racing" style="float: right; width: 260px; border-radius: 6px; margin: 0.5em 1em 1em 1.5em;" />
+
 Outside of work, I spend a lot of time training and racing endurance sports. I rowed at Princeton and now focus primarily on long-course triathlon, especially 70.3 and Ironman racing.
 
 - Former Division I rower on the Princeton lightweight rowing team
-- National champion in the Men's Lightweight 4-
+- Division I US national champion (Intercollegiate Rowing Association) in the Men's Lightweight 4-
 - Two-time Head of the Charles champion in the Men's Lightweight 8+
 - Co-chair of the Booth Triathlon and Running Club
 - 2022 Ironman World Championships finisher
 - Four-time Ironman 70.3 World Championship qualifier
+
+<div style="clear: both;"></div>
