@@ -37,10 +37,6 @@ I’m especially interested in AI/ML products, GenAI tooling, technical prototyp
 
 I'm excited by a mix of strategy and building: shaping product direction, working closely with technical teams, and creating artifacts that make ideas more concrete. That includes writing, prototyping, experimenting with tools, and learning by shipping.
 
----
-
-## Currently Focused On
-
 Right now, I’m especially interested in:
 - GenAI and LLM-enabled product experiences
 - AI prototyping workflows and agent-based tooling
@@ -87,7 +83,7 @@ Outside of work, I spend a lot of time training and racing endurance sports. I r
 - Division I US national champion (Intercollegiate Rowing Association) in the Men's Lightweight 4-
 - Two-time Head of the Charles champion in the Men's Lightweight 8+
 - Co-chair of the Booth Triathlon and Running Club
-- 2022 Ironman World Championships finisher
+- 2022 Ironman World Championships qualifier and finisher
 - Five-time Ironman 70.3 World Championship qualifier
 
 </div>
