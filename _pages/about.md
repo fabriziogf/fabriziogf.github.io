@@ -15,6 +15,8 @@ Over the last few years, I’ve worked at the intersection of data, machine lear
 
 I created this site as a place to share what I’m learning and building, especially across AI, ML, product thinking, and endurance sports.
 
+You can also take a look at my [CV](https://fabriziogf.github.io//download/Fabrizio Giovannini Filho - Resume ML 20260407 AI.pdf).
+
 ---
 
 ## Highlights
@@ -63,12 +65,6 @@ Right now, I’m especially interested in:
 
 ---
 
-## CV
-
-- [Fabrizio's CV](https://fabriziogf.github.io//download/Fabrizio Giovannini Filho - Resume ML 20260407 AI.pdf)
-
----
-
 ## Life Outside Work
 
 <img src="/assets/images/family_pic.jpg" alt="Fabrizio, Emily, and Ralphie" style="float: right; width: 260px; border-radius: 6px; margin: 0.5em 1em 1em 1.5em;" />
@@ -85,11 +81,15 @@ Outside of training, I also love going on long walks with my wife Emily and our 
 
 Outside of work, I spend a lot of time training and racing endurance sports. I rowed at Princeton and now focus primarily on long-course triathlon, especially 70.3 and Ironman racing.
 
+<div style="overflow: hidden;" markdown="1">
+
 - Former Division I rower on the Princeton lightweight rowing team
 - Division I US national champion (Intercollegiate Rowing Association) in the Men's Lightweight 4-
 - Two-time Head of the Charles champion in the Men's Lightweight 8+
 - Co-chair of the Booth Triathlon and Running Club
 - 2022 Ironman World Championships finisher
-- Four-time Ironman 70.3 World Championship qualifier
+- Five-time Ironman 70.3 World Championship qualifier
+
+</div>
 
 <div style="clear: both;"></div>
