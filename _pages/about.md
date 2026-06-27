@@ -63,7 +63,7 @@ Right now, I’m especially interested in:
 
 ## Life Outside Work
 
-<img src="/assets/images/family_pic.jpg" alt="Fabrizio, Emily, and Ralphie" style="float: right; width: 260px; border-radius: 6px; margin: 0.5em 1em 1em 1.5em;" />
+<img src="/assets/images/ralphie_emm.jpg" alt="Emily and Ralphie" style="float: right; width: 260px; border-radius: 6px; margin: 0.5em 1em 1em 1.5em;" />
 
 Outside of training, I also love going on long walks with my wife Emily and our dog Ralphie. It's a good excuse to slow down, explore new neighborhoods, and spend time together away from screens. Being Brazilian, I also follow soccer — Arsenal is my favorite team, go Gunners!
 
