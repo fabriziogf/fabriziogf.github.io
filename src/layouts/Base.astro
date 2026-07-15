@@ -1,0 +1,70 @@
+---
+import '@fontsource-variable/inter-tight';
+import '@fontsource/ibm-plex-mono/400.css';
+import '@fontsource/ibm-plex-mono/500.css';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title, description = "Fabrizio GF's personal website" } = Astro.props;
+const pageTitle = title ? `${title} - fabriziogf.github.io` : 'fabriziogf.github.io';
+
+const navItems = [
+  { label: 'Writing', href: '/year-archive/' },
+  { label: 'Projects', href: '/projects/' },
+  { label: 'Training', href: '/training/' },
+  { label: 'About', href: '/about/' },
+];
+
+const current = Astro.url.pathname.replace(/\/+$/, '') + '/';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="alternate" type="application/rss+xml" title="Fabrizio GF" href="/feed.xml" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <a class="site-logo" href="/">Fabrizio GF</a>
+        <nav class="site-nav" aria-label="Main">
+          {
+            navItems.map((item) => (
+              <a href={item.href} aria-current={current === item.href ? 'page' : undefined}>
+                {item.label}
+              </a>
+            ))
+          }
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <span>© {new Date().getFullYear()} Fabrizio Giovannini Filho</span>
+        <span>
+          <a href="https://github.com/fabriziogf" rel="noopener">GitHub</a>
+          &nbsp;·&nbsp;
+          <a href="https://www.linkedin.com/in/fgiovanninifilho/" rel="noopener">LinkedIn</a>
+          &nbsp;·&nbsp;
+          <a href="mailto:fabriziogf@gmail.com">Email</a>
+          &nbsp;·&nbsp;
+          <a href="/feed.xml">RSS</a>
+        </span>
+      </div>
+    </footer>
+  </body>
+</html>

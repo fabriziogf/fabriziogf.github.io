@@ -1,0 +1,63 @@
+---
+import { render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import { sortedPosts, parseId, formatDate, isoDate } from '../lib/posts';
+
+export async function getStaticPaths() {
+  const posts = await sortedPosts();
+  return posts.map((post) => ({
+    params: { slug: parseId(post.id).slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { date } = parseId(post.id);
+const { Content } = await render(post);
+---
+
+<Base title={post.data.title}>
+  <div class="container">
+    <article>
+      <header class="post-head">
+        <p class="micro-label">
+          <span class="dot" style="background: var(--ink)"></span>
+        Writing
+        </p>
+        <h1 class="page-title">{post.data.title}</h1>
+        <p class="post-meta num">
+          <time datetime={isoDate(date)}>{formatDate(date)}</time>
+        </p>
+      </header>
+      <div class="prose">
+        <Content />
+      </div>
+      <nav class="post-foot">
+        <a class="arrow-link" href="/year-archive/">← All posts</a>
+      </nav>
+    </article>
+  </div>
+</Base>
+
+<style>
+  .post-head {
+    padding: 44px 0 28px;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 36px;
+    max-width: 70ch;
+  }
+
+  .post-meta {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--muted);
+    margin: 16px 0 0;
+  }
+
+  .post-foot {
+    margin-top: 56px;
+    padding-top: 20px;
+    border-top: 1px solid var(--hairline);
+    max-width: 70ch;
+  }
+</style>

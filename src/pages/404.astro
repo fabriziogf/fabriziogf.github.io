@@ -1,0 +1,22 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="Page not found">
+  <div class="container">
+    <header class="page-head">
+      <p class="micro-label"><span class="dot" style="background: var(--fatigue)"></span>404</p>
+      <h1 class="page-title">Page not found</h1>
+      <p class="sub">
+        That page doesn’t exist — it may have moved when the site was redesigned. Try the
+        <a href="/year-archive/">post archive</a> or head <a href="/">home</a>.
+      </p>
+    </header>
+  </div>
+</Base>
+
+<style>
+  .sub a {
+    color: var(--ink);
+  }
+</style>

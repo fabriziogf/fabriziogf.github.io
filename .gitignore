@@ -7,3 +7,15 @@ vendor
 # Strava run-PR incremental cache (machine-local state)
 scripts/.strava_pr_cache.json
 scripts/__pycache__/
+
+# Astro
+node_modules
+dist
+.astro
+
+# macOS
+.DS_Store
+
+# Claude Code local state
+.claude/worktrees/
+.claude/settings.local.json

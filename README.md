@@ -1,46 +1,48 @@
 # Fabrizio GF — Personal Website
 
-Personal website built with [Jekyll](https://jekyllrb.com/) using the [Minimal Mistakes](https://mmistakes.github.io/minimal-mistakes/) theme, hosted on GitHub Pages.
+Personal website built with [Astro](https://astro.build/), deployed to GitHub Pages via GitHub Actions.
 
 ## Directory Structure
 
 ```
 .
-├── _config.yml                  # Jekyll site-wide configuration (theme, title, author, plugins)
-├── index.html                   # Site homepage
-├── Gemfile / Gemfile.lock       # Ruby gem dependencies
-├── package.json                 # Node.js dev dependencies (e.g. for asset tooling)
-├── Rakefile                     # Rake tasks (tests, asset compilation)
-├── staticman.yml                # Staticman configuration for static comment submissions
-├── minimal-mistakes-jekyll.gemspec  # Gem spec if using the theme as a local gem
-├── CHANGELOG.md                 # Upstream theme changelog
-├── LICENSE                      # Theme license
+├── astro.config.mjs             # Astro configuration (site URL, sitemap, code themes)
+├── package.json                 # Node dependencies and scripts
+├── tsconfig.json                # TypeScript configuration
 │
-├── _posts/                      # Published blog posts (filename: YYYY-MM-DD-title.md)
-├── _pages/                      # Static pages (about, home, archive, 404)
-├── _data/                       # YAML data files
-│   ├── navigation.yml           # Site navigation links
-│   ├── ui-text.yml              # Localised UI strings
-│   └── _training_data/          # Raw training/fitness data used by posts and notebooks
+├── src/
+│   ├── content.config.ts        # Content collections (posts load from _posts/)
+│   ├── layouts/                 # Base shell, markdown page layout
+│   ├── lib/                     # Post helpers, training-data loader
+│   ├── pages/                   # Routes: index, year-archive, projects, training, about, [slug]
+│   └── styles/global.css        # Design tokens ("Gridline") — light + dark themes
 │
-├── _layouts/                    # Page layout templates (HTML)
-├── _includes/                   # Reusable HTML partials (header, footer, SEO tags, etc.)
-├── _sass/                       # SASS source files
-│   ├── minimal-mistakes/        # Theme SASS partials
-│   └── minimal-mistakes.scss    # Main SASS entry point
+├── public/                      # Static files served as-is
+│   ├── assets/images/           # Site images
+│   └── download/                # CV and other downloads
 │
-├── assets/                      # Compiled/static assets served directly
-│   ├── css/                     # Compiled stylesheets
-│   ├── js/                      # JavaScript files
-│   └── images/                  # Site images
+├── _posts/                      # Blog posts (filename: YYYY-MM-DD-Slug.md → served at /Slug/)
+├── _data/
+│   ├── training_data.yml        # Machine-generated dashboard data (daily cron)
+│   └── _training_data/          # Raw training/fitness data archives
 │
+├── scripts/                     # Training dashboard updater (Strava + TrainingPeaks)
 ├── notebooks/                   # Jupyter notebooks for data analysis posts
-│   └── fit_training_analysis.ipynb
-│
 ├── _garage/                     # Staging area / work-in-progress content not yet published
-├── docs/                        # Theme documentation
-├── download/                    # Downloadable files linked from pages
-└── test/                        # Theme test suite
+│
+└── .github/workflows/deploy.yml # Build + deploy to GitHub Pages on push to main
 ```
 
-The site is available at https://fabriziogf.github.io/
+## Development
+
+```bash
+npm install
+npx astro dev        # http://localhost:4321
+npm run build        # static build to dist/
+```
+
+## Deployment
+
+Push to `main`. The GitHub Actions workflow builds the site and publishes it to GitHub Pages (Pages source: "GitHub Actions").
+
+The training dashboard (`/training/`) is fed by `_data/training_data.yml`, rewritten daily by `scripts/update_training_data.py` (Cowork cron job); its push to `main` triggers a rebuild, keeping the dashboard fresh.

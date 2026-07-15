@@ -1,0 +1,174 @@
+---
+import Base from '../layouts/Base.astro';
+
+const projects = [
+  {
+    tag: 'Sports Analytics',
+    tagColor: 'var(--swim-ink)',
+    dot: 'var(--swim)',
+    status: 'Active',
+    title: 'World Cup 2026 Prediction Model',
+    desc: 'Monte Carlo tournament simulator built on Dixon-Coles and Elo ratings. Backtested across 2014–2022 World Cups with Brier score and calibration analysis.',
+    stack: 'Python · Monte Carlo · Dixon-Coles',
+    links: [
+      { label: 'Read the writeup →', href: '/World_Cup_prediction_model_part10/' },
+      { label: 'View code →', href: 'https://github.com/fabriziogf/world_cup_model', external: true },
+    ],
+  },
+  {
+    tag: 'Triathlon',
+    tagColor: 'var(--run-ink)',
+    dot: 'var(--run)',
+    status: 'Active',
+    title: 'Training Dashboard',
+    desc: 'Live 7-day rolling window of swim, bike, run, and strength training. Activity data is pulled from Strava daily, with fitness metrics (CTL, ATL, TSB) and training load (TSS) from TrainingPeaks. Shows session-level detail, 12-month trends, and personal records.',
+    stack: 'Python · Astro · Strava API · TrainingPeaks API',
+    links: [{ label: 'View dashboard →', href: '/training/' }],
+  },
+  {
+    tag: 'GenAI',
+    tagColor: 'var(--strength-ink)',
+    dot: 'var(--strength)',
+    status: 'In progress',
+    title: 'Job Hunting Agent',
+    desc: 'An AI agent that helps a candidate run a full job search end-to-end — resume, cover letter, networking, interview prep, application tracking, and offer negotiation — with advice grounded in a concrete playbook rather than generic LLM intuition.',
+    stack: 'Python · Anthropic SDK · Claude Code',
+    links: [
+      { label: 'Read the writeup →', href: '/Job_hunting_agent_technical_implementation/' },
+      { label: 'View code →', href: 'https://github.com/fabriziogf/job-hunt-assistant', external: true },
+    ],
+  },
+];
+---
+
+<Base title="Projects">
+  <div class="container">
+    <header class="page-head">
+      <p class="micro-label"><span class="dot" style="background: var(--bike)"></span>Projects</p>
+      <h1 class="page-title">Projects</h1>
+      <p class="sub">
+        The <strong>live outputs</strong> of projects I’m actively building — tools, models,
+        dashboards, and experiments. Each card links directly to the finished artifact. I work
+        across AI/ML, GenAI tooling, sports analytics, and decision systems; projects here range
+        from polished prototypes to early releases.
+      </p>
+    </header>
+
+    <div class="grid">
+      {
+        projects.map((p) => (
+          <article class="card">
+            <div class="card-head">
+              <p class="micro-label" style="margin: 0">
+                <span class="dot" style={`background: ${p.dot}`} />
+                <span style={`color: ${p.tagColor}`}>{p.tag}</span>
+              </p>
+              <span class:list={['status', { wip: p.status !== 'Active' }]}>{p.status}</span>
+            </div>
+            <h2 class="card-title">{p.title}</h2>
+            <p class="card-desc">{p.desc}</p>
+            <p class="card-stack">{p.stack}</p>
+            <div class="card-links">
+              {p.links.map((l) => (
+                <a
+                  class="arrow-link"
+                  href={l.href}
+                  target={l.external ? '_blank' : undefined}
+                  rel={l.external ? 'noopener' : undefined}
+                >
+                  {l.label}
+                </a>
+              ))}
+            </div>
+          </article>
+        ))
+      }
+    </div>
+
+    <p class="foot-note">
+      For context on how these projects were built, see the <a href="/year-archive/">blog posts</a>.
+    </p>
+  </div>
+</Base>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    border-left: 1px solid var(--hairline);
+    border-top: 1px solid var(--hairline);
+    margin-top: 0;
+  }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 26px 28px 28px;
+    border-right: 1px solid var(--hairline);
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .status {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--bike-ink);
+    border: 1px solid currentColor;
+    border-radius: 99px;
+    padding: 2px 10px;
+    white-space: nowrap;
+  }
+
+  .status.wip {
+    color: var(--run-ink);
+  }
+
+  .card-title {
+    font-size: 19px;
+    font-weight: 650;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+    margin: 2px 0 0;
+  }
+
+  .card-desc {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--muted);
+    margin: 0;
+    flex-grow: 1;
+  }
+
+  .card-stack {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--faint);
+    margin: 0;
+  }
+
+  .card-links {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+  }
+
+  .foot-note {
+    font-size: 13.5px;
+    color: var(--muted);
+    margin-top: 28px;
+  }
+
+  .foot-note a {
+    color: var(--ink);
+  }
+</style>

@@ -1,0 +1,282 @@
+---
+import Base from '../layouts/Base.astro';
+import { sortedPosts, parseId, formatDate } from '../lib/posts';
+import { loadTrainingData } from '../lib/training';
+
+const posts = (await sortedPosts()).slice(0, 4);
+const td = loadTrainingData();
+
+const weekHours = (['swim', 'bike', 'run', 'strength'] as const).reduce(
+  (a, s) => a + td.totals[s].hours,
+  0
+);
+
+// CTL sparkline from the 12-month trend, thinned to keep the polyline light
+const trend = td.ctl_trend ?? [];
+const step = Math.max(1, Math.floor(trend.length / 40));
+const pts = trend.filter((_, i) => i % step === 0 || i === trend.length - 1);
+const ctlMin = Math.min(...pts.map((p) => p.ctl));
+const ctlMax = Math.max(...pts.map((p) => p.ctl));
+const W = 260;
+const H = 44;
+const sparkPoints = pts
+  .map((p, i) => {
+    const x = (i / (pts.length - 1)) * W;
+    const y = H - 4 - ((p.ctl - ctlMin) / (ctlMax - ctlMin || 1)) * (H - 8);
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
+  })
+  .join(' ');
+const lastPoint = sparkPoints.split(' ').at(-1)!.split(',');
+---
+
+<Base>
+  <div class="container">
+    <section class="hero">
+      <div class="hero-text">
+        <h1>Welcome to my personal website!</h1>
+        <p>
+          I’m <a href="/about/">Fabrizio</a>: product leader, builder, and endurance sports
+          enthusiast. I created this site as a place to share what I’m learning and what I’m
+          building.
+        </p>
+        <p>
+          Expect posts on AI, ML, data science, product thinking, sports, and the occasional side
+          project that feels too interesting not to chase.
+        </p>
+      </div>
+      <figure class="hero-photo">
+        <img src="/assets/images/family_pic.jpg" alt="Fabrizio, Emily, and Ralphie" width="640" />
+      </figure>
+    </section>
+
+    <section class="cells">
+      <div class="cell">
+        <p class="micro-label"><span class="dot" style="background: var(--ink)"></span>Latest writing</p>
+        {
+          posts.map((post) => {
+            const { date, slug } = parseId(post.id);
+            return (
+              <a class="post-item" href={`/${slug}/`}>
+                <span class="post-date num">{formatDate(date)}</span>
+                <span class="post-title">{post.data.title}</span>
+              </a>
+            );
+          })
+        }
+        <a class="arrow-link cell-more" href="/year-archive/">All posts →</a>
+      </div>
+
+      <div class="cell">
+        <p class="micro-label"><span class="dot" style="background: var(--bike)"></span>Now building</p>
+        <a class="post-item" href="/projects/">
+          <span class="post-title">World Cup 2026 Prediction Model</span>
+          <span class="post-sub">Monte Carlo tournament simulator on Dixon-Coles and Elo</span>
+        </a>
+        <a class="post-item" href="/projects/">
+          <span class="post-title">Job Hunting Agent</span>
+          <span class="post-sub">An AI agent that runs a full job search end-to-end</span>
+        </a>
+        <a class="post-item" href="/training/">
+          <span class="post-title">Training Dashboard</span>
+          <span class="post-sub">Live Strava + TrainingPeaks pipeline, updated daily</span>
+        </a>
+        <a class="arrow-link cell-more" href="/projects/">All projects →</a>
+      </div>
+
+      <div class="cell">
+        <p class="micro-label"><span class="dot" style="background: var(--run)"></span>Training · updated daily</p>
+        <div class="metrics num">
+          <div><b>{td.fitness.ctl.toFixed(1)}</b><span>CTL</span></div>
+          <div><b>{td.fitness.tsb >= 0 ? `+${td.fitness.tsb.toFixed(1)}` : td.fitness.tsb.toFixed(1)}</b><span>TSB</span></div>
+          <div><b>{weekHours.toFixed(1)}h</b><span>Week</span></div>
+        </div>
+        <svg
+          class="spark"
+          viewBox={`0 0 ${W} ${H}`}
+          preserveAspectRatio="none"
+          role="img"
+          aria-label={`Chronic training load over the past 12 months, currently ${td.fitness.ctl}`}
+        >
+          <polyline points={sparkPoints} fill="none" stroke="var(--run)" stroke-width="2"></polyline>
+          <circle cx={lastPoint[0]} cy={lastPoint[1]} r="3.4" fill="var(--ink)"></circle>
+        </svg>
+        <p class="spark-cap">CTL, trailing 12 months → Ironman Lake Placid, July 19</p>
+        <a class="arrow-link cell-more" href="/training/">View dashboard →</a>
+      </div>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 48px;
+    align-items: center;
+    padding: 52px 0 44px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .hero h1 {
+    font-size: clamp(32px, 4.5vw, 46px);
+    font-weight: 650;
+    letter-spacing: -0.03em;
+    line-height: 1.08;
+    margin: 0 0 20px;
+    text-wrap: balance;
+  }
+
+  .hero-text p {
+    margin: 0 0 0.9em;
+    color: var(--muted);
+    max-width: 56ch;
+  }
+
+  .hero-text p:last-child {
+    margin-bottom: 0;
+  }
+
+  .hero-text a {
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-color: var(--faint);
+    text-underline-offset: 3px;
+  }
+
+  .hero-photo {
+    margin: 0;
+  }
+
+  .hero-photo img {
+    display: block;
+    width: 300px;
+    max-width: 100%;
+    border-radius: 4px;
+    border: 1px solid var(--hairline);
+  }
+
+  .cells {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .cell {
+    padding: 28px 28px 30px;
+    border-right: 1px solid var(--hairline);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .cell:first-child {
+    padding-left: 0;
+  }
+
+  .cell:last-child {
+    border-right: none;
+    padding-right: 0;
+  }
+
+  .post-item {
+    display: block;
+    text-decoration: none;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .post-item:last-of-type {
+    border-bottom: none;
+  }
+
+  .post-date {
+    display: block;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--faint);
+    margin-bottom: 2px;
+  }
+
+  .post-title {
+    display: block;
+    font-size: 14.5px;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  .post-item:hover .post-title {
+    text-decoration: underline;
+    text-decoration-color: var(--faint);
+    text-underline-offset: 3px;
+  }
+
+  .post-sub {
+    display: block;
+    font-size: 12.5px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .cell-more {
+    margin-top: auto;
+    padding-top: 18px;
+    align-self: flex-start;
+  }
+
+  .metrics {
+    display: flex;
+    gap: 26px;
+    margin: 4px 0 16px;
+  }
+
+  .metrics b {
+    display: block;
+    font-size: 27px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+
+  .metrics span {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+
+  .spark {
+    width: 100%;
+    height: 44px;
+    display: block;
+  }
+
+  .spark-cap {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--faint);
+    margin: 8px 0 0;
+  }
+
+  @media (max-width: 860px) {
+    .hero {
+      grid-template-columns: 1fr;
+      gap: 28px;
+      padding: 40px 0 36px;
+    }
+
+    .cells {
+      grid-template-columns: 1fr;
+    }
+
+    .cell {
+      border-right: none;
+      border-bottom: 1px solid var(--hairline);
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    .cell:last-child {
+      border-bottom: none;
+    }
+  }
+</style>

@@ -1,9 +1,15 @@
 # Claude Context — fabriziogf.github.io
 
 ## Site
-- Jekyll 3 / Minimal Mistakes theme, hosted on GitHub Pages
-- Run locally: `LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 bundle exec jekyll serve --livereload`
-- Push to deploy: `git push origin main`
+- Astro 5, custom "Gridline" design (Swiss modern, light + dark via `prefers-color-scheme`), hosted on GitHub Pages
+- Run locally: `npx astro dev` (or the `astro-dev` entry in `.claude/launch.json`)
+- Build: `npm run build` → `dist/`
+- Push to deploy: `git push origin main` → `.github/workflows/deploy.yml` builds and publishes (Pages source must be set to "GitHub Actions")
+- Posts stay in `_posts/` (Jekyll filename convention `YYYY-MM-DD-Slug.md`); the content loader in `src/content.config.ts` keeps the exact filename as the slug so Jekyll-era URLs (`/Slug/`) are preserved — do not let it slugify/lowercase ids
+- Pages: `src/pages/` (`index.astro`, `year-archive.astro`, `projects.astro`, `training.astro`, `about.md`, `[slug].astro` for posts); layouts in `src/layouts/`; design tokens in `src/styles/global.css`
+- Navigation lives in `src/layouts/Base.astro` (no more `_data/navigation.yml`)
+- Static files: `public/` (contains copies of `assets/` and `download/`; images are referenced as `/assets/images/...`)
+- Legacy Minimal Mistakes / Jekyll files (`_config.yml`, `_includes/`, `_layouts/`, `_sass/`, `docs/`, `test/`, `Gemfile`, top-level `assets/`, `_pages/`, etc.) are still in the repo pending cleanup after the Astro migration is confirmed live
 
 ---
 
@@ -83,10 +89,10 @@ Athlete ID: **2106530**
 
 ## Training Dashboard (`/training/`)
 
-- Page: `_pages/training.md`, permalink `/training/`
-- Data file: `_data/training_data.yml` (machine-generated, 7-day rolling window)
-- Daily updater: `scripts/update_training_data.py` (run via Cowork cron job)
-- Navigation entry: `_data/navigation.yml` under `main` links
+- Page: `src/pages/training.astro`, permalink `/training/` (three tabs: This Week, 12-Month Trends, Personal Records)
+- Data file: `_data/training_data.yml` (machine-generated, 7-day rolling window) — read at build time by `src/lib/training.ts`; the daily push to main triggers the Actions rebuild, so the dashboard stays fresh
+- Daily updater: `scripts/update_training_data.py` (run via Cowork cron job) — unchanged by the Astro migration
+- Charts: Chart.js (bundled via npm). Charts inside hidden tab panels are created lazily on first tab view — Chart.js laid out in a `hidden` container gets zero dimensions
 
 ### Dashboard data file structure
 ```yaml
@@ -152,9 +158,8 @@ where each field comes from changed.
   `Run/TrailRun/Walk/Hike→run`, `WeightTraining/Workout/Crossfit→strength`.
 - `DASHBOARD_DRY_RUN=1` env var on the updater writes the YAML but skips git commit/push.
 
-### Jekyll 3 Liquid gotchas
-- **No `for` loop with inline filter**: `{% for x in "a,b" | split: "," %}` silently fails in Jekyll 3. Write explicit per-sport HTML instead.
-- **Markdown tables + Liquid**: `{% if %}` blocks inside Markdown table rows emit newlines that break parsing. Use HTML `<table>` for any table that contains Liquid logic.
+### Historical note (Jekyll era, pre-2026-07 redesign)
+- The site ran Jekyll 3 / Minimal Mistakes until the Astro redesign. Old posts that discuss Jekyll/Liquid quirks (e.g. the 2026-04-11 Training Dashboard post) describe that era; the quirks no longer apply to the site itself.
 
 ### Sport color palette
 | Sport    | Color   |

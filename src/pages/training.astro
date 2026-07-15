@@ -1,0 +1,846 @@
+---
+import Base from '../layouts/Base.astro';
+import { loadTrainingData, SPORT_COLORS, SPORT_LABELS, type SportKey } from '../lib/training';
+
+const td = loadTrainingData();
+const sports = ['swim', 'bike', 'run', 'strength'] as const;
+
+const totalTss = sports.reduce((a, s) => a + td.totals[s].tss, 0);
+const totalHours = sports.reduce((a, s) => a + td.totals[s].hours, 0);
+
+const sportVar = (s: SportKey) => `var(--${s})`;
+const sportInkVar = (s: SportKey) => `var(--${s}-ink)`;
+
+// Heatmap intensities (rendered at build time)
+const monthly = td.monthly ?? [];
+const monthTotals = monthly.map((m) => sports.reduce((a, s) => a + m[s].tss, 0));
+const maxMonthTss = Math.max(...monthTotals, 1);
+function shortMonth(ym: string): string {
+  const [y, m] = ym.split('-');
+  return new Date(Number(y), Number(m) - 1).toLocaleDateString('en-US', {
+    month: 'short',
+    year: '2-digit',
+  });
+}
+
+// PR tables
+const bikeOrder = ['power5sec', 'power1min', 'power5min', 'power10min', 'power20min', 'power60min'];
+const runOrder = ['speed1K', 'speed5K', 'speed10K', 'speedHalfMarathon', 'speedMarathon'];
+
+type PrRow = { label: string; value: string; date: string; workout: string };
+function prRows(
+  group: Record<string, any>,
+  order: string[],
+  period: 'this_year' | 'all_time',
+  fmt: (v: any) => string
+): PrRow[] {
+  return order
+    .filter((k) => group?.[k])
+    .map((k) => {
+      const e = group[k];
+      const v = e[period];
+      return {
+        label: e.label,
+        value: v != null && v !== '' ? fmt(v) : '—',
+        date: e[`${period}_date`] ?? '',
+        workout: e[`${period}_workout`] ?? '',
+      };
+    });
+}
+const fmtWatts = (v: any) => `${Math.round(Number(v))} W`;
+const fmtPace = (v: any) => `${v}/km`;
+
+const prTables = [
+  {
+    sport: 'bike' as const,
+    heading: 'Bike — Peak Power',
+    col: 'Duration',
+    periods: {
+      this_year: prRows(td.prs?.bike ?? {}, bikeOrder, 'this_year', fmtWatts),
+      all_time: prRows(td.prs?.bike ?? {}, bikeOrder, 'all_time', fmtWatts),
+    },
+  },
+  {
+    sport: 'run' as const,
+    heading: 'Run — Pace',
+    col: 'Distance',
+    periods: {
+      this_year: prRows(td.prs?.run ?? {}, runOrder, 'this_year', fmtPace),
+      all_time: prRows(td.prs?.run ?? {}, runOrder, 'all_time', fmtPace),
+    },
+  },
+];
+
+// Payload for the client-side charts
+const chartData = {
+  daily: td.daily,
+  monthly: td.monthly,
+  ctlTrend: td.ctl_trend,
+  totals: Object.fromEntries(sports.map((s) => [s, td.totals[s].tss])),
+  colors: SPORT_COLORS,
+};
+---
+
+<Base title="Training Dashboard">
+  <div class="container">
+    <header class="page-head">
+      <p class="micro-label"><span class="dot" style="background: var(--run)"></span>Training · updated daily</p>
+      <h1 class="page-title">Training Dashboard</h1>
+      <p class="window num">
+        Rolling 7-day window <strong>{td.window_start}</strong> → <strong>{td.window_end}</strong>
+        &nbsp;·&nbsp; Updated {td.generated_at}
+      </p>
+    </header>
+
+    <div class="tabs" role="tablist" aria-label="Dashboard views">
+      <button class="tab" role="tab" id="tab-btn-week" aria-selected="true" aria-controls="tab-week">This Week</button>
+      <button class="tab" role="tab" id="tab-btn-trends" aria-selected="false" aria-controls="tab-trends">12-Month Trends</button>
+      <button class="tab" role="tab" id="tab-btn-prs" aria-selected="false" aria-controls="tab-prs">Personal Records</button>
+    </div>
+
+    <!-- ── TAB 1 · THIS WEEK ─────────────────────────────────── -->
+    <section id="tab-week" role="tabpanel" aria-labelledby="tab-btn-week">
+      <h2 class="sec">Fitness (PMC)</h2>
+      <div class="stat-row num">
+        <div class="stat">
+          <p class="micro-label"><span class="dot" style="background: var(--swim)"></span>Fitness · CTL</p>
+          <b>{td.fitness.ctl.toFixed(1)}</b>
+        </div>
+        <div class="stat">
+          <p class="micro-label"><span class="dot" style="background: var(--fatigue)"></span>Fatigue · ATL</p>
+          <b>{td.fitness.atl.toFixed(1)}</b>
+        </div>
+        <div class="stat">
+          <p class="micro-label">
+            <span class="dot" style={`background: ${td.fitness.tsb >= 0 ? 'var(--bike)' : 'var(--fatigue)'}`}></span>
+            Form · TSB
+          </p>
+          <b>{td.fitness.tsb >= 0 ? `+${td.fitness.tsb.toFixed(1)}` : td.fitness.tsb.toFixed(1)}</b>
+        </div>
+      </div>
+
+      <h2 class="sec">7-Day Summary</h2>
+      <div class="sport-row num">
+        {
+          sports.map((s) => (
+            <div class="sport-cell">
+              <p class="micro-label">
+                <span class="dot" style={`background: ${sportVar(s)}`} />
+                {SPORT_LABELS[s]}
+              </p>
+              <div class="sport-line"><span>Sessions</span><strong>{td.totals[s].sessions}</strong></div>
+              <div class="sport-line"><span>Hours</span><strong>{td.totals[s].hours}h</strong></div>
+              {s !== 'strength' && (
+                <div class="sport-line"><span>Distance</span><strong>{td.totals[s].distance_km} km</strong></div>
+              )}
+              <div class="sport-line"><span>TSS</span><strong>{td.totals[s].tss}</strong></div>
+            </div>
+          ))
+        }
+      </div>
+      <p class="totals-line num">
+        <strong>Total TSS</strong> {totalTss} &nbsp;·&nbsp; <strong>Total Hours</strong> {totalHours.toFixed(1)}h
+      </p>
+
+      <h2 class="sec">Daily TSS by Sport</h2>
+      <div class="chart-box"><canvas id="chartDailyTSS"></canvas></div>
+
+      <h2 class="sec">Daily Hours by Sport</h2>
+      <div class="chart-box"><canvas id="chartDailyHours"></canvas></div>
+
+      <h2 class="sec">TSS Distribution</h2>
+      <div class="chart-box donut"><canvas id="chartTSSDonut"></canvas></div>
+
+      <h2 class="sec">Sessions This Week</h2>
+      <div class="table-scroll">
+        <table class="data-table num">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Sport</th>
+              <th>Session</th>
+              <th class="r">Hours</th>
+              <th class="r">Distance</th>
+              <th class="r">TSS</th>
+              <th class="r">Avg HR</th>
+              <th class="r">Avg Power</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              td.workouts.map((w) => (
+                <tr>
+                  <td class="mono-cell">{w.date}</td>
+                  <td>
+                    <span class="sport-chip" style={`color: ${sportInkVar(w.sport)}`}>
+                      <i style={`background: ${sportVar(w.sport)}`} />
+                      {SPORT_LABELS[w.sport]}
+                    </span>
+                  </td>
+                  <td>
+                    {w.strava_id ? (
+                      <a class="session-link" href={`https://www.strava.com/activities/${w.strava_id}`} target="_blank" rel="noopener">
+                        {w.title}
+                      </a>
+                    ) : (
+                      w.title
+                    )}
+                  </td>
+                  <td class="r">{w.hours}h</td>
+                  <td class="r">{w.distance_km > 0 ? `${w.distance_km} km` : '—'}</td>
+                  <td class="r">{w.tss}</td>
+                  <td class="r">{w.hr_avg ? `${w.hr_avg} bpm` : '—'}</td>
+                  <td class="r">{w.power_avg ? `${w.power_avg} W` : '—'}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ── TAB 2 · 12-MONTH TRENDS ───────────────────────────── -->
+    <section id="tab-trends" role="tabpanel" aria-labelledby="tab-btn-trends" hidden>
+      <h2 class="sec">Monthly TSS by Sport</h2>
+      <div class="chart-box tall"><canvas id="chartMonthlyTSS"></canvas></div>
+
+      <h2 class="sec">Monthly Hours by Sport</h2>
+      <div class="chart-box tall"><canvas id="chartMonthlyHours"></canvas></div>
+
+      <h2 class="sec">CTL / ATL Trend</h2>
+      <p class="sec-note">End-of-day values, one per calendar day over the past 12 months.</p>
+      <div class="chart-box"><canvas id="chartCTL"></canvas></div>
+
+      <h2 class="sec">Monthly Volume Heatmap</h2>
+      <div class="table-scroll">
+        <table class="data-table num heatmap">
+          <thead>
+            <tr>
+              <th>Month</th>
+              {sports.map((s) => (
+                <th class="r" style={`color: ${sportInkVar(s)}`}>{SPORT_LABELS[s]}</th>
+              ))}
+              <th class="r">Total TSS</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              monthly.map((m, i) => (
+                <tr style={`background: rgba(79, 195, 247, ${((monthTotals[i] / maxMonthTss) * 0.28).toFixed(2)})`}>
+                  <td class="mono-cell"><strong>{shortMonth(m.month)}</strong></td>
+                  {sports.map((s) => (
+                    <td class="r">{m[s].tss > 0 ? m[s].tss : '—'}</td>
+                  ))}
+                  <td class="r"><strong>{monthTotals[i]}</strong></td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ── TAB 3 · PERSONAL RECORDS ──────────────────────────── -->
+    <section id="tab-prs" role="tabpanel" aria-labelledby="tab-btn-prs" hidden>
+      <div class="segment" role="group" aria-label="Record period">
+        <button class="seg-btn" data-period="this_year" aria-pressed="true">2026 · This Year</button>
+        <button class="seg-btn" data-period="all_time" aria-pressed="false">All-Time</button>
+      </div>
+
+      {
+        prTables.map((t) => (
+          <div class="pr-block">
+            <p class="micro-label">
+              <span class="dot" style={`background: ${sportVar(t.sport)}`} />
+              {t.heading}
+            </p>
+            {(['this_year', 'all_time'] as const).map((period) => (
+              <div class="table-scroll pr-period" data-period={period} hidden={period === 'all_time'}>
+                <table class="data-table num">
+                  <thead>
+                    <tr>
+                      <th>{t.col}</th>
+                      <th>{period === 'this_year' ? '2026 Best' : 'All-Time Best'}</th>
+                      <th>Date</th>
+                      <th>Session</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {t.periods[period].map((row) => (
+                      <tr>
+                        <td>{row.label}</td>
+                        <td class="pr-value">{row.value}</td>
+                        <td class="mono-cell">{row.date}</td>
+                        <td class="pr-workout">{row.workout}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ))}
+          </div>
+        ))
+      }
+    </section>
+  </div>
+
+  <script type="application/json" id="td-data" set:html={JSON.stringify(chartData)} />
+</Base>
+
+<script>
+  import Chart from 'chart.js/auto';
+
+  const data = JSON.parse(document.getElementById('td-data')!.textContent!);
+  const sports = ['swim', 'bike', 'run', 'strength'] as const;
+  const label = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+
+  // ── Theme-aware chart defaults ────────────────────────────
+  const css = () => getComputedStyle(document.documentElement);
+  function applyTheme() {
+    Chart.defaults.color = css().getPropertyValue('--muted').trim();
+    Chart.defaults.borderColor = css().getPropertyValue('--hairline').trim();
+    Chart.defaults.font.family = getComputedStyle(document.body).getPropertyValue('--mono');
+    Chart.defaults.font.size = 11;
+  }
+  applyTheme();
+
+  const charts: Chart[] = [];
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+    applyTheme();
+    for (const c of charts) {
+      c.options.color = Chart.defaults.color;
+      for (const scale of Object.values(c.options.scales ?? {})) {
+        if (scale && 'grid' in scale) (scale as any).grid.color = Chart.defaults.borderColor;
+        if (scale && 'ticks' in scale) (scale as any).ticks.color = Chart.defaults.color;
+      }
+      c.update();
+    }
+  });
+
+  const stacked = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { position: 'bottom' as const } },
+    scales: {
+      x: { stacked: true, grid: { display: false } },
+      y: { stacked: true, beginAtZero: true },
+    },
+  };
+
+  function shortMonth(ym: string) {
+    const [y, m] = ym.split('-');
+    return new Date(+y, +m - 1).toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
+  }
+
+  const dayLabels = data.daily.map((d: any) =>
+    new Date(d.date + 'T00:00:00').toLocaleDateString('en-US', {
+      weekday: 'short',
+      month: 'short',
+      day: 'numeric',
+    })
+  );
+
+  const barSets = (rows: any[], field: string) =>
+    sports.map((s) => ({
+      label: label(s),
+      data: rows.map((r: any) => r[s][field]),
+      backgroundColor: data.colors[s],
+    }));
+
+  // Charts are created lazily per tab: Chart.js laid out inside a hidden
+  // panel gets zero dimensions, so each tab builds its charts on first view.
+  function createWeekCharts() {
+  charts.push(
+    new Chart(document.getElementById('chartDailyTSS') as HTMLCanvasElement, {
+      type: 'bar',
+      data: { labels: dayLabels, datasets: barSets(data.daily, 'tss') },
+      options: {
+        ...stacked,
+        plugins: {
+          ...stacked.plugins,
+          tooltip: {
+            callbacks: {
+              footer: (items: any[]) => `Total TSS: ${items.reduce((a, i) => a + i.raw, 0).toFixed(0)}`,
+            },
+          },
+        },
+      },
+    })
+  );
+
+  charts.push(
+    new Chart(document.getElementById('chartDailyHours') as HTMLCanvasElement, {
+      type: 'bar',
+      data: { labels: dayLabels, datasets: barSets(data.daily, 'hours') },
+      options: {
+        ...stacked,
+        plugins: {
+          ...stacked.plugins,
+          tooltip: {
+            callbacks: {
+              label: (ctx: any) => ` ${ctx.dataset.label}: ${ctx.raw}h`,
+              footer: (items: any[]) => `Total: ${items.reduce((a, i) => a + i.raw, 0).toFixed(1)}h`,
+            },
+          },
+        },
+        scales: {
+          ...stacked.scales,
+          y: { stacked: true, beginAtZero: true, ticks: { callback: (v: any) => v + 'h' } },
+        },
+      },
+    })
+  );
+
+  // Chart 3: donut
+  charts.push(
+    new Chart(document.getElementById('chartTSSDonut') as HTMLCanvasElement, {
+      type: 'doughnut',
+      data: {
+        labels: sports.map(label),
+        datasets: [
+          {
+            data: sports.map((s) => data.totals[s]),
+            backgroundColor: sports.map((s) => data.colors[s]),
+            borderWidth: 0,
+            hoverOffset: 8,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'bottom' },
+          tooltip: {
+            callbacks: {
+              label: (ctx: any) => {
+                const total = ctx.dataset.data.reduce((a: number, v: number) => a + v, 0);
+                const pct = total > 0 ? ((ctx.raw / total) * 100).toFixed(0) : 0;
+                return ` ${ctx.label}: ${ctx.raw} TSS (${pct}%)`;
+              },
+            },
+          },
+        },
+      },
+    })
+  );
+  }
+
+  // Charts 4 + 5: monthly TSS / hours
+  function createTrendsCharts() {
+  const monthLabels = data.monthly.map((m: any) => shortMonth(m.month));
+
+  charts.push(
+    new Chart(document.getElementById('chartMonthlyTSS') as HTMLCanvasElement, {
+      type: 'bar',
+      data: { labels: monthLabels, datasets: barSets(data.monthly, 'tss') },
+      options: {
+        ...stacked,
+        plugins: {
+          ...stacked.plugins,
+          tooltip: {
+            callbacks: {
+              footer: (items: any[]) => `Total: ${items.reduce((a, i) => a + i.raw, 0).toFixed(0)} TSS`,
+            },
+          },
+        },
+      },
+    })
+  );
+
+  charts.push(
+    new Chart(document.getElementById('chartMonthlyHours') as HTMLCanvasElement, {
+      type: 'bar',
+      data: { labels: monthLabels, datasets: barSets(data.monthly, 'hours') },
+      options: {
+        ...stacked,
+        plugins: {
+          ...stacked.plugins,
+          tooltip: {
+            callbacks: {
+              label: (ctx: any) => ` ${ctx.dataset.label}: ${ctx.raw}h`,
+              footer: (items: any[]) => `Total: ${items.reduce((a, i) => a + i.raw, 0).toFixed(1)}h`,
+            },
+          },
+        },
+        scales: {
+          ...stacked.scales,
+          y: { stacked: true, beginAtZero: true, ticks: { callback: (v: any) => v + 'h' } },
+        },
+      },
+    })
+  );
+
+  // Chart 6: CTL/ATL trend, sampled weekly to stay readable
+  const trend = data.ctlTrend.filter(
+    (_: any, i: number) => i % 7 === 0 || i === data.ctlTrend.length - 1
+  );
+  charts.push(
+    new Chart(document.getElementById('chartCTL') as HTMLCanvasElement, {
+      type: 'line',
+      data: {
+        labels: trend.map((c: any) =>
+          new Date(c.month + '-01T00:00:00').toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+          })
+        ),
+        datasets: [
+          {
+            label: 'CTL (Fitness)',
+            data: trend.map((c: any) => c.ctl),
+            borderColor: data.colors.swim,
+            backgroundColor: 'rgba(79, 195, 247, 0.08)',
+            tension: 0.3,
+            fill: true,
+            pointRadius: 0,
+            borderWidth: 2,
+          },
+          {
+            label: 'ATL (Fatigue)',
+            data: trend.map((c: any) => c.atl),
+            borderColor: '#ef9a9a',
+            tension: 0.3,
+            fill: false,
+            pointRadius: 0,
+            borderWidth: 1.5,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        plugins: {
+          legend: { position: 'bottom' },
+          tooltip: {
+            callbacks: {
+              afterBody: (items: any[]) => {
+                const ctl = items[0]?.raw ?? 0;
+                const atl = items[1]?.raw ?? 0;
+                return `TSB (Form): ${(ctl - atl).toFixed(1)}`;
+              },
+            },
+          },
+        },
+        scales: { x: { grid: { display: false } }, y: { beginAtZero: false } },
+      },
+    })
+  );
+  }
+
+  createWeekCharts();
+
+  // ── Tabs ──────────────────────────────────────────────────
+  let trendsChartsBuilt = false;
+  const tabs = document.querySelectorAll<HTMLButtonElement>('.tab');
+  tabs.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      tabs.forEach((b) => b.setAttribute('aria-selected', String(b === btn)));
+      document.querySelectorAll<HTMLElement>('[role="tabpanel"]').forEach((p) => {
+        p.hidden = p.id !== btn.getAttribute('aria-controls');
+      });
+      if (btn.id === 'tab-btn-trends' && !trendsChartsBuilt) {
+        trendsChartsBuilt = true;
+        createTrendsCharts();
+      }
+      window.dispatchEvent(new Event('resize')); // repaint after unhiding
+    });
+  });
+
+  // ── PR period toggle ──────────────────────────────────────
+  document.querySelectorAll<HTMLButtonElement>('.seg-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const period = btn.dataset.period;
+      document
+        .querySelectorAll<HTMLButtonElement>('.seg-btn')
+        .forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+      document.querySelectorAll<HTMLElement>('.pr-period').forEach((div) => {
+        div.hidden = div.dataset.period !== period;
+      });
+    });
+  });
+</script>
+
+<style>
+  .window {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--muted);
+    margin: 14px 0 0;
+  }
+
+  /* ── Tabs ── */
+  .tabs {
+    display: flex;
+    gap: 28px;
+    border-bottom: 1px solid var(--hairline);
+    margin-bottom: 8px;
+    overflow-x: auto;
+  }
+
+  .tab {
+    appearance: none;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    padding: 14px 0 12px;
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--faint);
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .tab:hover {
+    color: var(--ink);
+  }
+
+  .tab[aria-selected='true'] {
+    color: var(--ink);
+    border-bottom-color: var(--ink);
+  }
+
+  .sec {
+    font-size: 21px;
+    font-weight: 650;
+    letter-spacing: -0.01em;
+    margin: 44px 0 18px;
+  }
+
+  .sec-note {
+    font-size: 13px;
+    color: var(--muted);
+    margin: -10px 0 18px;
+  }
+
+  /* ── Stat cells ── */
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .stat {
+    padding: 20px 24px 22px;
+    border-right: 1px solid var(--hairline);
+  }
+
+  .stat:first-child {
+    padding-left: 0;
+  }
+
+  .stat:last-child {
+    border-right: none;
+  }
+
+  .stat b {
+    font-size: 40px;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1;
+  }
+
+  /* ── Sport summary ── */
+  .sport-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .sport-cell {
+    padding: 18px 22px 20px;
+    border-right: 1px solid var(--hairline);
+  }
+
+  .sport-cell:first-child {
+    padding-left: 0;
+  }
+
+  .sport-cell:last-child {
+    border-right: none;
+  }
+
+  .sport-line {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13.5px;
+    padding: 3px 0;
+  }
+
+  .sport-line span {
+    color: var(--muted);
+  }
+
+  .totals-line {
+    font-size: 14px;
+    color: var(--muted);
+    margin: 14px 0 0;
+  }
+
+  .totals-line strong {
+    color: var(--ink);
+  }
+
+  /* ── Charts ── */
+  .chart-box {
+    position: relative;
+    height: 300px;
+  }
+
+  .chart-box.tall {
+    height: 340px;
+  }
+
+  .chart-box.donut {
+    height: 320px;
+    max-width: 420px;
+    margin: 0 auto;
+  }
+
+  /* ── Tables ── */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+
+  .data-table th {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: left;
+    padding: 8px 12px 8px 0;
+    border-bottom: 1px solid var(--rule);
+    white-space: nowrap;
+  }
+
+  .data-table td {
+    padding: 8px 12px 8px 0;
+    border-bottom: 1px solid var(--hairline);
+    vertical-align: baseline;
+  }
+
+  .data-table .r {
+    text-align: right;
+  }
+
+  .data-table th.r {
+    padding-right: 0;
+  }
+
+  .data-table td.r {
+    padding-right: 0;
+    white-space: nowrap;
+  }
+
+  .mono-cell {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .sport-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-weight: 600;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+
+  .sport-chip i {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex: none;
+  }
+
+  .session-link {
+    text-decoration: none;
+    border-bottom: 1px dotted var(--faint);
+  }
+
+  .session-link:hover {
+    border-bottom-style: solid;
+    border-bottom-color: var(--ink);
+  }
+
+  .heatmap td,
+  .heatmap th {
+    padding-left: 10px;
+  }
+
+  /* ── PRs ── */
+  .segment {
+    display: inline-flex;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 32px;
+  }
+
+  .seg-btn {
+    appearance: none;
+    background: none;
+    border: none;
+    padding: 8px 18px;
+    font-family: var(--mono);
+    font-size: 11.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    cursor: pointer;
+  }
+
+  .seg-btn + .seg-btn {
+    border-left: 1px solid var(--rule);
+  }
+
+  .seg-btn[aria-pressed='true'] {
+    background: var(--ink);
+    color: var(--bg);
+  }
+
+  .pr-block {
+    margin-top: 40px;
+  }
+
+  .pr-value {
+    font-weight: 700;
+    font-size: 15px;
+  }
+
+  .pr-workout {
+    font-size: 12.5px;
+    color: var(--muted);
+  }
+
+  @media (max-width: 760px) {
+    .stat-row {
+      grid-template-columns: 1fr;
+    }
+
+    .stat,
+    .sport-cell {
+      border-right: none;
+      border-bottom: 1px solid var(--hairline);
+      padding-left: 0;
+    }
+
+    .stat:last-child,
+    .sport-cell:last-child {
+      border-bottom: none;
+    }
+  }
+</style>

@@ -1,0 +1,34 @@
+---
+import Base from './Base.astro';
+
+const { frontmatter } = Astro.props;
+---
+
+<Base title={frontmatter.title} description={frontmatter.excerpt}>
+  <div class="container">
+    <header class="page-head">
+      {
+        frontmatter.label && (
+          <p class="micro-label">
+            <span class="dot" style={`background: ${frontmatter.labelColor ?? 'var(--ink)'}`} />
+            {frontmatter.label}
+          </p>
+        )
+      }
+      <h1 class="page-title">{frontmatter.title}</h1>
+      {frontmatter.excerpt && <p class="sub">{frontmatter.excerpt}</p>}
+    </header>
+    <div class="prose page-prose">
+      <slot />
+    </div>
+  </div>
+</Base>
+
+<style>
+  /* Full-width page: text and floated images span the same width as the
+     page header and the rest of the site. */
+  .page-prose {
+    padding-top: 36px;
+    max-width: none;
+  }
+</style>

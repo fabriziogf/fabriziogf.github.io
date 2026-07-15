@@ -1,0 +1,111 @@
+---
+import Base from '../layouts/Base.astro';
+import { sortedPosts, parseId, formatDate, isoDate } from '../lib/posts';
+
+const posts = await sortedPosts();
+
+const byYear = new Map<number, typeof posts>();
+for (const post of posts) {
+  const year = parseId(post.id).date.getFullYear();
+  if (!byYear.has(year)) byYear.set(year, []);
+  byYear.get(year)!.push(post);
+}
+const years = [...byYear.keys()].sort((a, b) => b - a);
+---
+
+<Base title="Posts by Year">
+  <div class="container">
+    <header class="page-head">
+      <p class="micro-label"><span class="dot" style="background: var(--ink)"></span>Writing</p>
+      <h1 class="page-title">Posts by Year</h1>
+      <p class="sub">
+        Notes on what I’m learning across AI, ML, product, and endurance sport.
+      </p>
+    </header>
+
+    {
+      years.map((year) => (
+        <section class="year-block">
+          <h2 class="year num">{year}</h2>
+          <div class="year-posts">
+            {byYear.get(year)!.map((post) => {
+              const { date, slug } = parseId(post.id);
+              return (
+                <a class="row" href={`/${slug}/`}>
+                  <time class="row-date num" datetime={isoDate(date)}>
+                    {formatDate(date)}
+                  </time>
+                  <span class="row-title">{post.data.title}</span>
+                </a>
+              );
+            })}
+          </div>
+        </section>
+      ))
+    }
+  </div>
+</Base>
+
+<style>
+  .year-block {
+    display: grid;
+    grid-template-columns: 180px minmax(0, 1fr);
+    gap: 32px;
+    padding: 36px 0 20px;
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .year {
+    font-size: clamp(38px, 5vw, 56px);
+    font-weight: 650;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin: 0;
+    color: var(--faint);
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 110px minmax(0, 1fr);
+    gap: 20px;
+    align-items: baseline;
+    padding: 11px 0;
+    border-bottom: 1px solid var(--hairline);
+    text-decoration: none;
+  }
+
+  .row:last-child {
+    border-bottom: none;
+  }
+
+  .row-date {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--faint);
+    white-space: nowrap;
+  }
+
+  .row-title {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  .row:hover .row-title {
+    text-decoration: underline;
+    text-decoration-color: var(--faint);
+    text-underline-offset: 3px;
+  }
+
+  @media (max-width: 700px) {
+    .year-block {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .row {
+      grid-template-columns: 92px minmax(0, 1fr);
+      gap: 14px;
+    }
+  }
+</style>
