@@ -87,11 +87,17 @@ I never wanted a black box telling me to draft someone with thirty seconds on th
 
 On top of value, the assistant surfaces plain, rule-based flags: a rookie whose number came from ADP rather than tape, a running back into his age-cliff years, a player who's missed a lot of time, or a bye week that collides with someone I've already drafted. Each is a transparent rule, not a mysterious risk score.
 
+![Draft cockpit showing ranked recommendations with reason lines and the roster tracker](/assets/images/ff_draft_cockpit.png)
+*On the clock: each recommendation carries its reason line, value stats (VOR, VONA, ADP), and rule-based flags — next to the live roster tracker.*
+
 ---
 
 ## The cockpit
 
 None of this matters if it's slow to use with a pick clock ticking. The interface is a single React screen: a ranked list of recommendations with their reasons, a roster tracker showing which starting slots I still need, a search box to mark any pick — mine or an opponent's — in one keystroke, and a tier board that makes positional runs visible at a glance. The snake-draft math tells me how many picks until I'm up again. Draft state is saved server-side, so if the browser dies mid-draft, a refresh puts me right back where I was.
+
+![Tier board grouping every position into value tiers](/assets/images/ff_tier_board.png)
+*The tier board: every position grouped into value tiers, so a run on the board is obvious at a glance.*
 
 Under it all is the part I care about most: it's tunable and testable. Every knob — scoring, the shrinkage strength, the value weights, the strategy — lives in one config file, and the model logic runs under a test suite with no network and no surprises. The projections will only get sharper once this season's data lands. But the machine that turns numbers into a pick on the clock is done, and I'll be drafting with it.
 
