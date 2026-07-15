@@ -4,6 +4,19 @@ import Base from '../layouts/Base.astro';
 const projects = [
   {
     tag: 'Sports Analytics',
+    tagColor: 'var(--bike-ink)',
+    dot: 'var(--bike)',
+    status: 'Active',
+    title: 'Fantasy Football Draft Assistant',
+    desc: 'A draft-day assistant that builds my own player projections from nflverse history, turns them into value (VOR and VONA), and recommends the best pick in real time based on who is already gone and what my roster needs. Every recommendation explains its reasoning.',
+    stack: 'Python · FastAPI · React · nflverse',
+    links: [
+      { label: 'Read the writeup →', href: '/Fantasy_football_draft_assistant/' },
+      { label: 'View code →', href: 'https://github.com/fabriziogf/fantasy-football-draft', external: true },
+    ],
+  },
+  {
+    tag: 'Sports Analytics',
     tagColor: 'var(--swim-ink)',
     dot: 'var(--swim)',
     status: 'Active',
