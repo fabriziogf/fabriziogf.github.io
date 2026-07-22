@@ -10,9 +10,11 @@ Six months of training, a swim PR, and a bike best on that course — and I didn
 
 ## The Setup
 
-I went into race morning knowing something was off with my stomach. It had been bothering me in the days before, and I was hoping it would settle once I got moving. It didn't.
+I came to Lake Placid with one goal: qualify for Kona. Not just finish — qualify. That changes how you race. You can't ride conservatively and hope something works out on the run. You have to push, accept the risk, and see what happens.
 
-My back is also a recurring issue — it tightens up on long rides and gets significantly worse on hilly terrain. Lake Placid's bike course has 2,500m of climbing. I knew that was a risk going in.
+I went into race morning knowing something was off with my stomach. It had been bothering me in the days before, and I was hoping it would settle once I got moving. It didn't. But with a Kona slot on the line, I wasn't going to pull out at the start line.
+
+My back is also a recurring issue — it tightens up on long rides and gets significantly worse on hilly terrain. Lake Placid's bike course has 2,500m of climbing. I knew that was a risk going in. I took it anyway.
 
 ---
 
@@ -54,7 +56,7 @@ But the stomach issues that had been present all morning got worse on the run, a
 
 DNF.
 
-It's the right call when continuing would mean serious injury risk or something worse. I know that. But knowing it doesn't make standing at mile 15 of an Ironman marathon and deciding not to finish any easier.
+It's the right call when continuing would mean serious injury risk or something worse. I know that. But knowing it doesn't make standing at mile 15 of an Ironman marathon — chasing a Kona slot — and deciding not to finish any easier.
 
 ---
 
@@ -66,7 +68,7 @@ Two things, and they compounded each other.
 
 **Back**: The hills on the Lake Placid bike course are exactly the kind of prolonged climbing that aggravates my back. It's a recurring issue and I underestimated how much 5+ hours of hilly riding would load it before the run even started.
 
-Neither of these is a fitness problem. The fitness was clearly there — the swim PR and bike best time prove that. These are body management problems, and they're worth taking seriously going into whatever comes next.
+Neither of these is a fitness problem. The fitness was clearly there — the swim PR and the bike best time on a windy day prove that. I'm proud of how the first two disciplines went. These are body management problems, and they're worth taking seriously going into whatever comes next.
 
 ---
 
