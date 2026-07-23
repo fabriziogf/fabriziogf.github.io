@@ -35,7 +35,14 @@ const current = Astro.url.pathname.replace(/\/+$/, '') + '/';
   <body>
     <header class="site-header">
       <div class="container">
-        <a class="site-logo" href="/">Fabrizio GF</a>
+        <a class="site-logo" href="/" aria-label="Fabrizio GF — home">
+          <svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true">
+            <rect x="3" y="14" width="7" height="15" rx="1.5" fill="var(--ink)"></rect>
+            <rect x="12.5" y="7" width="7" height="22" rx="1.5" fill="var(--ink)"></rect>
+            <rect x="22" y="3" width="7" height="26" rx="1.5" fill="var(--ink)"></rect>
+          </svg>
+          <span>Fabrizio GF</span>
+        </a>
         <nav class="site-nav" aria-label="Main">
           {
             navItems.map((item) => (
