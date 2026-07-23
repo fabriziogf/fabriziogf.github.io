@@ -229,7 +229,6 @@ main {
 .page-head .sub {
   margin: 14px 0 0;
   color: var(--muted);
-  max-width: 62ch;
 }
 
 .num {
@@ -250,7 +249,6 @@ main {
 
 /* ── Prose (posts, about) ──────────────────────────────────── */
 .prose {
-  max-width: 70ch;
   font-size: 16.5px;
   line-height: 1.7;
 }
