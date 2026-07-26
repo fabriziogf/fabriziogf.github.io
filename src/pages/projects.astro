@@ -16,6 +16,19 @@ const projects = [
     ],
   },
   {
+    tag: 'GenAI',
+    tagColor: 'var(--strength-ink)',
+    dot: 'var(--strength)',
+    status: 'Active',
+    title: 'Job Hunting Agent',
+    desc: 'An AI agent that helps a candidate run a full job search end-to-end — resume, cover letter, networking, interview prep, application tracking, and offer negotiation — with advice grounded in a concrete playbook rather than generic LLM intuition.',
+    stack: 'Python · Anthropic SDK · Claude Code',
+    links: [
+      { label: 'Read the writeup →', href: '/Job_hunting_agent_technical_implementation/' },
+      { label: 'View code →', href: 'https://github.com/fabriziogf/job-hunt-assistant', external: true },
+    ],
+  },
+  {
     tag: 'Sports Analytics',
     tagColor: 'var(--swim-ink)',
     dot: 'var(--swim)',
@@ -37,19 +50,6 @@ const projects = [
     desc: 'Live 7-day rolling window of swim, bike, run, and strength training. Activity data is pulled from Strava daily, with fitness metrics (CTL, ATL, TSB) and training load (TSS) from TrainingPeaks. Shows session-level detail, 12-month trends, and personal records.',
     stack: 'Python · Astro · Strava API · TrainingPeaks API',
     links: [{ label: 'View dashboard →', href: '/training/' }],
-  },
-  {
-    tag: 'GenAI',
-    tagColor: 'var(--strength-ink)',
-    dot: 'var(--strength)',
-    status: 'In progress',
-    title: 'Job Hunting Agent',
-    desc: 'An AI agent that helps a candidate run a full job search end-to-end — resume, cover letter, networking, interview prep, application tracking, and offer negotiation — with advice grounded in a concrete playbook rather than generic LLM intuition.',
-    stack: 'Python · Anthropic SDK · Claude Code',
-    links: [
-      { label: 'Read the writeup →', href: '/Job_hunting_agent_technical_implementation/' },
-      { label: 'View code →', href: 'https://github.com/fabriziogf/job-hunt-assistant', external: true },
-    ],
   },
 ];
 ---
