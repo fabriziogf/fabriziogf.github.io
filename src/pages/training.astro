@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import { loadTrainingData, SPORT_COLORS, SPORT_LABELS, type SportKey } from '../lib/training';
+import { readFileSync } from 'fs';
 
 const td = loadTrainingData();
 const sports = ['swim', 'bike', 'run', 'strength'] as const;
@@ -71,6 +72,73 @@ const prTables = [
   },
 ];
 
+// Parse workout library from markdown
+const libPath = new URL('../../docs/workout-library.md', import.meta.url).pathname;
+const libContent = readFileSync(libPath, 'utf-8');
+
+type LibWorkout = {
+  type: string;
+  typeKey: string;
+  phase: string;
+  raceCtx: string;
+  date: string;
+  volume: string;
+  tss: string;
+  title: string;
+  wu: string;
+  ms: string;
+  cd: string;
+  sport: 'swim' | 'bike' | 'run';
+};
+
+function getTypeKey(type: string): string {
+  if (type.startsWith('VO2max')) return 'vo2max';
+  if (type.startsWith('Race-pace')) return 'racepace';
+  if (type.startsWith('Threshold') || type.startsWith('Speed')) return 'threshold';
+  return 'base';
+}
+
+function parseLibSection(content: string, heading: string, sport: 'swim' | 'bike' | 'run'): LibWorkout[] {
+  const regex = new RegExp(`## ${heading}\\n([\\s\\S]*?)(?=\\n## |$)`);
+  const m = content.match(regex);
+  if (!m) return [];
+  const rows = m[1].split('\n').filter((l) => {
+    const t = l.trim();
+    return t.startsWith('|') && !t.includes('---') && !l.includes('| Type |') && !l.includes('| # |');
+  });
+  return rows.map((line) => {
+    const cells = line.split('|').map((c) => c.trim()).filter(Boolean);
+    if (cells.length < 8) return null;
+    const desc = cells[cells.length - 1] ?? '';
+    const titleMatch = desc.match(/\*\*(.+?)\.\*\*/);
+    const wuMatch = desc.match(/WU:\s*(.+?)(?=\s*MS:|$)/);
+    const msMatch = desc.match(/MS:\s*(.+?)(?=\s*CD:|$)/);
+    const cdMatch = desc.match(/CD:\s*(.+?)$/);
+    const volume = sport === 'bike'
+      ? `${cells[7] ?? ''} · ${cells[6] ?? ''}`
+      : (cells[6] ?? '');
+    return {
+      type: cells[1] ?? '',
+      typeKey: getTypeKey(cells[1] ?? ''),
+      phase: cells[2] ?? '',
+      raceCtx: cells[3] ?? '',
+      date: cells[5] ?? '',
+      volume,
+      tss: cells[8] ?? '',
+      title: titleMatch?.[1] ?? '',
+      wu: wuMatch?.[1]?.trim() ?? '',
+      ms: msMatch?.[1]?.trim() ?? '',
+      cd: cdMatch?.[1]?.trim() ?? '',
+      sport,
+    };
+  }).filter((x): x is LibWorkout => x !== null);
+}
+
+const swimLib = parseLibSection(libContent, 'Swimming', 'swim');
+const bikeLib = parseLibSection(libContent, 'Cycling', 'bike');
+const runLib = parseLibSection(libContent, 'Running', 'run');
+const allLib = [...swimLib, ...bikeLib, ...runLib];
+
 // Payload for the client-side charts
 const chartData = {
   daily: td.daily,
@@ -101,6 +169,7 @@ const chartData = {
       <button class="tab" role="tab" id="tab-btn-week" aria-selected="true" aria-controls="tab-week">This Week</button>
       <button class="tab" role="tab" id="tab-btn-trends" aria-selected="false" aria-controls="tab-trends">12-Month Trends</button>
       <button class="tab" role="tab" id="tab-btn-prs" aria-selected="false" aria-controls="tab-prs">Personal Records</button>
+      <button class="tab" role="tab" id="tab-btn-library" aria-selected="false" aria-controls="tab-library">Workout Library</button>
     </div>
 
     <!-- ── TAB 1 · THIS WEEK ─────────────────────────────────── -->
@@ -286,6 +355,64 @@ const chartData = {
           </div>
         ))
       }
+    </section>
+
+    <!-- ── TAB 4 · WORKOUT LIBRARY ──────────────────────────── -->
+    <section id="tab-library" role="tabpanel" aria-labelledby="tab-btn-library" hidden>
+      <h2 class="sec">Workout Library</h2>
+      <p class="lib-lead">30 curated sessions per discipline, sorted by ascending intensity then duration.</p>
+
+      <div class="lib-filters">
+        <div class="lib-filter-group" role="group" aria-label="Filter by sport">
+          <button class="lib-sport-btn" data-lib-sport="all" aria-pressed="true">All</button>
+          <button class="lib-sport-btn" data-lib-sport="swim" aria-pressed="false">Swim</button>
+          <button class="lib-sport-btn" data-lib-sport="bike" aria-pressed="false">Bike</button>
+          <button class="lib-sport-btn" data-lib-sport="run" aria-pressed="false">Run</button>
+        </div>
+        <div class="lib-filter-group" role="group" aria-label="Filter by intensity">
+          <button class="lib-type-btn" data-lib-type="all" aria-pressed="true">All types</button>
+          <button class="lib-type-btn" data-lib-type="base" aria-pressed="false">Base</button>
+          <button class="lib-type-btn" data-lib-type="racepace" aria-pressed="false">Race-pace</button>
+          <button class="lib-type-btn" data-lib-type="threshold" aria-pressed="false">Threshold</button>
+          <button class="lib-type-btn" data-lib-type="vo2max" aria-pressed="false">VO2max</button>
+        </div>
+      </div>
+
+      <div class="table-scroll">
+        <table class="data-table lib-table">
+          <thead>
+            <tr>
+              <th>Sport</th>
+              <th>Type</th>
+              <th>Phase</th>
+              <th>Race context</th>
+              <th class="r">Date</th>
+              <th class="r">Volume</th>
+              <th class="r">TSS</th>
+              <th>Session</th>
+            </tr>
+          </thead>
+          <tbody>
+            {allLib.map((w) => (
+              <tr class="lib-row" data-sport={w.sport} data-type={w.typeKey}>
+                <td><span class={`sport-chip sport-chip--${w.sport}`}>{w.sport}</span></td>
+                <td><span class={`type-chip type-chip--${w.typeKey}`}>{w.type}</span></td>
+                <td>{w.phase}</td>
+                <td class="muted-cell">{w.raceCtx}</td>
+                <td class="r mono-cell">{w.date}</td>
+                <td class="r mono-cell">{w.volume}</td>
+                <td class="r mono-cell">{w.tss}</td>
+                <td class="lib-session">
+                  {w.title && <div class="lib-title">{w.title}</div>}
+                  {w.wu && <div class="lib-interval"><span class="ikey">WU</span>{w.wu}</div>}
+                  {w.ms && <div class="lib-interval lib-ms-line"><span class="ikey">MS</span>{w.ms}</div>}
+                  {w.cd && <div class="lib-interval"><span class="ikey">CD</span>{w.cd}</div>}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </section>
   </div>
 
@@ -563,6 +690,36 @@ const chartData = {
       document.querySelectorAll<HTMLElement>('.pr-period').forEach((div) => {
         div.hidden = div.dataset.period !== period;
       });
+    });
+  });
+
+  // ── Workout library filters ───────────────────────────────
+  let libSport = 'all';
+  let libType = 'all';
+
+  function applyLibFilter() {
+    document.querySelectorAll<HTMLElement>('.lib-row').forEach((row) => {
+      const matchSport = libSport === 'all' || row.dataset.sport === libSport;
+      const matchType = libType === 'all' || row.dataset.type === libType;
+      row.hidden = !(matchSport && matchType);
+    });
+  }
+
+  document.querySelectorAll<HTMLButtonElement>('.lib-sport-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      libSport = btn.dataset.libSport ?? 'all';
+      document.querySelectorAll<HTMLButtonElement>('.lib-sport-btn')
+        .forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+      applyLibFilter();
+    });
+  });
+
+  document.querySelectorAll<HTMLButtonElement>('.lib-type-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      libType = btn.dataset.libType ?? 'all';
+      document.querySelectorAll<HTMLButtonElement>('.lib-type-btn')
+        .forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+      applyLibFilter();
     });
   });
 </script>
@@ -864,5 +1021,125 @@ const chartData = {
     .sport-cell:last-child {
       border-bottom: none;
     }
+  }
+
+  /* ── Workout Library tab ── */
+  .lib-lead {
+    font-size: 13.5px;
+    color: var(--muted);
+    margin: 0 0 24px;
+  }
+
+  .lib-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+
+  .lib-filter-group {
+    display: inline-flex;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .lib-sport-btn,
+  .lib-type-btn {
+    background: transparent;
+    border: none;
+    padding: 6px 14px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    cursor: pointer;
+  }
+
+  .lib-sport-btn + .lib-sport-btn,
+  .lib-type-btn + .lib-type-btn {
+    border-left: 1px solid var(--rule);
+  }
+
+  .lib-sport-btn[aria-pressed='true'],
+  .lib-type-btn[aria-pressed='true'] {
+    background: var(--ink);
+    color: var(--bg);
+  }
+
+  /* Sport & type chips */
+  .sport-chip,
+  .type-chip {
+    display: inline-block;
+    padding: 2px 7px;
+    border-radius: 3px;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .sport-chip--swim { background: color-mix(in srgb, #4fc3f7 18%, transparent); color: #0288d1; }
+  .sport-chip--bike { background: color-mix(in srgb, #81c784 18%, transparent); color: #388e3c; }
+  .sport-chip--run  { background: color-mix(in srgb, #ffb74d 20%, transparent); color: #e65100; }
+
+  .type-chip--base      { background: color-mix(in srgb, #81c784 15%, transparent); color: #388e3c; }
+  .type-chip--racepace  { background: color-mix(in srgb, #ffb74d 18%, transparent); color: #e65100; }
+  .type-chip--threshold { background: color-mix(in srgb, #ce93d8 18%, transparent); color: #7b1fa2; }
+  .type-chip--vo2max    { background: color-mix(in srgb, #ef9a9a 20%, transparent); color: #c62828; }
+
+  /* Session cell */
+  .lib-session {
+    min-width: 300px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  .lib-title {
+    font-weight: 650;
+    font-size: 13px;
+    margin-bottom: 5px;
+  }
+
+  .lib-interval {
+    display: flex;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+    margin-top: 2px;
+  }
+
+  .lib-ms-line {
+    color: var(--ink);
+    font-size: 12.5px;
+  }
+
+  .ikey {
+    flex-shrink: 0;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding-top: 2px;
+    min-width: 20px;
+  }
+
+  .lib-ms-line .ikey {
+    color: var(--ink);
+  }
+
+  .muted-cell {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .lib-table td {
+    vertical-align: top;
   }
 </style>
