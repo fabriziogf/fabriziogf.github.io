@@ -407,10 +407,10 @@ const chartData = {
             <tr>
               <th>Sport</th>
               <th>Type</th>
-              <th>Phase</th>
+              <th class="lib-phase-cell">Phase</th>
               <th>Date</th>
               <th class="lib-vol-cell">Volume</th>
-              <th>TSS</th>
+              <th class="lib-tss-cell">TSS</th>
               <th>Session</th>
             </tr>
           </thead>
@@ -419,10 +419,10 @@ const chartData = {
               <tr class="lib-row" data-sport={w.sport} data-type={w.typeKey} data-phase={w.phase}>
                 <td><span class={`sport-chip sport-chip--${w.sport}`}>{w.sport}</span></td>
                 <td><span class={`type-chip type-chip--${w.typeKey}`}>{w.type}</span></td>
-                <td>{w.phase}</td>
+                <td class="lib-phase-cell">{w.phase}</td>
                 <td class="mono-cell">{w.date}</td>
                 <td class="mono-cell lib-vol-cell">{w.volume}</td>
-                <td class="mono-cell">{w.tss}</td>
+                <td class="mono-cell lib-tss-cell">{w.tss}</td>
                 <td class="lib-session">
                   {w.title && <div class="lib-title">{w.title}</div>}
                   {w.wu && <div class="lib-interval"><span class="ikey">WU</span>{w.wu}</div>}
@@ -1193,9 +1193,19 @@ const chartData = {
     vertical-align: top;
   }
 
+  .lib-phase-cell {
+    white-space: nowrap;
+    min-width: 110px;
+  }
+
   .lib-vol-cell {
     white-space: nowrap;
-    min-width: 160px;
-    padding-right: 40px;
+    min-width: 118px;
+    padding-right: 16px;
+  }
+
+  .lib-tss-cell {
+    min-width: 62px;
+    padding-right: 20px;
   }
 </style>
