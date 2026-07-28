@@ -408,9 +408,9 @@ const chartData = {
               <th>Sport</th>
               <th>Type</th>
               <th>Phase</th>
-              <th class="r">Date</th>
-              <th class="r lib-vol-cell">Volume</th>
-              <th class="r">TSS</th>
+              <th>Date</th>
+              <th class="lib-vol-cell">Volume</th>
+              <th>TSS</th>
               <th>Session</th>
             </tr>
           </thead>
@@ -420,9 +420,9 @@ const chartData = {
                 <td><span class={`sport-chip sport-chip--${w.sport}`}>{w.sport}</span></td>
                 <td><span class={`type-chip type-chip--${w.typeKey}`}>{w.type}</span></td>
                 <td>{w.phase}</td>
-                <td class="r mono-cell">{w.date}</td>
-                <td class="r mono-cell lib-vol-cell">{w.volume}</td>
-                <td class="r mono-cell">{w.tss}</td>
+                <td class="mono-cell">{w.date}</td>
+                <td class="mono-cell lib-vol-cell">{w.volume}</td>
+                <td class="mono-cell">{w.tss}</td>
                 <td class="lib-session">
                   {w.title && <div class="lib-title">{w.title}</div>}
                   {w.wu && <div class="lib-interval"><span class="ikey">WU</span>{w.wu}</div>}
