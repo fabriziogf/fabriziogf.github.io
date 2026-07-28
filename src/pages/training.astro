@@ -387,7 +387,7 @@ const chartData = {
               <th>Phase</th>
               <th>Race context</th>
               <th class="r">Date</th>
-              <th class="r">Volume</th>
+              <th class="r lib-vol-cell">Volume</th>
               <th class="r">TSS</th>
               <th>Session</th>
             </tr>
@@ -400,7 +400,7 @@ const chartData = {
                 <td>{w.phase}</td>
                 <td class="muted-cell">{w.raceCtx}</td>
                 <td class="r mono-cell">{w.date}</td>
-                <td class="r mono-cell">{w.volume}</td>
+                <td class="r mono-cell lib-vol-cell">{w.volume}</td>
                 <td class="r mono-cell">{w.tss}</td>
                 <td class="lib-session">
                   {w.title && <div class="lib-title">{w.title}</div>}
@@ -1141,5 +1141,10 @@ const chartData = {
 
   .lib-table td {
     vertical-align: top;
+  }
+
+  .lib-vol-cell {
+    white-space: nowrap;
+    padding-right: 32px;
   }
 </style>
