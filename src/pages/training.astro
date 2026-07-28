@@ -408,7 +408,7 @@ const chartData = {
               <th>Sport</th>
               <th>Type</th>
               <th class="lib-phase-cell">Phase</th>
-              <th>Date</th>
+              <th class="lib-date-cell">Date</th>
               <th class="lib-vol-cell">Volume</th>
               <th class="lib-tss-cell">TSS</th>
               <th>Session</th>
@@ -420,7 +420,7 @@ const chartData = {
                 <td><span class={`sport-chip sport-chip--${w.sport}`}>{w.sport}</span></td>
                 <td><span class={`type-chip type-chip--${w.typeKey}`}>{w.type}</span></td>
                 <td class="lib-phase-cell">{w.phase}</td>
-                <td class="mono-cell">{w.date}</td>
+                <td class="mono-cell lib-date-cell">{w.date}</td>
                 <td class="mono-cell lib-vol-cell">{w.volume}</td>
                 <td class="mono-cell lib-tss-cell">{w.tss}</td>
                 <td class="lib-session">
@@ -1196,6 +1196,11 @@ const chartData = {
   .lib-phase-cell {
     white-space: nowrap;
     min-width: 110px;
+  }
+
+  .lib-date-cell {
+    white-space: nowrap;
+    min-width: 104px;
   }
 
   .lib-vol-cell {
