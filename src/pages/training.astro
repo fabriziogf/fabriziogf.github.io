@@ -363,18 +363,34 @@ const chartData = {
       <p class="lib-lead">30 curated sessions per discipline, sorted by ascending intensity then duration.</p>
 
       <div class="lib-filters">
-        <div class="lib-filter-group" role="group" aria-label="Filter by sport">
-          <button class="lib-sport-btn" data-lib-sport="all" aria-pressed="true">All</button>
-          <button class="lib-sport-btn" data-lib-sport="swim" aria-pressed="false">Swim</button>
-          <button class="lib-sport-btn" data-lib-sport="bike" aria-pressed="false">Bike</button>
-          <button class="lib-sport-btn" data-lib-sport="run" aria-pressed="false">Run</button>
+        <div class="lib-filter-row">
+          <span class="lib-filter-label">Sport</span>
+          <div class="lib-filter-group" role="group" aria-label="Filter by sport">
+            <button class="lib-sport-btn" data-lib-sport="all" aria-pressed="true">All</button>
+            <button class="lib-sport-btn" data-lib-sport="swim" aria-pressed="false">Swim</button>
+            <button class="lib-sport-btn" data-lib-sport="bike" aria-pressed="false">Bike</button>
+            <button class="lib-sport-btn" data-lib-sport="run" aria-pressed="false">Run</button>
+          </div>
         </div>
-        <div class="lib-filter-group" role="group" aria-label="Filter by intensity">
-          <button class="lib-type-btn" data-lib-type="all" aria-pressed="true">All types</button>
-          <button class="lib-type-btn" data-lib-type="base" aria-pressed="false">Base</button>
-          <button class="lib-type-btn" data-lib-type="racepace" aria-pressed="false">Race-pace</button>
-          <button class="lib-type-btn" data-lib-type="threshold" aria-pressed="false">Threshold</button>
-          <button class="lib-type-btn" data-lib-type="vo2max" aria-pressed="false">VO2max</button>
+        <div class="lib-filter-row">
+          <span class="lib-filter-label">Type</span>
+          <div class="lib-filter-group" role="group" aria-label="Filter by intensity">
+            <button class="lib-type-btn" data-lib-type="all" aria-pressed="true">All</button>
+            <button class="lib-type-btn" data-lib-type="base" aria-pressed="false">Base</button>
+            <button class="lib-type-btn" data-lib-type="racepace" aria-pressed="false">Race-pace</button>
+            <button class="lib-type-btn" data-lib-type="threshold" aria-pressed="false">Threshold</button>
+            <button class="lib-type-btn" data-lib-type="vo2max" aria-pressed="false">VO2max</button>
+          </div>
+        </div>
+        <div class="lib-filter-row">
+          <span class="lib-filter-label">Phase</span>
+          <div class="lib-filter-group" role="group" aria-label="Filter by training phase">
+            <button class="lib-phase-btn" data-lib-phase="all" aria-pressed="true">All</button>
+            <button class="lib-phase-btn" data-lib-phase="Base" aria-pressed="false">Base</button>
+            <button class="lib-phase-btn" data-lib-phase="Build" aria-pressed="false">Build</button>
+            <button class="lib-phase-btn" data-lib-phase="Sharpening" aria-pressed="false">Sharpening</button>
+            <button class="lib-phase-btn" data-lib-phase="Race taper" aria-pressed="false">Race taper</button>
+          </div>
         </div>
       </div>
 
@@ -385,7 +401,6 @@ const chartData = {
               <th>Sport</th>
               <th>Type</th>
               <th>Phase</th>
-              <th>Race context</th>
               <th class="r">Date</th>
               <th class="r lib-vol-cell">Volume</th>
               <th class="r">TSS</th>
@@ -394,11 +409,10 @@ const chartData = {
           </thead>
           <tbody>
             {allLib.map((w) => (
-              <tr class="lib-row" data-sport={w.sport} data-type={w.typeKey}>
+              <tr class="lib-row" data-sport={w.sport} data-type={w.typeKey} data-phase={w.phase}>
                 <td><span class={`sport-chip sport-chip--${w.sport}`}>{w.sport}</span></td>
                 <td><span class={`type-chip type-chip--${w.typeKey}`}>{w.type}</span></td>
                 <td>{w.phase}</td>
-                <td class="muted-cell">{w.raceCtx}</td>
                 <td class="r mono-cell">{w.date}</td>
                 <td class="r mono-cell lib-vol-cell">{w.volume}</td>
                 <td class="r mono-cell">{w.tss}</td>
@@ -696,12 +710,14 @@ const chartData = {
   // ── Workout library filters ───────────────────────────────
   let libSport = 'all';
   let libType = 'all';
+  let libPhase = 'all';
 
   function applyLibFilter() {
     document.querySelectorAll<HTMLElement>('.lib-row').forEach((row) => {
       const matchSport = libSport === 'all' || row.dataset.sport === libSport;
       const matchType = libType === 'all' || row.dataset.type === libType;
-      row.hidden = !(matchSport && matchType);
+      const matchPhase = libPhase === 'all' || row.dataset.phase === libPhase;
+      row.hidden = !(matchSport && matchType && matchPhase);
     });
   }
 
@@ -718,6 +734,15 @@ const chartData = {
     btn.addEventListener('click', () => {
       libType = btn.dataset.libType ?? 'all';
       document.querySelectorAll<HTMLButtonElement>('.lib-type-btn')
+        .forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+      applyLibFilter();
+    });
+  });
+
+  document.querySelectorAll<HTMLButtonElement>('.lib-phase-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      libPhase = btn.dataset.libPhase ?? 'all';
+      document.querySelectorAll<HTMLButtonElement>('.lib-phase-btn')
         .forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
       applyLibFilter();
     });
@@ -1032,9 +1057,24 @@ const chartData = {
 
   .lib-filters {
     display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
+    flex-direction: column;
+    gap: 8px;
     margin-bottom: 24px;
+  }
+
+  .lib-filter-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .lib-filter-label {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    min-width: 48px;
   }
 
   .lib-filter-group {
@@ -1045,7 +1085,8 @@ const chartData = {
   }
 
   .lib-sport-btn,
-  .lib-type-btn {
+  .lib-type-btn,
+  .lib-phase-btn {
     background: transparent;
     border: none;
     padding: 6px 14px;
@@ -1058,12 +1099,14 @@ const chartData = {
   }
 
   .lib-sport-btn + .lib-sport-btn,
-  .lib-type-btn + .lib-type-btn {
+  .lib-type-btn + .lib-type-btn,
+  .lib-phase-btn + .lib-phase-btn {
     border-left: 1px solid var(--rule);
   }
 
   .lib-sport-btn[aria-pressed='true'],
-  .lib-type-btn[aria-pressed='true'] {
+  .lib-type-btn[aria-pressed='true'],
+  .lib-phase-btn[aria-pressed='true'] {
     background: var(--ink);
     color: var(--bg);
   }
@@ -1145,6 +1188,7 @@ const chartData = {
 
   .lib-vol-cell {
     white-space: nowrap;
-    padding-right: 32px;
+    min-width: 160px;
+    padding-right: 40px;
   }
 </style>
