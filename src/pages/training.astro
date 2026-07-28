@@ -91,10 +91,17 @@ type LibWorkout = {
   sport: 'swim' | 'bike' | 'run';
 };
 
-function getTypeKey(type: string): string {
+// Swim zones run A1→A3, bike/run run Z2→Z5; A2 sits at race pace and A3 at
+// threshold, so the same "Threshold" prefix means different things per sport.
+function getTypeKey(type: string, sport: 'swim' | 'bike' | 'run'): string {
+  if (sport === 'swim') {
+    if (type.startsWith('Threshold')) return 'racepace';
+    if (type.startsWith('Speed')) return 'threshold';
+    return 'base';
+  }
   if (type.startsWith('VO2max')) return 'vo2max';
-  if (type.startsWith('Race-pace') || type.startsWith('Threshold')) return 'racepace';
-  if (type.startsWith('Speed')) return 'threshold';
+  if (type.startsWith('Threshold')) return 'threshold';
+  if (type.startsWith('Race-pace')) return 'racepace';
   return 'base';
 }
 
@@ -119,7 +126,7 @@ function parseLibSection(content: string, heading: string, sport: 'swim' | 'bike
       : (cells[6] ?? '');
     return {
       type: cells[1] ?? '',
-      typeKey: getTypeKey(cells[1] ?? ''),
+      typeKey: getTypeKey(cells[1] ?? '', sport),
       phase: cells[2] ?? '',
       raceCtx: cells[3] ?? '',
       date: cells[5] ?? '',
