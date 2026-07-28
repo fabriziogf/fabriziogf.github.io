@@ -5,6 +5,8 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: 'https://fabriziogf.github.io',
   trailingSlash: 'ignore',
+  // Honor the port the harness assigns so parallel dev servers don't collide.
+  server: { port: Number(process.env.PORT) || 4321 },
   integrations: [sitemap()],
   markdown: {
     shikiConfig: {
