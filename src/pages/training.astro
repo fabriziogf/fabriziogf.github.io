@@ -93,8 +93,8 @@ type LibWorkout = {
 
 function getTypeKey(type: string): string {
   if (type.startsWith('VO2max')) return 'vo2max';
-  if (type.startsWith('Race-pace')) return 'racepace';
-  if (type.startsWith('Threshold') || type.startsWith('Speed')) return 'threshold';
+  if (type.startsWith('Race-pace') || type.startsWith('Threshold')) return 'racepace';
+  if (type.startsWith('Speed')) return 'threshold';
   return 'base';
 }
 
