@@ -120,19 +120,27 @@ a {
 
 .site-logo {
   display: inline-flex;
-  align-items: center;
+  align-items: baseline;
   gap: 10px;
   font-weight: 700;
   font-size: 20px;
   letter-spacing: -0.02em;
   text-decoration: none;
+  /* Measured: the lockup's bottom edge sits 1.12px below the nav links' glyph
+     bottom once both are box-centered. Raise it so the two bottoms are flush. */
+  transform: translateY(-1.12px);
 }
 
 .logo-mark {
+  /* viewBox is cropped to the ink (y 3-29), so the box edges are the dots'
+     edges and `align-items: baseline` lands the bottom row on the text baseline. */
   width: 22px;
-  height: 22px;
+  height: auto;
   flex: none;
   display: block;
+  /* Optical offset: sitting exactly on the baseline reads high next to the
+     wordmark, so drop the mark back down by half the correction. */
+  transform: translateY(1px);
 }
 
 .site-nav {

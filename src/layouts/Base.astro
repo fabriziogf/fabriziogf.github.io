@@ -36,10 +36,24 @@ const current = Astro.url.pathname.replace(/\/+$/, '') + '/';
     <header class="site-header">
       <div class="container">
         <a class="site-logo" href="/" aria-label="Fabrizio GF — home">
-          <svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true">
-            <rect x="3" y="14" width="7" height="15" rx="1.5" fill="var(--ink)"></rect>
-            <rect x="12.5" y="7" width="7" height="22" rx="1.5" fill="var(--ink)"></rect>
-            <rect x="22" y="3" width="7" height="26" rx="1.5" fill="var(--ink)"></rect>
+          <svg class="logo-mark" viewBox="0 3 32 26" aria-hidden="true">
+            <path
+              d="M6.5 19.5 L16 12.5 L25.5 5.5"
+              fill="none"
+              stroke="var(--ink)"
+              stroke-width="1.4"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              opacity="0.3"></path>
+            <circle cx="6.5" cy="26.5" r="2.5" fill="var(--ink)" opacity="0.95"></circle>
+            <circle cx="6.5" cy="19.5" r="2.5" fill="var(--ink)" opacity="0.7"></circle>
+            <circle cx="16" cy="26.5" r="2.5" fill="var(--ink)" opacity="0.95"></circle>
+            <circle cx="16" cy="19.5" r="2.5" fill="var(--ink)" opacity="0.7"></circle>
+            <circle cx="16" cy="12.5" r="2.5" fill="var(--ink)" opacity="0.5"></circle>
+            <circle cx="25.5" cy="26.5" r="2.5" fill="var(--ink)" opacity="0.95"></circle>
+            <circle cx="25.5" cy="19.5" r="2.5" fill="var(--ink)" opacity="0.7"></circle>
+            <circle cx="25.5" cy="12.5" r="2.5" fill="var(--ink)" opacity="0.5"></circle>
+            <circle cx="25.5" cy="5.5" r="2.5" fill="var(--ink)" opacity="0.34"></circle>
           </svg>
           <span>Fabrizio GF</span>
         </a>
