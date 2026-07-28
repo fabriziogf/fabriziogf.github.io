@@ -15,6 +15,12 @@ I created this site as a place to share what I’m learning and building, especi
 
 You can also take a look at my [CV](/download/Fabrizio%20Giovannini%20Filho%20-%20Resume%20ML%2020260407%20AI.pdf).
 
+### Links
+
+- [GitHub](https://github.com/fabriziogf) — code and side projects
+- [LinkedIn](https://www.linkedin.com/in/fgiovanninifilho/) — professional profile
+- [Email](mailto:fabriziogf@gmail.com) — fabriziogf@gmail.com
+
 <div style="clear: both;"></div>
 
 ---
@@ -89,11 +95,3 @@ Outside of work, I spend a lot of time training and racing endurance sports. I r
 - Five-time Ironman 70.3 World Championship qualifier
 
 <div style="clear: both;"></div>
-
----
-
-## Links
-
-- [GitHub](https://github.com/fabriziogf) — code and side projects
-- [LinkedIn](https://www.linkedin.com/in/fgiovanninifilho/) — professional profile
-- [Email](mailto:fabriziogf@gmail.com) — fabriziogf@gmail.com
