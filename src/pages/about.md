@@ -11,7 +11,7 @@ I’m an AI/ML product leader and builder with 9+ years of experience across pro
 
 Over the last few years, I’ve worked at the intersection of data, machine learning, and operations, helping build products that solve complex real-world problems and create measurable business impact. My work has included 0-to-1 product development, large-scale experimentation, high-visibility organizational goals, products that reached 250M+ users, and initiatives that generated $255M+ in revenue.
 
-Across all of it, I follow one principle: *just win*. As a PM and in life generally, that means staying focused on the outcome that actually matters and being willing to adapt everything else to get there.
+Across all of it, I follow one principle: *just win*. As a PM and in life generally, that means staying focused on the outcome that actually matters and being willing to adapt to get there.
 
 I created this site as a place to share what I’m learning and building, especially across AI, ML, product thinking, and endurance sports.
 
