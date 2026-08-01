@@ -13,13 +13,15 @@
   --hairline: #dbddd7;
   --rule: #17191b; /* strong structural rule */
 
-  /* sport palette — marks (bars, dots, borders) */
-  --swim: #4fc3f7;
-  --bike: #81c784;
-  --run: #ffb74d;
-  --strength: #ce93d8;
-  --other: #90a4ae;
-  --fatigue: #ef9a9a;
+  /* sport palette — marks (bars, dots, borders)
+     Pitched at the same intensity as the source-brand colors below, and
+     overridden in dark mode so each ground gets a value tuned to it. */
+  --swim: #0284c7;
+  --bike: #16a34a;
+  --run: #f59e0b;
+  --strength: #9333ea;
+  --other: #64748b;
+  --fatigue: #e11d48;
 
   /* Source-brand colors — for marks that represent Strava or GitHub itself
      rather than a sport. Kept separate from --run / --bike so the sport
@@ -28,12 +30,12 @@
   --github: #2ea043;
 
   /* sport palette — text-safe variants for this ground */
-  --swim-ink: #147cb3;
-  --bike-ink: #3c7c40;
-  --run-ink: #b06a00;
-  --strength-ink: #8e4d9e;
-  --other-ink: #5c707b;
-  --fatigue-ink: #c25b5b;
+  --swim-ink: #0369a1;
+  --bike-ink: #15803d;
+  --run-ink: #b45309;
+  --strength-ink: #7e22ce;
+  --other-ink: #475569;
+  --fatigue-ink: #be123c;
 
   --sans: 'Inter Tight Variable', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   --mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
@@ -54,12 +56,20 @@
     --strava: #fd5a17;
     --github: #39d353;
 
-    --swim-ink: #4fc3f7;
-    --bike-ink: #81c784;
-    --run-ink: #ffb74d;
-    --strength-ink: #ce93d8;
-    --other-ink: #90a4ae;
-    --fatigue-ink: #ef9a9a;
+    /* brighter on the dark ground, where the light-mode values go muddy */
+    --swim: #38bdf8;
+    --bike: #4ade80;
+    --run: #fbbf24;
+    --strength: #c084fc;
+    --other: #94a3b8;
+    --fatigue: #fb7185;
+
+    --swim-ink: #38bdf8;
+    --bike-ink: #4ade80;
+    --run-ink: #fbbf24;
+    --strength-ink: #c084fc;
+    --other-ink: #94a3b8;
+    --fatigue-ink: #fb7185;
   }
 }
 

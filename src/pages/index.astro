@@ -50,45 +50,6 @@ const trainingHours = (td.year_daily ?? []).reduce((a, d) => a + d.hours, 0);
       </figure>
     </section>
 
-    <section class="cells">
-      <div class="cell">
-        <p class="micro-label"><span class="dot" style="background: var(--ink)"></span>Latest writing</p>
-        {
-          posts.map((post) => {
-            const { date, slug } = parseId(post.id);
-            return (
-              <a class="post-item" href={`/${slug}/`}>
-                <span class="post-date num">{formatDate(date)}</span>
-                <span class="post-title">{post.data.title}</span>
-              </a>
-            );
-          })
-        }
-        <a class="arrow-link cell-more" href="/year-archive/">All posts →</a>
-      </div>
-
-      <div class="cell">
-        <p class="micro-label"><span class="dot" style="background: var(--swim)"></span>Now building</p>
-        <a class="post-item" href="/projects/">
-          <span class="post-title">Fantasy Football Draft Assistant</span>
-          <span class="post-sub">Value-based pick recommendations, live on the clock</span>
-        </a>
-        <a class="post-item" href="/projects/">
-          <span class="post-title">World Cup 2026 Prediction Model</span>
-          <span class="post-sub">Monte Carlo tournament simulator on Dixon-Coles and Elo</span>
-        </a>
-        <a class="post-item" href="/projects/">
-          <span class="post-title">Job Hunting Agent</span>
-          <span class="post-sub">An AI agent that runs a full job search end-to-end</span>
-        </a>
-        <a class="post-item" href="/training/">
-          <span class="post-title">Training Dashboard</span>
-          <span class="post-sub">Live Strava + TrainingPeaks pipeline, updated daily</span>
-        </a>
-        <a class="arrow-link cell-more" href="/projects/">All projects →</a>
-      </div>
-    </section>
-
     <section class="cal-grid">
       {
         contrib && (
@@ -140,6 +101,46 @@ const trainingHours = (td.year_daily ?? []).reduce((a, d) => a + d.hours, 0);
         )
       }
     </section>
+
+    <section class="cells">
+      <div class="cell">
+        <p class="micro-label"><span class="dot" style="background: var(--ink)"></span>Latest writing</p>
+        {
+          posts.map((post) => {
+            const { date, slug } = parseId(post.id);
+            return (
+              <a class="post-item" href={`/${slug}/`}>
+                <span class="post-date num">{formatDate(date)}</span>
+                <span class="post-title">{post.data.title}</span>
+              </a>
+            );
+          })
+        }
+        <a class="arrow-link cell-more" href="/year-archive/">All posts →</a>
+      </div>
+
+      <div class="cell">
+        <p class="micro-label"><span class="dot" style="background: var(--swim)"></span>Now building</p>
+        <a class="post-item" href="/projects/">
+          <span class="post-title">Fantasy Football Draft Assistant</span>
+          <span class="post-sub">Value-based pick recommendations, live on the clock</span>
+        </a>
+        <a class="post-item" href="/projects/">
+          <span class="post-title">World Cup 2026 Prediction Model</span>
+          <span class="post-sub">Monte Carlo tournament simulator on Dixon-Coles and Elo</span>
+        </a>
+        <a class="post-item" href="/projects/">
+          <span class="post-title">Job Hunting Agent</span>
+          <span class="post-sub">An AI agent that runs a full job search end-to-end</span>
+        </a>
+        <a class="post-item" href="/training/">
+          <span class="post-title">Training Dashboard</span>
+          <span class="post-sub">Live Strava + TrainingPeaks pipeline, updated daily</span>
+        </a>
+        <a class="arrow-link cell-more" href="/projects/">All projects →</a>
+      </div>
+    </section>
+
   </div>
 </Base>
 

@@ -82,12 +82,14 @@ export function loadTrainingData(): TrainingData {
   return yaml.load(fs.readFileSync(DATA_PATH, 'utf8')) as TrainingData;
 }
 
+// Chart.js receives these as literal hex, so unlike the CSS sport palette they
+// can't split by theme — these sit between the light and dark values on purpose.
 export const SPORT_COLORS: Record<SportKey, string> = {
-  swim: '#4fc3f7',
-  bike: '#81c784',
-  run: '#ffb74d',
-  strength: '#ce93d8',
-  other: '#90a4ae',
+  swim: '#0ea5e9',
+  bike: '#22c55e',
+  run: '#f59e0b',
+  strength: '#a855f7',
+  other: '#94a3b8',
 };
 
 export const SPORT_LABELS: Record<SportKey, string> = {
