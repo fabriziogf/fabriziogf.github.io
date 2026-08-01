@@ -1,0 +1,147 @@
+---
+/**
+ * A GitHub-style year calendar: one square per day, 7 rows, ~53 columns.
+ *
+ * Callers supply already-bucketed days (level 0-4) plus the hover title, so
+ * this component owns only geometry and styling — it has no opinion about
+ * what is being counted.
+ */
+export interface HeatmapDay {
+  date: string;
+  /** 0 = empty, 1-4 = increasing intensity */
+  level: number;
+  title: string;
+}
+
+interface Props {
+  days: HeatmapDay[];
+  /** CSS color for levels 1-4; level 0 always paints --hairline */
+  color: string;
+  ariaLabel: string;
+}
+
+const { days, color, ariaLabel } = Astro.props;
+
+const CELL = 11;
+const PITCH = CELL + 3;
+const TOP = 16; // room for the month row above the grid
+
+// The ramp starts at 0.35 so the lightest step still reads as a color against
+// --hairline in both themes; anything fainter inverts on the light background.
+const LEVEL_OPACITY = [0, 0.35, 0.55, 0.76, 1];
+
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+const utc = (d: string) => new Date(`${d}T00:00:00Z`);
+
+// Column 0 is the Sunday on or before the first day, so partial leading and
+// trailing weeks line up on the correct weekday rows.
+const origin = utc(days[0].date);
+origin.setUTCDate(origin.getUTCDate() - origin.getUTCDay());
+
+const week = (d: string) => Math.floor((utc(d).getTime() - origin.getTime()) / 604_800_000);
+
+const cells = days.map((d) => ({ ...d, week: week(d.date), weekday: utc(d.date).getUTCDay() }));
+
+const weeks = cells[cells.length - 1].week + 1;
+const gridW = weeks * PITCH - 3;
+const gridH = TOP + 7 * PITCH - 3;
+
+// Label each month above its first full week. A leading partial month is
+// skipped for free, since its 1st falls outside the window.
+const monthTicks = cells
+  .filter((c) => c.date.endsWith('-01'))
+  .map((c) => ({
+    x: (c.weekday === 0 ? c.week : c.week + 1) * PITCH,
+    label: MONTHS[Number(c.date.slice(5, 7)) - 1],
+  }))
+  .filter((t) => t.x < gridW - PITCH);
+---
+
+<svg class="cal" viewBox={`0 0 ${gridW} ${gridH}`} role="img" aria-label={ariaLabel}>
+  {monthTicks.map((t) => <text class="cal-month" x={t.x} y="9">{t.label}</text>)}
+  {
+    cells.map((c) => (
+      <rect
+        x={c.week * PITCH}
+        y={TOP + c.weekday * PITCH}
+        width={CELL}
+        height={CELL}
+        rx="2"
+        fill={c.level === 0 ? 'var(--hairline)' : color}
+        fill-opacity={c.level === 0 ? 1 : LEVEL_OPACITY[c.level]}
+      >
+        <title>{c.title}</title>
+      </rect>
+    ))
+  }
+</svg>
+
+<div class="cal-foot">
+  <slot />
+  <p class="cal-legend">
+    <span>Less</span>
+    {
+      LEVEL_OPACITY.map((o, i) => (
+        <i style={`background: ${i === 0 ? 'var(--hairline)' : color}; opacity: ${i === 0 ? 1 : o}`} />
+      ))
+    }
+    <span>More</span>
+  </p>
+</div>
+
+<style>
+  .cal-foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-top: 14px;
+  }
+
+  .cal {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .cal rect {
+    transition: fill-opacity 0.15s ease;
+  }
+
+  .cal rect:hover {
+    fill-opacity: 1;
+  }
+
+  .cal-month {
+    font-family: var(--mono);
+    font-size: 10px;
+    fill: var(--faint);
+  }
+
+  .cal-legend {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--faint);
+    margin: 0;
+  }
+
+  .cal-legend i {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+  }
+
+  .cal-legend span:first-child {
+    margin-right: 4px;
+  }
+
+  .cal-legend span:last-child {
+    margin-left: 4px;
+  }
+</style>

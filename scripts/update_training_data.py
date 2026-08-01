@@ -239,6 +239,13 @@ def build_yaml(data: dict) -> str:
                 f"distance_km: {v['distance_km']:<7}, tss: {v['tss']} }}"
             )
 
+    # ── Year-long daily hours (drives the homepage training calendar) ────────
+    lines += ["", "year_daily:"]
+    for d in td['year_daily']:
+        lines.append(
+            f"  - {{ date: {q(d['date'])}, hours: {d['hours']:<5}, sports: {q(d['sports'])} }}"
+        )
+
     # ── CTL trend (end-of-month snapshots) ───────────────────────────────────
     lines += ["", "ctl_trend:"]
     for c in td['ctl_trend']:
@@ -529,6 +536,29 @@ async def main():
             }
         monthly_list.append(entry)
 
+    # ── Build the year-long daily hours calendar ─────────────────────────────
+    # Reuses strava_12mo — no extra API calls. Every day in the window gets an
+    # entry, including rest days, so the calendar renders without holes.
+    year_hours  = defaultdict(float)
+    year_sports = defaultdict(set)
+    for a in strava_12mo:
+        d = (a.get('start_date_local') or '')[:10]
+        if not d:
+            continue
+        year_hours[d]  += (a.get('moving_time') or 0) / 3600
+        year_sports[d].add(strava_classify(a))
+
+    year_daily = []
+    cur = trend_start
+    while cur <= end:
+        k = cur.isoformat()
+        year_daily.append({
+            'date':   k,
+            'hours':  round(year_hours.get(k, 0.0), 2),
+            'sports': ','.join(sorted(year_sports.get(k, ()))),
+        })
+        cur += timedelta(days=1)
+
     # ── CTL trend: last entry per month ──────────────────────────────────────
     ctl_by_month = {}
     for d in trend_daily:
@@ -548,6 +578,7 @@ async def main():
         'daily':        daily_list,
         'workouts':     workout_list,
         'monthly':      monthly_list,
+        'year_daily':   year_daily,
         'ctl_trend':    ctl_trend,
         'prs':          prs,
     }

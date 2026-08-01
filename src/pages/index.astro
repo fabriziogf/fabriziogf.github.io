@@ -3,36 +3,31 @@ import Base from '../layouts/Base.astro';
 import { sortedPosts, parseId, formatDate } from '../lib/posts';
 import { loadTrainingData } from '../lib/training';
 import { loadContributions } from '../lib/github';
+import CalendarHeatmap from '../components/CalendarHeatmap.astro';
 
 const posts = (await sortedPosts()).slice(0, 4);
 const td = loadTrainingData();
 const contrib = await loadContributions('fabriziogf');
 
-// Contribution grid geometry, in SVG units — the whole thing scales to fit
-const CELL = 11;
-const PITCH = CELL + 3;
-const TOP = 16; // room for the month row above the grid
-// index 0 is unused — empty days paint --hairline instead. The ramp starts at
-// 0.35 so the lightest green still reads as green against --hairline in both
-// light and dark mode; anything fainter inverts against the light background.
-const LEVEL_OPACITY = [0, 0.35, 0.55, 0.76, 1];
-const gridW = (contrib?.weeks ?? 0) * PITCH - 3;
-const gridH = TOP + 7 * PITCH - 3;
+const contribDays = (contrib?.days ?? []).map((d) => ({
+  date: d.date,
+  level: d.level,
+  title: `${d.count === 0 ? 'No' : d.count} contribution${d.count === 1 ? '' : 's'} on ${d.date}`,
+}));
 
-const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
-// Label each month above its first full week; the leading partial month is
-// skipped for free, since its 1st falls outside the window.
-const monthTicks = (contrib?.days ?? [])
-  .filter((d) => d.date.endsWith('-01'))
-  .map((d) => ({
-    x: (d.weekday === 0 ? d.week : d.week + 1) * PITCH,
-    label: MONTHS[Number(d.date.slice(5, 7)) - 1],
-  }))
-  .filter((t) => t.x < gridW - PITCH);
-
-const dayLabel = (d: { count: number; date: string }) =>
-  `${d.count === 0 ? 'No' : d.count} contribution${d.count === 1 ? '' : 's'} on ${d.date}`;
+// Training calendar — same grid, bucketed by daily moving time. Thresholds are
+// fixed rather than relative so a light month reads as light: roughly a short
+// session, an hour-plus, a long ride or brick, then the big weekend days.
+const HOUR_STEPS = [1.5, 3, 4.5];
+const trainingDays = (td.year_daily ?? []).map((d) => ({
+  date: d.date,
+  level: d.hours === 0 ? 0 : HOUR_STEPS.filter((t) => d.hours >= t).length + 1,
+  title:
+    d.hours === 0
+      ? `Rest day on ${d.date}`
+      : `${d.hours.toFixed(1)}h on ${d.date}${d.sports ? ` — ${d.sports.split(',').join(', ')}` : ''}`,
+}));
+const trainingHours = (td.year_daily ?? []).reduce((a, d) => a + d.hours, 0);
 
 const weekHours = (['swim', 'bike', 'run', 'strength'] as const).reduce(
   (a, s) => a + td.totals[s].hours,
@@ -139,55 +134,50 @@ const lastPoint = sparkPoints.split(' ').at(-1)!.split(',');
 
     {
       contrib && (
-        <section class="contrib">
-          <div class="contrib-head">
+        <section class="cal-block">
+          <div class="cal-head">
             <p class="micro-label">
-              <span class="dot" style="background: var(--bike)" />
+              <span class="dot" style="background: var(--github)" />
               GitHub Contributions
             </p>
-            <p class="contrib-total">
+            <p class="cal-total">
               <b class="num">{contrib.total.toLocaleString()}</b> in the last year
             </p>
           </div>
 
-          <svg
-            class="contrib-grid"
-            viewBox={`0 0 ${gridW} ${gridH}`}
-            role="img"
-            aria-label={`GitHub contribution calendar: ${contrib.total} contributions between ${contrib.start} and ${contrib.end}`}
+          <CalendarHeatmap
+            days={contribDays}
+            color="var(--github)"
+            ariaLabel={`GitHub contribution calendar: ${contrib.total} contributions between ${contrib.start} and ${contrib.end}`}
           >
-            {monthTicks.map((t) => (
-              <text class="contrib-month" x={t.x} y="9">
-                {t.label}
-              </text>
-            ))}
-            {contrib.days.map((d) => (
-              <rect
-                x={d.week * PITCH}
-                y={TOP + d.weekday * PITCH}
-                width={CELL}
-                height={CELL}
-                rx="2"
-                fill={d.level === 0 ? 'var(--hairline)' : 'var(--bike)'}
-                fill-opacity={d.level === 0 ? 1 : LEVEL_OPACITY[d.level]}
-              >
-                <title>{dayLabel(d)}</title>
-              </rect>
-            ))}
-          </svg>
-
-          <div class="contrib-foot">
             <a class="arrow-link" href="https://github.com/fabriziogf" target="_blank" rel="noopener">
               View my GitHub →
             </a>
-            <p class="contrib-legend">
-              <span>Less</span>
-              {LEVEL_OPACITY.map((o, i) => (
-                <i style={`background: ${i === 0 ? 'var(--hairline)' : 'var(--bike)'}; opacity: ${i === 0 ? 1 : o}`} />
-              ))}
-              <span>More</span>
+          </CalendarHeatmap>
+        </section>
+      )
+    }
+
+    {
+      trainingDays.length > 0 && (
+        <section class="cal-block">
+          <div class="cal-head">
+            <p class="micro-label">
+              <span class="dot" style="background: var(--strava)" />
+              Workout Hours
+            </p>
+            <p class="cal-total">
+              <b class="num">{Math.round(trainingHours).toLocaleString()}h</b> in the last year
             </p>
           </div>
+
+          <CalendarHeatmap
+            days={trainingDays}
+            color="var(--strava)"
+            ariaLabel={`Training calendar: ${Math.round(trainingHours)} hours of swim, bike, run, and strength work between ${trainingDays[0].date} and ${trainingDays[trainingDays.length - 1].date}`}
+          >
+            <a class="arrow-link" href="/training/">View dashboard →</a>
+          </CalendarHeatmap>
         </section>
       )
     }
@@ -344,12 +334,12 @@ const lastPoint = sparkPoints.split(' ').at(-1)!.split(',');
     margin: 8px 0 0;
   }
 
-  .contrib {
+  .cal-block {
     padding: 30px 0 34px;
     border-bottom: 1px solid var(--hairline);
   }
 
-  .contrib-head {
+  .cal-head {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
@@ -357,74 +347,20 @@ const lastPoint = sparkPoints.split(' ').at(-1)!.split(',');
     margin-bottom: 16px;
   }
 
-  .contrib-head .micro-label {
+  .cal-head .micro-label {
     margin: 0;
   }
 
-  .contrib-total {
+  .cal-total {
     font-size: 13px;
     color: var(--muted);
     margin: 0;
   }
 
-  .contrib-total b {
+  .cal-total b {
     font-size: 15px;
     font-weight: 700;
     color: var(--ink);
-  }
-
-  .contrib-grid {
-    display: block;
-    width: 100%;
-    height: auto;
-  }
-
-  .contrib-grid rect {
-    transition: fill-opacity 0.15s ease;
-  }
-
-  .contrib-grid rect:hover {
-    fill-opacity: 1;
-  }
-
-  .contrib-month {
-    font-family: var(--mono);
-    font-size: 10px;
-    fill: var(--faint);
-  }
-
-  .contrib-foot {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 16px;
-    margin-top: 14px;
-  }
-
-  .contrib-legend {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    font-family: var(--mono);
-    font-size: 10.5px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--faint);
-    margin: 0;
-  }
-
-  .contrib-legend i {
-    width: 10px;
-    height: 10px;
-    border-radius: 2px;
-  }
-
-  .contrib-legend span:first-child {
-    margin-right: 4px;
-  }
-
-  .contrib-legend span:last-child {
-    margin-left: 4px;
   }
 
   @media (max-width: 860px) {

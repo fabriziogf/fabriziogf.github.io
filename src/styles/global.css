@@ -21,6 +21,12 @@
   --other: #90a4ae;
   --fatigue: #ef9a9a;
 
+  /* Source-brand colors — for marks that represent Strava or GitHub itself
+     rather than a sport. Kept separate from --run / --bike so the sport
+     palette stays intact. */
+  --strava: #fc4c02;
+  --github: #2ea043;
+
   /* sport palette — text-safe variants for this ground */
   --swim-ink: #147cb3;
   --bike-ink: #3c7c40;
@@ -42,6 +48,11 @@
     --faint: #767c77;
     --hairline: #2b2e31;
     --rule: #d3d5d1;
+
+    /* nudged brighter so they still read as brand colors on the dark ground —
+       --github matches GitHub's own dark-mode top step */
+    --strava: #fd5a17;
+    --github: #39d353;
 
     --swim-ink: #4fc3f7;
     --bike-ink: #81c784;

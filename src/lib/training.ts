@@ -49,6 +49,14 @@ export interface PrEntry {
   this_year_workout?: string;
 }
 
+/** One entry per day for the trailing 12 months, rest days included. */
+export interface YearDay {
+  date: string;
+  hours: number;
+  /** comma-separated sports trained that day, e.g. "bike,run" */
+  sports: string;
+}
+
 export interface TrainingData {
   generated_at: string;
   window_start: string;
@@ -58,6 +66,7 @@ export interface TrainingData {
   daily: DailyEntry[];
   workouts: Workout[];
   monthly: MonthlyEntry[];
+  year_daily?: YearDay[];
   ctl_trend: { month: string; ctl: number; atl: number; tsb: number }[];
   prs: {
     bike: Record<string, PrEntry>;
