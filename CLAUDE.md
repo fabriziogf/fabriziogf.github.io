@@ -162,13 +162,33 @@ where each field comes from changed.
 - The site ran Jekyll 3 / Minimal Mistakes until the Astro redesign. Old posts that discuss Jekyll/Liquid quirks (e.g. the 2026-04-11 Training Dashboard post) describe that era; the quirks no longer apply to the site itself.
 
 ### Sport color palette
-| Sport    | Color   |
-|----------|---------|
-| swim     | #4fc3f7 |
-| bike     | #81c784 |
-| run      | #ffb74d |
-| strength | #ce93d8 |
-| other    | #90a4ae |
+Defined in `src/styles/global.css`. Each mark splits by theme — the light-mode
+values go muddy on the dark ground and vice versa — so change both rows together.
+The `-ink` variants are the text-safe versions for the same ground.
+
+| Sport    | light (`--x`) | dark (`--x`) | light (`--x-ink`) | dark (`--x-ink`) |
+|----------|---------------|--------------|-------------------|------------------|
+| swim     | #0284c7       | #38bdf8      | #0369a1           | #38bdf8          |
+| bike     | #16a34a       | #4ade80      | #15803d           | #4ade80          |
+| run      | #f59e0b       | #fbbf24      | #b45309           | #fbbf24          |
+| strength | #9333ea       | #c084fc      | #7e22ce           | #c084fc          |
+| other    | #64748b       | #94a3b8      | #475569           | #94a3b8          |
+| fatigue  | #e11d48       | #fb7185      | #be123c           | #fb7185          |
+
+Source-brand and status tokens, kept separate from the sport palette so those
+stay free to change:
+
+| Token           | light   | dark    | Used by |
+|-----------------|---------|---------|---------|
+| `--github`      | #2ea043 | #39d353 | GitHub contribution calendar |
+| `--strava`      | #fc4c02 | #fd5a17 | Workout Hours calendar, Triathlon tag dot, `/training/` header dot |
+| `--strava-ink`  | #c2410c | #fd5a17 | Triathlon tag label (the brand orange is only 3.2:1 as light-mode text) |
+| `--wip`         | #a16207 | #facc15 | "In Progress" status pill on `/projects/` |
+
+Chart.js can't read CSS vars — `SPORT_COLORS` in `src/lib/training.ts` carries a
+single hex set sitting between the light and dark values, so the dashboard charts
+read on either ground: swim #0ea5e9, bike #22c55e, run #f59e0b, strength #a855f7,
+other #94a3b8.
 
 ---
 

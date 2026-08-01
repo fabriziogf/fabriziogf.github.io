@@ -85,8 +85,9 @@ export const projects: Project[] = [
     tag: 'Triathlon',
     // --strava, matching the Workout Hours calendar. Deliberately not --run:
     // the amber --run-ink is what the "In Progress" status pill uses, and a
-    // tag in that color reads as a status.
-    tagColor: 'var(--strava)',
+    // tag in that color reads as a status. The label takes the darkened -ink
+    // variant for contrast; the dot keeps the true brand orange.
+    tagColor: 'var(--strava-ink)',
     dot: 'var(--strava)',
     status: 'Active',
     title: 'Training Dashboard',

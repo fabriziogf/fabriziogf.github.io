@@ -28,6 +28,8 @@
      palette stays intact. */
   --strava: #fc4c02;
   --github: #2ea043;
+  /* darkened for text: the brand orange only reaches 3.2:1 on this ground */
+  --strava-ink: #c2410c;
 
   /* status accent — yellow, kept clear of --run-ink's amber and --strava */
   --wip: #a16207;
@@ -59,6 +61,8 @@
     --strava: #fd5a17;
     --github: #39d353;
     --wip: #facc15;
+    /* on the dark ground the brand orange is already legible as text */
+    --strava-ink: #fd5a17;
 
     /* brighter on the dark ground, where the light-mode values go muddy */
     --swim: #38bdf8;
