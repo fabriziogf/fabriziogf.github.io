@@ -25,6 +25,9 @@ const { days, color, ariaLabel } = Astro.props;
 const CELL = 11;
 const PITCH = CELL + 3;
 const TOP = 16; // room for the month row above the grid
+// In SVG units, so it shrinks with the grid. Sized for the two-up layout,
+// where the viewBox renders at roughly two-thirds scale.
+const MONTH_FONT = 14;
 
 // The ramp starts at 0.35 so the lightest step still reads as a color against
 // --hairline in both themes; anything fainter inverts on the light background.
@@ -59,7 +62,13 @@ const monthTicks = cells
 ---
 
 <svg class="cal" viewBox={`0 0 ${gridW} ${gridH}`} role="img" aria-label={ariaLabel}>
-  {monthTicks.map((t) => <text class="cal-month" x={t.x} y="9">{t.label}</text>)}
+  {
+    monthTicks.map((t) => (
+      <text class="cal-month" x={t.x} y="9" font-size={MONTH_FONT}>
+        {t.label}
+      </text>
+    ))
+  }
   {
     cells.map((c) => (
       <rect
@@ -77,7 +86,10 @@ const monthTicks = cells
   }
 </svg>
 
-<div class="cal-foot" style={`--swatch: ${((CELL / gridW) * 100).toFixed(3)}`}>
+<div
+  class="cal-foot"
+  style={`--swatch: ${((CELL / gridW) * 100).toFixed(3)}; --label: ${((MONTH_FONT / gridW) * 100).toFixed(3)}`}
+>
   <slot />
   <p class="cal-legend">
     <span>Less</span>
@@ -116,11 +128,9 @@ const monthTicks = cells
     fill-opacity: 1;
   }
 
-  /* In SVG units, so this shrinks with the grid. Sized for the two-up layout,
-     where the viewBox renders at roughly two-thirds scale. */
+  /* size comes from the MONTH_FONT attribute, in SVG units */
   .cal-month {
     font-family: var(--mono);
-    font-size: 14px;
     fill: var(--faint);
   }
 
@@ -129,7 +139,8 @@ const monthTicks = cells
     align-items: center;
     gap: 3px;
     font-family: var(--mono);
-    font-size: 9px;
+    /* --label mirrors the month row, so both labels render at the same size */
+    font-size: calc(var(--label) * 1cqw);
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--faint);
