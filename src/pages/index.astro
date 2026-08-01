@@ -3,9 +3,11 @@ import Base from '../layouts/Base.astro';
 import { sortedPosts, parseId, formatDate } from '../lib/posts';
 import { loadTrainingData } from '../lib/training';
 import { loadContributions } from '../lib/github';
+import { projects } from '../lib/projects';
 import CalendarHeatmap from '../components/CalendarHeatmap.astro';
 
 const posts = (await sortedPosts()).slice(0, 4);
+const latestProjects = projects.slice(0, 4);
 const td = loadTrainingData();
 const contrib = await loadContributions('fabriziogf');
 
@@ -121,22 +123,14 @@ const trainingHours = (td.year_daily ?? []).reduce((a, d) => a + d.hours, 0);
 
       <div class="cell">
         <p class="micro-label"><span class="dot" style="background: var(--swim)"></span>Now building</p>
-        <a class="post-item" href="/projects/">
-          <span class="post-title">Fantasy Football Draft Assistant</span>
-          <span class="post-sub">Value-based pick recommendations, live on the clock</span>
-        </a>
-        <a class="post-item" href="/projects/">
-          <span class="post-title">World Cup 2026 Prediction Model</span>
-          <span class="post-sub">Monte Carlo tournament simulator on Dixon-Coles and Elo</span>
-        </a>
-        <a class="post-item" href="/projects/">
-          <span class="post-title">Job Hunting Agent</span>
-          <span class="post-sub">An AI agent that runs a full job search end-to-end</span>
-        </a>
-        <a class="post-item" href="/training/">
-          <span class="post-title">Training Dashboard</span>
-          <span class="post-sub">Live Strava + TrainingPeaks pipeline, updated daily</span>
-        </a>
+        {
+          latestProjects.map((p) => (
+            <a class="post-item" href={p.homeHref ?? '/projects/'}>
+              <span class="post-title">{p.title}</span>
+              <span class="post-sub">{p.blurb}</span>
+            </a>
+          ))
+        }
         <a class="arrow-link cell-more" href="/projects/">All projects →</a>
       </div>
     </section>

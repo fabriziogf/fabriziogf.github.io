@@ -2,7 +2,7 @@
 title: "Updating the Training Dashboard: Trends, Personal Records, and a More Interactive Layout"
 ---
 
-The [Training](/training/) page started as a simple 7-day snapshot — current fitness metrics, this week's sessions, a few Chart.js charts. It worked, but the view was narrow. You could see what happened in the last seven days, not how the year was unfolding.
+The [Training](/training/) page started as a simple 7-day snapshot — current fitness metrics, this week's sessions, a few Chart.js charts. I wrote about building that first version in [Building a Daily-Updated Training Dashboard with Jekyll and TrainingPeaks](/Training_dashboard/). It worked, but the view was narrow. You could see what happened in the last seven days, not how the year was unfolding.
 
 I wanted three things from an update: a longer time horizon, personal records pulled automatically from TrainingPeaks, and more information when looking at individual sessions. This post documents what changed, what worked, and the few places where the API or tooling pushed back.
 

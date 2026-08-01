@@ -29,6 +29,9 @@
   --strava: #fc4c02;
   --github: #2ea043;
 
+  /* status accent — yellow, kept clear of --run-ink's amber and --strava */
+  --wip: #a16207;
+
   /* sport palette — text-safe variants for this ground */
   --swim-ink: #0369a1;
   --bike-ink: #15803d;
@@ -55,6 +58,7 @@
        --github matches GitHub's own dark-mode top step */
     --strava: #fd5a17;
     --github: #39d353;
+    --wip: #facc15;
 
     /* brighter on the dark ground, where the light-mode values go muddy */
     --swim: #38bdf8;
