@@ -15,19 +15,15 @@ Across all of it, I follow one principle: *just win*. As a PM and in life genera
 
 I created this site as a place to share what I’m learning and building, especially across AI, ML, product thinking, and endurance sports.
 
-You can also take a look at my [CV](/download/Fabrizio%20Giovannini%20Filho%20-%20Resume%20ML%2020260407%20AI.pdf).
-
 ### Links
 
-- [GitHub](https://github.com/fabriziogf) — code and side projects
-- [LinkedIn](https://www.linkedin.com/in/fgiovanninifilho/) — professional profile
-- [Email](mailto:fabriziogf@gmail.com) — fabriziogf@gmail.com
+[GitHub](https://github.com/fabriziogf) · [LinkedIn](https://www.linkedin.com/in/fgiovanninifilho/) · [Strava](https://www.strava.com/athletes/25618422) · [Email](mailto:fabriziogf@gmail.com)
 
 <div style="clear: both;"></div>
 
 ---
 
-## Highlights
+## Highlights <a href="/download/Fabrizio%20Giovannini%20Filho%20-%20Resume%20ML%2020260407%20AI.pdf" style="font-size: 15px; font-weight: 500; margin-left: 10px; white-space: nowrap;">View my CV →</a>
 
 - **AI/ML product leadership:** 9+ years leading products across analytics, data science, machine learning, and data-heavy environments.
 - **0-to-1 builder:** Built and launched products from concept to rollout, turning ambiguous problems into working systems and measurable outcomes.
