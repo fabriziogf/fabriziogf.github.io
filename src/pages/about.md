@@ -15,9 +15,7 @@ Across all of it, I follow one principle: *just win*. As a PM and in life genera
 
 I created this site as a place to share what I’m learning and building, especially across AI, ML, product thinking, and endurance sports.
 
-### Links
-
-[GitHub](https://github.com/fabriziogf) · [LinkedIn](https://www.linkedin.com/in/fgiovanninifilho/) · [Strava](https://www.strava.com/athletes/25618422) · [Email](mailto:fabriziogf@gmail.com)
+**Links:** [GitHub](https://github.com/fabriziogf) · [LinkedIn](https://www.linkedin.com/in/fgiovanninifilho/) · [Strava](https://www.strava.com/athletes/25618422) · [Email](mailto:fabriziogf@gmail.com)
 
 <div style="clear: both;"></div>
 
