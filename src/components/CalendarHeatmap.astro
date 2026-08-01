@@ -113,9 +113,11 @@ const monthTicks = cells
     fill-opacity: 1;
   }
 
+  /* In SVG units, so this shrinks with the grid. Sized for the two-up layout,
+     where the viewBox renders at roughly two-thirds scale. */
   .cal-month {
     font-family: var(--mono);
-    font-size: 10px;
+    font-size: 14px;
     fill: var(--faint);
   }
 
