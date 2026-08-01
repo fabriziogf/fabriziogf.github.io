@@ -148,14 +148,17 @@ a {
   letter-spacing: -0.02em;
   text-decoration: none;
   /* Measured: the lockup's bottom edge sits 1.12px below the nav links' glyph
-     bottom once both are box-centered. Raise it so the two bottoms are flush. */
+     bottom once both are box-centered. Raise it so the two bottoms are flush.
+     Re-measure this if the logo's font-size changes — the header row is
+     center-aligned, so a taller lockup moves both itself and the nav. (The
+     mark's width is safe to change: it's baseline-aligned, so it grows up.) */
   transform: translateY(-1.12px);
 }
 
 .logo-mark {
   /* viewBox is cropped to the ink (y 3-29), so the box edges are the dots'
      edges and `align-items: baseline` lands the bottom row on the text baseline. */
-  width: 22px;
+  width: 24px;
   height: auto;
   flex: none;
   display: block;
