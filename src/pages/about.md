@@ -73,9 +73,9 @@ Right now, I’m especially interested in:
 
 ---
 
-## Life Outside Work
+<img src="/assets/images/ralphie_emm.jpg" alt="Emily and Ralphie" style="float: right; width: 260px; border-radius: 4px; margin: 13px 0 1em 1.5em;" />
 
-<img src="/assets/images/ralphie_emm.jpg" alt="Emily and Ralphie" style="float: right; width: 260px; border-radius: 4px; margin: 0.5em 0 1em 1.5em;" />
+## Life Outside Work
 
 Outside of training, I also love going on long walks with my wife Emily and our dog Ralphie. It's a good excuse to slow down, explore new neighborhoods, and spend time together away from screens. Being Brazilian, I also follow soccer — Arsenal is my favorite team, go Gunners!
 
@@ -83,9 +83,9 @@ Outside of training, I also love going on long walks with my wife Emily and our 
 
 ---
 
-## Triathlon and Rowing
+<img src="/assets/images/Foto_Fa_Primeira_Corrida_cropped.jpg" alt="Fabrizio racing" style="float: right; width: 260px; border-radius: 4px; margin: 13px 0 1em 1.5em;" />
 
-<img src="/assets/images/Foto_Fa_Primeira_Corrida_cropped.jpg" alt="Fabrizio racing" style="float: right; width: 260px; border-radius: 4px; margin: 0.5em 0 1em 1.5em;" />
+## Triathlon and Rowing
 
 Outside of work, I spend a lot of time training and racing endurance sports. I rowed at Princeton and now focus primarily on long-course triathlon, especially 70.3 and Ironman racing.
 
