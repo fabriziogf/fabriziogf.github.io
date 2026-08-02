@@ -78,6 +78,28 @@ Post-race: four jogs between 5 and 10.5 km, starting six days after the race. My
 
 ---
 
+## A Caveat on Run TSS
+
+One thing I have to flag, because it changes how to read every run number above.
+
+TrainingPeaks seems to have changed how it scores running TSS in mid-June. Same runs, lower numbers. I noticed it pulling this month's data and went looking for a clean comparison. This is the one I found:
+
+| | May 29 | Jun 24 |
+|---|---|---|
+| Distance | 11.16 km | 11.16 km |
+| Time | 55:01 | 55:01 |
+| Normalized pace | 4:56/km | 4:56/km |
+| Avg HR | 127 | 124 |
+| **TSS** | **100.5** | **55.1** |
+
+Same route, same pace, durations a third of a second apart, 26 days apart on the calendar. The second one scored 45% lower.
+
+It isn't just those two. For the previous eighteen months my runs came back between 100 and 155 TSS per hour. From June 17 onward every single one lands between 55 and 76. The last run scored on the old scale was Rockford on June 14.
+
+**I think the new numbers are the correct ones.** On the old scale, easy Z2 long runs were coming back with an IF above 1.0 — that would mean holding above threshold for two hours, which never happened. The old scores were inflated. But run TSS before and after mid-June are not the same unit, and anything that sums them is mixing two scales.
+
+---
+
 ## Strength
 
 Three sessions, the last one on July 9. Nothing since.
@@ -101,6 +123,8 @@ CTL fell from 131.6 to 103.6. A 28-point drop in a month.
 | July | 103.6 |
 
 That's the steepest drop of the year. Two weeks of taper and then a week and a half of easy riding will do that. TSB is +51.4, which is far higher than useful — it means fresh, but it also means undertrained compared to where I was.
+
+**Part of that 28-point drop is the TSS change, not lost fitness.** Running was 30% of July's TSS and all of it is scored on the new scale, while June's CTL was built mostly on the old one. Scored the old way, July's running would have come in at roughly double — something like 800 more TSS on the month. The fitness loss is real. It's just smaller than 28 points of CTL makes it look, and I won't have a clean year-over-year comparison again until twelve months from now.
 
 The peak was May at 140.5. I'm now roughly back where I was in February.
 
