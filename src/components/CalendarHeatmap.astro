@@ -76,30 +76,33 @@ for (let w = 0; w < weeks; w++) {
 }
 ---
 
-<svg class="cal" viewBox={`0 0 ${gridW} ${gridH}`} role="img" aria-label={ariaLabel}>
-  {
-    monthTicks.map((t) => (
-      <text class="cal-month" x={t.x} y={MONTH_BASELINE} font-size={MONTH_FONT}>
-        {t.label}
-      </text>
-    ))
-  }
-  {
-    cells.map((c) => (
-      <rect
-        x={c.week * PITCH}
-        y={TOP + c.weekday * PITCH}
-        width={CELL}
-        height={CELL}
-        rx="2"
-        fill={c.level === 0 ? 'var(--hairline)' : color}
-        fill-opacity={c.level === 0 ? 1 : LEVEL_OPACITY[c.level]}
-      >
-        <title>{c.title}</title>
-      </rect>
-    ))
-  }
-</svg>
+<div class="cal-wrap">
+  <svg class="cal" viewBox={`0 0 ${gridW} ${gridH}`} role="img" aria-label={ariaLabel}>
+    {
+      monthTicks.map((t) => (
+        <text class="cal-month" x={t.x} y={MONTH_BASELINE} font-size={MONTH_FONT}>
+          {t.label}
+        </text>
+      ))
+    }
+    {
+      cells.map((c) => (
+        <rect
+          x={c.week * PITCH}
+          y={TOP + c.weekday * PITCH}
+          width={CELL}
+          height={CELL}
+          rx="2"
+          fill={c.level === 0 ? 'var(--hairline)' : color}
+          fill-opacity={c.level === 0 ? 1 : LEVEL_OPACITY[c.level]}
+        >
+          <title>{c.title}</title>
+        </rect>
+      ))
+    }
+  </svg>
+  <p class="cal-tip" role="status" aria-live="polite"></p>
+</div>
 
 <div
   class="cal-foot"
@@ -117,6 +120,57 @@ for (let w = 0; w < weeks; w++) {
   </p>
 </div>
 
+<script>
+  // Tap/click a square to pin its reading. Hover already surfaces the same text
+  // via <title>, but that never fires on touch — this is the path that works
+  // everywhere. Runs once per page and wires up every calendar on it.
+  document.querySelectorAll<HTMLElement>('.cal-wrap').forEach((wrap) => {
+    const tip = wrap.querySelector<HTMLElement>('.cal-tip');
+    const svg = wrap.querySelector('svg');
+    if (!tip || !svg) return;
+
+    let active: SVGRectElement | null = null;
+
+    const hide = () => {
+      tip.removeAttribute('data-show');
+      active?.removeAttribute('data-active');
+      active = null;
+    };
+
+    const show = (rect: SVGRectElement) => {
+      tip.textContent = rect.querySelector('title')?.textContent ?? '';
+      tip.setAttribute('data-show', '');
+      active?.removeAttribute('data-active');
+      rect.setAttribute('data-active', '');
+      active = rect;
+
+      // Measure after the text lands so the width used for clamping is real.
+      const box = rect.getBoundingClientRect();
+      const frame = wrap.getBoundingClientRect();
+      const half = tip.offsetWidth / 2;
+      const x = box.left - frame.left + box.width / 2;
+      tip.style.left = `${Math.max(half, Math.min(x, frame.width - half))}px`;
+      tip.style.top = `${box.top - frame.top}px`;
+    };
+
+    svg.addEventListener('click', (event) => {
+      const rect = (event.target as Element).closest('rect');
+      if (!rect) return hide();
+      // second tap on the same square dismisses it
+      if (rect === active) return hide();
+      show(rect as SVGRectElement);
+    });
+
+    document.addEventListener('click', (event) => {
+      if (!wrap.contains(event.target as Node)) hide();
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') hide();
+    });
+    window.addEventListener('resize', hide);
+  });
+</script>
+
 <style>
   .cal-foot {
     display: flex;
@@ -129,6 +183,10 @@ for (let w = 0; w < weeks; w++) {
     container-type: inline-size;
   }
 
+  .cal-wrap {
+    position: relative;
+  }
+
   .cal {
     display: block;
     width: 100%;
@@ -136,11 +194,45 @@ for (let w = 0; w < weeks; w++) {
   }
 
   .cal rect {
+    cursor: pointer;
     transition: fill-opacity 0.15s ease;
   }
 
   .cal rect:hover {
     fill-opacity: 1;
+  }
+
+  .cal rect[data-active] {
+    stroke: var(--ink);
+    stroke-width: 1.5;
+    paint-order: stroke;
+  }
+
+  /* Positioned against .cal-wrap by the click handler; the transform anchors it
+     above the square it describes. */
+  .cal-tip {
+    position: absolute;
+    z-index: 2;
+    transform: translate(-50%, calc(-100% - 7px));
+    margin: 0;
+    padding: 5px 9px;
+    border: 1px solid var(--hairline);
+    border-radius: 4px;
+    background: var(--surface);
+    color: var(--ink);
+    font-family: var(--mono);
+    font-size: 11px;
+    line-height: 1.35;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.12s ease;
+  }
+
+  .cal-tip[data-show] {
+    opacity: 1;
+    visibility: visible;
   }
 
   /* size comes from the MONTH_FONT attribute, in SVG units */
