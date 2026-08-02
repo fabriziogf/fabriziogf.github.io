@@ -221,9 +221,10 @@ Runs `scripts/update_training_data.py` once per day, which:
   - Do NOT use the system Python — it lacks the required packages
 
 ### Window logic
-- `end = yesterday` (last fully completed day)
-- `start = yesterday − 6 days` (7-day rolling window)
-- Data is always one day behind real-time (yesterday's workouts are the freshest)
+- `end = today` — both windows are inclusive of both ends and run through the day of the pull
+- `start = today − 6 days` (7-day rolling window, today included)
+- `trend_start = today − 364 days` (365 days for `year_daily` / monthly / CTL trend, today included)
+- Today is necessarily partial: anything logged after the pull lands on the next day's run
 
 ### Authentication
 TrainingPeaks credentials are stored in the macOS keyring. The script inherits them as long as it runs as the same user. No env vars or secrets files needed.

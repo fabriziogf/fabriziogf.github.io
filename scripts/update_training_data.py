@@ -346,10 +346,13 @@ pace1500m:
 
 # ── Main ─────────────────────────────────────────────────────────────────────
 async def main():
+    # Windows are inclusive of both ends and run through today, so a session
+    # done this morning shows up on the same day's run. Today is necessarily
+    # partial — anything logged after the pull lands on the next run.
     today     = date.today()
-    end       = today - timedelta(days=1)
-    start     = end - timedelta(days=6)
-    trend_start = today - timedelta(days=365)
+    end       = today
+    start     = end - timedelta(days=6)     # 7 days, today included
+    trend_start = today - timedelta(days=364)  # 365 days, today included
     year_days   = (today - date(today.year, 1, 1)).days
 
     print(f"7-day window: {start} → {end}")
