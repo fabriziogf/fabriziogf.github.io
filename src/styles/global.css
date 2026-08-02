@@ -349,6 +349,54 @@ main {
   border-radius: 4px;
 }
 
+/* Text-beside-photo sections (About). Source order is copy first, photo last,
+   so the stacked mobile layout reads correctly on its own; the side-by-side
+   arrangement is a desktop-only enhancement rather than a float that has to be
+   cleared. */
+.prose .split {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.prose .split-copy > :first-child {
+  margin-top: 0;
+}
+
+.prose .split-copy > :last-child {
+  margin-bottom: 0;
+}
+
+.prose .split-photo {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+}
+
+@media (min-width: 700px) {
+  .prose .split {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 28px;
+  }
+
+  .prose .split-copy {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .prose .split-photo {
+    flex: none;
+    width: 260px;
+  }
+
+  /* Only sections that open with a heading need the nudge that lines the
+     photo's top edge up with the heading's cap; the intro has none. */
+  .prose .split:has(.split-copy > h2:first-child) .split-photo {
+    margin-top: 13px;
+  }
+}
+
 .prose code {
   font-family: var(--mono);
   font-size: 0.88em;

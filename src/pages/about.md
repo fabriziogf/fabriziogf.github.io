@@ -5,7 +5,8 @@ excerpt: "AI/ML product leader, builder, and endurance sports enthusiast"
 label: "About"
 ---
 
-<img src="/assets/images/Giovannini Filho-Fabrizio-250709-2147-fave-final-crop.jpg" alt="Fabrizio Giovannini Filho" style="float: right; width: 260px; border-radius: 4px; margin: 0 0 1em 1.5em;" />
+<div class="split">
+<div class="split-copy">
 
 I’m an AI/ML product leader and builder with 9+ years of experience across product management, analytics, economics, and technical prototyping.
 
@@ -17,7 +18,9 @@ I created this site as a place to share what I’m learning and building, especi
 
 **Links:** [GitHub](https://github.com/fabriziogf) · [LinkedIn](https://www.linkedin.com/in/fgiovanninifilho/) · [Strava](https://www.strava.com/athletes/25618422) · [Email](mailto:fabriziogf@gmail.com)
 
-<div style="clear: both;"></div>
+</div>
+<img class="split-photo" src="/assets/images/Giovannini Filho-Fabrizio-250709-2147-fave-final-crop.jpg" alt="Fabrizio Giovannini Filho" />
+</div>
 
 ---
 
@@ -67,17 +70,21 @@ Right now, I’m especially interested in:
 
 ---
 
-<img src="/assets/images/ralphie_emm.jpg" alt="Emily and Ralphie" style="float: right; width: 260px; border-radius: 4px; margin: 13px 0 1em 1.5em;" />
+<div class="split">
+<div class="split-copy">
 
 ## Life Outside Work
 
 Outside of training, I also love going on long walks with my wife Emily and our dog Ralphie. It's a good excuse to slow down, explore new neighborhoods, and spend time together away from screens. Being Brazilian, I also follow soccer — Arsenal is my favorite team, go Gunners!
 
-<div style="clear: both;"></div>
+</div>
+<img class="split-photo" src="/assets/images/ralphie_emm.jpg" alt="Emily and Ralphie" />
+</div>
 
 ---
 
-<img src="/assets/images/Foto_Fa_Primeira_Corrida_cropped.jpg" alt="Fabrizio racing" style="float: right; width: 260px; border-radius: 4px; margin: 13px 0 1em 1.5em;" />
+<div class="split">
+<div class="split-copy">
 
 ## Triathlon and Rowing
 
@@ -90,4 +97,6 @@ Outside of work, I spend a lot of time training and racing endurance sports. I r
 - 2022 Ironman World Championships qualifier and finisher
 - Five-time Ironman 70.3 World Championship qualifier
 
-<div style="clear: both;"></div>
+</div>
+<img class="split-photo" src="/assets/images/Foto_Fa_Primeira_Corrida_cropped.jpg" alt="Fabrizio racing" />
+</div>
