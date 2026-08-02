@@ -353,6 +353,11 @@ async def main():
     end       = today
     start     = end - timedelta(days=6)     # 7 days, today included
     trend_start = today - timedelta(days=364)  # 365 days, today included
+    # The homepage calendar mirrors GitHub's contribution grid, whose window
+    # starts on a Sunday up to ~53 weeks back. Pull a little further than the
+    # reporting year so that grid is always fully covered. These extra days
+    # feed year_daily only — totals, monthly and CTL trend stay on trend_start.
+    cal_start = today - timedelta(days=370)
     year_days   = (today - date(today.year, 1, 1)).days
 
     print(f"7-day window: {start} → {end}")
@@ -422,8 +427,13 @@ async def main():
     print("Fetching activities from Strava…")
     sclient   = StravaClient()
     before    = _epoch(end + timedelta(days=1))
-    strava_7day = sclient.activities(after=_epoch(start),       before=before)
-    strava_12mo = sclient.activities(after=_epoch(trend_start), before=before)
+    strava_7day = sclient.activities(after=_epoch(start),     before=before)
+    strava_cal  = sclient.activities(after=_epoch(cal_start), before=before)
+    # everything except the calendar reports on the 365-day year
+    strava_12mo = [
+        a for a in strava_cal
+        if (a.get('start_date_local') or '')[:10] >= trend_start.isoformat()
+    ]
 
     pr_cache = load_cache()
     new_runs = 0
@@ -539,12 +549,14 @@ async def main():
             }
         monthly_list.append(entry)
 
-    # ── Build the year-long daily hours calendar ─────────────────────────────
-    # Reuses strava_12mo — no extra API calls. Every day in the window gets an
-    # entry, including rest days, so the calendar renders without holes.
+    # ── Build the daily hours calendar (cal_start → today) ───────────────────
+    # Reuses strava_cal — no extra API calls. Every day in the window gets an
+    # entry, including rest days, so the calendar renders without holes. This
+    # runs wider than the reporting year on purpose; the homepage sums only the
+    # trailing 365 days for its total.
     year_hours  = defaultdict(float)
     year_sports = defaultdict(set)
-    for a in strava_12mo:
+    for a in strava_cal:
         d = (a.get('start_date_local') or '')[:10]
         if not d:
             continue
@@ -552,7 +564,7 @@ async def main():
         year_sports[d].add(strava_classify(a))
 
     year_daily = []
-    cur = trend_start
+    cur = cal_start
     while cur <= end:
         k = cur.isoformat()
         year_daily.append({

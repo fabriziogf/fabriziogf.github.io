@@ -24,10 +24,13 @@ const { days, color, ariaLabel } = Astro.props;
 
 const CELL = 11;
 const PITCH = CELL + 3;
-const TOP = 16; // room for the month row above the grid
 // In SVG units, so it shrinks with the grid. Sized for the two-up layout,
 // where the viewBox renders at roughly two-thirds scale.
 const MONTH_FONT = 14;
+// Baseline has to clear the type's ascender or the month row clips against the
+// top of the viewBox; the grid then starts below the descender.
+const MONTH_BASELINE = 12;
+const TOP = MONTH_BASELINE + 6;
 
 // The ramp starts at 0.35 so the lightest step still reads as a color against
 // --hairline in both themes; anything fainter inverts on the light background.
@@ -50,21 +53,33 @@ const weeks = cells[cells.length - 1].week + 1;
 const gridW = weeks * PITCH - 3;
 const gridH = TOP + 7 * PITCH - 3;
 
-// Label each month above its first full week. A leading partial month is
-// skipped for free, since its 1st falls outside the window.
-const monthTicks = cells
-  .filter((c) => c.date.endsWith('-01'))
-  .map((c) => ({
-    x: (c.weekday === 0 ? c.week : c.week + 1) * PITCH,
-    label: MONTHS[Number(c.date.slice(5, 7)) - 1],
-  }))
-  .filter((t) => t.x < gridW - PITCH);
+// Label a month above the first column that opens in it. Keying off the
+// column's own first day (rather than looking for the 1st of the month in the
+// data) means the leading month still gets a label when the window starts
+// mid-month, which is the common case once GitHub's window has rolled.
+const firstDayOfWeek = new Map<number, string>();
+for (const c of cells) {
+  const held = firstDayOfWeek.get(c.week);
+  if (!held || c.date < held) firstDayOfWeek.set(c.week, c.date);
+}
+
+const monthTicks: { x: number; label: string }[] = [];
+let labelled = -1;
+for (let w = 0; w < weeks; w++) {
+  const date = firstDayOfWeek.get(w);
+  if (!date) continue;
+  const month = Number(date.slice(5, 7)) - 1;
+  if (month === labelled) continue;
+  labelled = month;
+  const x = w * PITCH;
+  if (x < gridW - PITCH) monthTicks.push({ x, label: MONTHS[month] });
+}
 ---
 
 <svg class="cal" viewBox={`0 0 ${gridW} ${gridH}`} role="img" aria-label={ariaLabel}>
   {
     monthTicks.map((t) => (
-      <text class="cal-month" x={t.x} y="9" font-size={MONTH_FONT}>
+      <text class="cal-month" x={t.x} y={MONTH_BASELINE} font-size={MONTH_FONT}>
         {t.label}
       </text>
     ))

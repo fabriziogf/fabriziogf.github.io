@@ -55,11 +55,17 @@ export async function loadContributions(login: string): Promise<Contributions | 
     counts.set(id, Number(text.trim().match(/^([\d,]+)/)?.[1].replace(/,/g, '') ?? 0));
   }
 
+  // GitHub pads the calendar out to a whole week, so depending on where the
+  // trailing year lands it can hand back dates in the future. Those are always
+  // empty and would render as a stray square in a column of their own.
+  const now = new Date();
+  const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+
   const days: ContribDay[] = [];
   for (const [tag] of html.matchAll(DAY_RE)) {
     const date = attr(tag, 'data-date');
     const id = attr(tag, 'id');
-    if (!date || !id) continue;
+    if (!date || !id || date > today) continue;
     days.push({
       date,
       level: Number(attr(tag, 'data-level') ?? 0),

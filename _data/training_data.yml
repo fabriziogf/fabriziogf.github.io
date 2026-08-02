@@ -227,6 +227,12 @@ monthly:
     other   : { sessions: 0, hours: 0.0   , distance_km: 0.0    , tss: 0 }
 
 year_daily:
+  - { date: "2025-07-27", hours: 1.74 , sports: "run" }
+  - { date: "2025-07-28", hours: 1.81 , sports: "strength,swim" }
+  - { date: "2025-07-29", hours: 2.86 , sports: "bike,run" }
+  - { date: "2025-07-30", hours: 0.88 , sports: "swim" }
+  - { date: "2025-07-31", hours: 2.74 , sports: "bike,run" }
+  - { date: "2025-08-01", hours: 0.93 , sports: "swim" }
   - { date: "2025-08-02", hours: 1.72 , sports: "run" }
   - { date: "2025-08-03", hours: 6.15 , sports: "bike,run" }
   - { date: "2025-08-04", hours: 1.0  , sports: "strength" }

@@ -17,11 +17,27 @@ const contribDays = (contrib?.days ?? []).map((d) => ({
   title: `${d.count === 0 ? 'No' : d.count} contribution${d.count === 1 ? '' : 's'} on ${d.date}`,
 }));
 
+const yearDaily = td.year_daily ?? [];
+
+// The "in the last year" figure stays on the trailing 365 days, independent of
+// how far back the calendar below is drawn.
+const trainingHours = yearDaily.slice(-365).reduce((a, d) => a + d.hours, 0);
+
 // Training calendar — same grid, bucketed by daily moving time. Thresholds are
 // fixed rather than relative so a light month reads as light: roughly a short
 // session, an hour-plus, a long ride or brick, then the big weekend days.
 const HOUR_STEPS = [1.5, 3, 4.5];
-const trainingDays = (td.year_daily ?? []).map((d) => ({
+
+// Draw the same span GitHub does, so the two calendars are the same width and
+// their month labels line up. The updater pulls past this range on purpose;
+// falling back to whole weeks keeps the grid square if GitHub is unavailable.
+const calFrom = contribDays[0]?.date;
+const calTo = contribDays[contribDays.length - 1]?.date;
+const calSource = calFrom
+  ? yearDaily.filter((d) => d.date >= calFrom && d.date <= calTo!)
+  : yearDaily.slice(-Math.floor(yearDaily.length / 7) * 7);
+
+const trainingDays = calSource.map((d) => ({
   date: d.date,
   level: d.hours === 0 ? 0 : HOUR_STEPS.filter((t) => d.hours >= t).length + 1,
   title:
@@ -29,7 +45,6 @@ const trainingDays = (td.year_daily ?? []).map((d) => ({
       ? `Rest day on ${d.date}`
       : `${d.hours.toFixed(1)}h on ${d.date}${d.sports ? ` — ${d.sports.split(',').join(', ')}` : ''}`,
 }));
-const trainingHours = (td.year_daily ?? []).reduce((a, d) => a + d.hours, 0);
 ---
 
 <Base>
