@@ -1,5 +1,5 @@
 ---
-title: "Building a Knowledge Base for Product Work"
+title: "Building a Knowledge Base for Product and AI Work"
 ---
 
 Most of a PM's job is building and disseminating context. Which products you own, how their capabilities fit together, what shipped last quarter, why a decision was made, what a stakeholder cares about. That context lives in scattered docs, Slack threads, and my head. The latter is the least reliable of the three, but the one which connects all the other disparate information. This post is about how I have build a knowledge base so I stop being the single point of failure for my own context.
