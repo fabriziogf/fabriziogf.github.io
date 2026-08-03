@@ -1,10 +1,10 @@
 ---
-title: "Turning Interview Prep Into a Knowledge Base"
+title: "Adding Interview Prep to My Knowledge Base"
 ---
 
-I recently [wrote about the knowledge base](/Product_knowledge_base/) I'm building for my product and AI work — how it's structured and how I keep it current. This post is about what actually went into it first, and where that material came from.
+I recently [wrote about the knowledge base](/Product_knowledge_base/) I'm building for my product and AI work — how it's structured and how I keep it current. That post was about the system. This one is about filling it.
 
-It came from a folder in my Documents called `Job Search`. It has 172 files in it. Until recently it was a graveyard.
+The knowledge base is meant to hold durable AI and product knowledge: how agents are actually built, how you evaluate them, how platform work really goes. What it needed was content. The first batch came from a place I didn't expect — a folder in my Documents called `Job Search`. It has 172 files in it. Until recently it was a graveyard.
 
 That's the honest description. Job search folders accumulate the way garages do. Every application generates a tailored resume. Every phone screen generates a study guide. Every onsite generates a prep doc, a case deck, a list of questions to ask, and a `_garage` folder where the previous three versions go to die. Then you take a job, or you don't, and the whole thing goes quiet.
 
@@ -56,9 +56,9 @@ The same rule killed a lot of material, and it should have. Company values, inte
 
 ---
 
-## What ended up in it
+## What the first pass added
 
-Thirty-one topics across six areas.
+Thirty-one topics across six areas — the knowledge base's first real content.
 
 **AI agents.** What actually makes something an agent, and why the useful question is never "is this an agent?" but "what does it do autonomously, and what happens when a wrong action goes through?" The ReAct loop and its four termination conditions. The four memory types. Tool schema design, including the observation that an agent with fifty tools makes *worse* selections than one with ten, because the model has to reason over a noisier action space. Orchestration patterns, with a strong bias toward starting single-agent and making the architecture earn its complexity. Guardrails as three distinct layers. Why agent cost grows quadratically rather than linearly with step count.
 
@@ -83,6 +83,8 @@ It came out of a case about AI customer support. The observation was that on gen
 I've since found that idea useful well outside support, and well outside AI. It's a good question to ask about any system that seems stuck: is this a knowledge problem or an authority problem? They look identical from the outside and they have completely different fixes.
 
 That's the argument for doing this at all. Interview prep is written to be thrown away. Some of it shouldn't be.
+
+It's also a finite source. That folder is picked over now, and the knowledge base is supposed to keep growing — so everything after this has to come from the work itself, which is the harder habit.
 
 ---
 
