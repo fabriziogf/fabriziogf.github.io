@@ -7,10 +7,16 @@ import '../styles/global.css';
 interface Props {
   title?: string;
   description?: string;
+  /** slug of the card under /og/, minus the .png — see src/pages/og/ */
+  ogSlug?: string;
 }
 
-const { title, description = "Fabrizio GF's personal website" } = Astro.props;
+const { title, description = "Fabrizio GF's personal website", ogSlug = 'site' } = Astro.props;
 const pageTitle = title ? `${title} - fabriziogf.github.io` : 'fabriziogf.github.io';
+
+// Absolute URLs: social clients don't resolve relative paths.
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL(`/og/${ogSlug}.png`, Astro.site);
 
 const navItems = [
   { label: 'Writing', href: '/year-archive/' },
@@ -29,6 +35,21 @@ const current = Astro.url.pathname.replace(/\/+$/, '') + '/';
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonical.href} />
+
+    <meta property="og:type" content={ogSlug === 'site' ? 'website' : 'article'} />
+    <meta property="og:site_name" content="fabriziogf.github.io" />
+    <meta property="og:title" content={title ?? 'Fabrizio GF'} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical.href} />
+    <meta property="og:image" content={ogImage.href} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title ?? 'Fabrizio GF'} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage.href} />
+
     <link rel="alternate" type="application/rss+xml" title="Fabrizio GF" href="/feed.xml" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   </head>

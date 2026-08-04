@@ -12,11 +12,25 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
-const { date } = parseId(post.id);
+const { date, slug } = parseId(post.id);
 const { Content } = await render(post);
+
+// Posts carry only a title, so the social/search description comes from the
+// opening prose: first non-heading, non-HTML paragraph, stripped of markdown.
+const summary = post.body
+  ?.split('\n\n')
+  .map((block) => block.trim())
+  .find((block) => block && !/^[#<\-*>|]/.test(block))
+  ?.replace(/\[([^\]]+)\]\([^)]*\)/g, '$1') // links → their text
+  .replace(/[*_`]/g, '')
+  .replace(/\s+/g, ' ')
+  .trim();
+
+const description =
+  summary && summary.length > 160 ? `${summary.slice(0, 157).trimEnd()}…` : summary;
 ---
 
-<Base title={post.data.title}>
+<Base title={post.data.title} description={description} ogSlug={slug}>
   <div class="container">
     <article>
       <header class="post-head">

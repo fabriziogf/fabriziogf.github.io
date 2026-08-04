@@ -3,6 +3,7 @@ layout: ../layouts/MarkdownPage.astro
 title: "About"
 excerpt: "AI/ML product leader, builder, and endurance sports enthusiast"
 label: "About"
+ogSlug: "about"
 ---
 
 <div class="split">

@@ -4,7 +4,7 @@ import Base from './Base.astro';
 const { frontmatter } = Astro.props;
 ---
 
-<Base title={frontmatter.title} description={frontmatter.excerpt}>
+<Base title={frontmatter.title} description={frontmatter.excerpt} ogSlug={frontmatter.ogSlug}>
   <div class="container">
     <header class="page-head">
       {
