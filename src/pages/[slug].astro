@@ -1,7 +1,7 @@
 ---
 import { render } from 'astro:content';
 import Base from '../layouts/Base.astro';
-import { sortedPosts, parseId, formatDate, isoDate } from '../lib/posts';
+import { sortedPosts, parseId, formatDate, isoDate, seriesFor } from '../lib/posts';
 
 export async function getStaticPaths() {
   const posts = await sortedPosts();
@@ -14,6 +14,7 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 const { date, slug } = parseId(post.id);
 const { Content } = await render(post);
+const series = await seriesFor(post);
 
 // Posts carry only a title, so the social/search description comes from the
 // opening prose: first non-heading, non-HTML paragraph, stripped of markdown.
@@ -41,13 +42,61 @@ const description =
         <h1 class="page-title">{post.data.title}</h1>
         <p class="post-meta num">
           <time datetime={isoDate(date)}>{formatDate(date)}</time>
+          {series && (
+            <>
+              &nbsp;·&nbsp;<span class="series-count">
+                Part {series.parts[series.index].part} of {series.parts.length}
+              </span>
+            </>
+          )}
         </p>
       </header>
       <div class="prose">
         <Content />
       </div>
+
+      {
+        series && (
+          <nav class="series" aria-label={`${series.name} series`}>
+            <p class="micro-label">
+              <span class="dot" style="background: var(--swim)" />
+              {series.name}
+            </p>
+            <ol class="series-list num">
+              {series.parts.map((p) => (
+                <li class:list={['series-item', { here: p.current }]}>
+                  <span class="series-num">{String(p.part).padStart(2, '0')}</span>
+                  {p.current ? (
+                    <span aria-current="page">{p.label}</span>
+                  ) : (
+                    <a href={`/${p.slug}/`}>{p.label}</a>
+                  )}
+                </li>
+              ))}
+            </ol>
+          </nav>
+        )
+      }
+
       <nav class="post-foot">
-        <a class="arrow-link" href="/year-archive/">← All posts</a>
+        {
+          series?.previous ? (
+            <a class="arrow-link" href={`/${series.previous.slug}/`}>
+              ← Part {series.previous.part}
+            </a>
+          ) : (
+            <a class="arrow-link" href="/year-archive/">
+              ← All posts
+            </a>
+          )
+        }
+        {
+          series?.next && (
+            <a class="arrow-link" href={`/${series.next.slug}/`}>
+              Part {series.next.part} →
+            </a>
+          )
+        }
       </nav>
     </article>
   </div>
@@ -67,8 +116,66 @@ const description =
     margin: 16px 0 0;
   }
 
-  .post-foot {
+  .series-count {
+    color: var(--swim-ink);
+  }
+
+  .series {
     margin-top: 56px;
+    padding-top: 24px;
+    border-top: 1px solid var(--rule);
+  }
+
+  .series-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .series-item {
+    display: flex;
+    gap: 14px;
+    align-items: baseline;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--hairline);
+    font-size: 14.5px;
+  }
+
+  .series-item:last-child {
+    border-bottom: none;
+  }
+
+  .series-num {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--faint);
+    flex: none;
+  }
+
+  .series-item a {
+    text-decoration: none;
+  }
+
+  .series-item a:hover {
+    text-decoration: underline;
+    text-decoration-color: var(--faint);
+    text-underline-offset: 3px;
+  }
+
+  /* the part you're on: marked, not linked */
+  .series-item.here {
+    font-weight: 650;
+  }
+
+  .series-item.here .series-num {
+    color: var(--swim-ink);
+  }
+
+  .post-foot {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 40px;
     padding-top: 20px;
     border-top: 1px solid var(--hairline);
   }
