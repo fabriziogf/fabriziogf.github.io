@@ -42,30 +42,48 @@ const description =
         <h1 class="page-title">{post.data.title}</h1>
         <p class="post-meta num">
           <time datetime={isoDate(date)}>{formatDate(date)}</time>
-          {series && (
+          {series?.counter && (
             <>
-              &nbsp;·&nbsp;<span class="series-count">
-                Part {series.parts[series.index].part} of {series.parts.length}
-              </span>
+              &nbsp;·&nbsp;<span class="series-count">{series.counter}</span>
             </>
           )}
         </p>
       </header>
+
+      {
+        series && (series.previous || series.next) && (
+          <nav class="series-jump" aria-label={`${series.name}: nearby posts`}>
+            {series.previous ? (
+              <a class="arrow-link" href={`/${series.previous.slug}/`}>
+                ← {series.previous.navLabel}
+              </a>
+            ) : (
+              <span />
+            )}
+            {series.next && (
+              <a class="arrow-link" href={`/${series.next.slug}/`}>
+                {series.next.navLabel} →
+              </a>
+            )}
+          </nav>
+        )
+      }
+
       <div class="prose">
         <Content />
       </div>
 
       {
-        series && (
+        series?.showIndex && (
           <nav class="series" aria-label={`${series.name} series`}>
             <p class="micro-label">
               <span class="dot" style="background: var(--swim)" />
               {series.name}
             </p>
             <ol class="series-list num">
-              {series.parts.map((p) => (
+              {series.parts.map((p, i) => (
                 <li class:list={['series-item', { here: p.current }]}>
-                  <span class="series-num">{String(p.part).padStart(2, '0')}</span>
+                  <span class="series-num">{String(i + 1).padStart(2, '0')}</span>
                   {p.current ? (
                     <span aria-current="page">{p.label}</span>
                   ) : (
@@ -79,24 +97,7 @@ const description =
       }
 
       <nav class="post-foot">
-        {
-          series?.previous ? (
-            <a class="arrow-link" href={`/${series.previous.slug}/`}>
-              ← Part {series.previous.part}
-            </a>
-          ) : (
-            <a class="arrow-link" href="/year-archive/">
-              ← All posts
-            </a>
-          )
-        }
-        {
-          series?.next && (
-            <a class="arrow-link" href={`/${series.next.slug}/`}>
-              Part {series.next.part} →
-            </a>
-          )
-        }
+        <a class="arrow-link" href="/year-archive/">← All posts</a>
       </nav>
     </article>
   </div>
@@ -118,6 +119,14 @@ const description =
 
   .series-count {
     color: var(--swim-ink);
+  }
+
+  /* sits between the header rule and the article body */
+  .series-jump {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    margin: -20px 0 32px;
   }
 
   .series {
