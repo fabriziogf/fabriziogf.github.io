@@ -6,7 +6,7 @@ I recently [wrote about the knowledge base](/Product_knowledge_base/) I'm buildi
 
 The knowledge base is meant to hold durable AI and product knowledge: how agents are actually built, how you evaluate them, how platform work really goes. What it needed was content. The first batch came from the documentation I had built for my job search with prep docs and case decks.
 
-These files contained deep dives on: agent architecture, evaluation frameworks for agentic products, metrics, xperimentation and causal inference, platform migration strategy, prioritization under a hard deadline, and engineering concepts for a PM who has to be credible with engineers without pretending to be one.
+These files contained deep dives on: agent architecture, evaluation frameworks for agentic products, metrics, experimentation and causal inference, platform migration strategy, prioritization under a hard deadline, and engineering concepts for a PM who has to be credible with engineers without pretending to be one.
 
 ---
 
