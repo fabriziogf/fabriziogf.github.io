@@ -24,4 +24,4 @@ Rendering is one Astro component used twice, emitting inline SVG. Colors come in
 
 Two things I got wrong first. GitHub pads its calendar out to whole weeks, so on the right day of the week it returns *tomorrow* as a trailing square; future days now get skipped. And to make both grids exactly the same width, the training chart draws whatever span GitHub reports rather than its own — which means the updater has to pull slightly more than a year so that span is always covered. The extra days feed the squares only. **The total in the corner still counts the trailing 365 days, and the dashboard never sees them.**
 
-The last addition was clicking. Each square had a `<title>`, which gives you a tooltip on hover and nothing at all on a phone — where I check this most.
+The last addition was clicking. Each square had a `<title>`, which gives you a tooltip on hover and nothing at all on a phone.
