@@ -66,6 +66,22 @@ The lifting isn't optional. It's the thing I stopped after Lake Placid and the t
 
 ---
 
+## The lifting
+
+Two sessions a week, and this is the part I'm most careful about.
+
+I'm following a six-week back, hip and core program my physio put together after Lake Placid. It has three phases and a ten-minute daily routine that runs underneath all of them. I wrote a [lifting plan](/yonkers-lifting/) that sequences that program against the running and adds a few things a marathon needs.
+
+Two things came out of putting them side by side.
+
+The first is a timing problem. The heaviest phase of the PT program starts on August 30, which is the same day as the 32 km long run, in the biggest running week I have. I moved that phase to September 1 so the two don't collide.
+
+The second is a gap. The PT program has no calf work at all. That's correct for back rehab, but the soleus takes six to eight times bodyweight per stride when running, and it's the first thing to complain when weekly volume jumps by a third. Mine is about to go from 50 to 67 km. So I added calf and soleus work to both sessions, slower eccentrics on the step-downs for the downhills at Yonkers, and a small amount of ankle stiffness work that comes out during the taper.
+
+The daily ten-minute routine is the part I won't skip. If a week goes badly, I'll drop a strength session before I drop that.
+
+---
+
 ## The back and the stomach
 
 All the bike work in this plan is flat, with free cadence. I took the low cadence and big gear sessions out for six weeks. That's the load that gave me trouble at Lake Placid, and it isn't especially useful for a marathon. Yonkers is hilly, so the downhills are what will bother my back late in the race. I'll run some downhill in the long runs so it isn't new on race day.
