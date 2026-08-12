@@ -5,7 +5,6 @@ import { loadTrainingData, SPORT_COLORS, SPORT_LABELS, type SportKey } from '../
 // built from import.meta.url — in a production build that resolves inside dist/,
 // not the source tree, and the build fails with ENOENT.
 import libContent from '../../docs/workout-library.md?raw';
-import yonkersMd from './yonkers-plan.md?raw';
 
 const td = loadTrainingData();
 const sports = ['swim', 'bike', 'run', 'strength'] as const;
@@ -148,63 +147,27 @@ const runLib = parseLibSection(libContent, 'Running', 'run');
 const allLib = [...swimLib, ...bikeLib, ...runLib];
 
 // ── Training plans ────────────────────────────────────────────────────────
-// Parsed from the plan page itself so the dashboard can't drift out of sync.
-function parsePlanWeeks(md: string) {
-  const heads = [...md.matchAll(/^## Week (\d+) — (.+)$/gm)].map((m) => {
-    const parts = m[2].split('·').map((s) => s.trim());
-    return {
-      week: Number(m[1]),
-      focus: (parts[1] ?? '').replace(/\s*\(.+?\)\s*$/, '').trim(),
-    };
-  });
-
-  const tbl = md.match(/## Volume summary\s*\n([\s\S]*?)(?=\n## |$)/);
-  const rows = tbl
-    ? tbl[1].split('\n').filter((l) => {
-        const t = l.trim();
-        return t.startsWith('|') && !t.includes('---') && !l.includes('| Week |');
-      })
-    : [];
-
-  return rows.map((line, i) => {
-    const c = line
-      .split('|')
-      .map((s) => s.trim().replace(/\*\*/g, ''))
-      .filter(Boolean);
-    return {
-      week: heads[i]?.week ?? i + 1,
-      focus: heads[i]?.focus ?? '',
-      dates: c[0] ?? '',
-      run: c[1] ?? '',
-      bike: c[2] ?? '',
-      swim: c[3] ?? '',
-      lift: c[4] ?? '',
-      long: c[5] ?? '',
-    };
-  });
-}
-
-const planWeeks = parsePlanWeeks(yonkersMd);
-
-const raceDate = new Date(2026, 8, 20); // Sunday, Sep 20 2026
-const now = new Date();
-const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-const daysOut = Math.round((raceDate.getTime() - midnight.getTime()) / 86_400_000);
-
-const plans = [
+// One entry per race. Add a new race here and the tab picks it up.
+const racePlans = [
   {
-    href: '/yonkers-plan/',
-    name: 'Training Plan',
-    blurb:
-      'Six-week build — three build weeks, one sharpening week, two taper weeks. Every session, both weekend options, and pace targets.',
-    meta: '4:15–4:25/km target · peak 67 km/week',
-  },
-  {
-    href: '/yonkers-lifting/',
-    name: 'Lifting Plan',
-    blurb:
-      'Strength work sequenced against the post-Ironman back program. Two sessions a week plus a daily ten-minute reset.',
-    meta: '3 phases · 2 sessions/week',
+    race: 'Yonkers Marathon',
+    date: 'September 20, 2026',
+    plans: [
+      {
+        href: '/yonkers-plan/',
+        name: 'Training Plan',
+        blurb:
+          'Six-week build — three build weeks, one sharpening week, two taper weeks. Every session, both weekend options, and pace targets.',
+        meta: '4:15–4:25/km target · peak 67 km/week',
+      },
+      {
+        href: '/yonkers-lifting/',
+        name: 'Lifting Plan',
+        blurb:
+          'Strength work sequenced against the post-Ironman back program. Two sessions a week plus a daily ten-minute reset.',
+        meta: '3 phases · 2 sessions/week',
+      },
+    ],
   },
 ];
 
@@ -501,72 +464,23 @@ const chartData = {
 
     <!-- ── TAB 5 · TRAINING PLANS ───────────────────────────── -->
     <section id="tab-plans" role="tabpanel" aria-labelledby="tab-btn-plans" hidden>
-      <h2 class="sec">Yonkers Marathon</h2>
-      <div class="stat-row num">
-        <div class="stat">
-          <p class="micro-label"><span class="dot" style="background: var(--run)"></span>Race day</p>
-          <b>Sep 20</b>
-        </div>
-        <div class="stat">
-          <p class="micro-label">{daysOut >= 0 ? 'Days out' : 'Days since'}</p>
-          <b>{Math.abs(daysOut)}</b>
-        </div>
-        <div class="stat">
-          <p class="micro-label">Target pace</p>
-          <b>4:15–4:25</b>
-        </div>
-      </div>
-
-      <h2 class="sec">Plans</h2>
-      <div class="plan-cards">
-        {
-          plans.map((p) => (
-            <a class="plan-card" href={p.href}>
-              <span class="plan-name">{p.name} <i class="plan-arrow">→</i></span>
-              <span class="plan-blurb">{p.blurb}</span>
-              <span class="plan-meta num">{p.meta}</span>
-            </a>
-          ))
-        }
-      </div>
-
-      <h2 class="sec">Week by Week</h2>
-      <div class="table-scroll">
-        <table class="data-table num">
-          <thead>
-            <tr>
-              <th>Week</th>
-              <th>Dates</th>
-              <th>Focus</th>
-              <th>Run</th>
-              <th>Bike</th>
-              <th>Swim</th>
-              <th>Lift</th>
-              <th>Long run</th>
-            </tr>
-          </thead>
-          <tbody>
-            {
-              planWeeks.map((w) => (
-                <tr>
-                  <td class="mono-cell">{w.week}</td>
-                  <td class="mono-cell plan-dates">{w.dates}</td>
-                  <td>{w.focus && <span class="plan-focus">{w.focus}</span>}</td>
-                  <td class="mono-cell">{w.run}</td>
-                  <td class="mono-cell">{w.bike}</td>
-                  <td class="mono-cell">{w.swim}</td>
-                  <td class="mono-cell">{w.lift}</td>
-                  <td class="mono-cell plan-long">{w.long}</td>
-                </tr>
-              ))
-            }
-          </tbody>
-        </table>
-      </div>
-      <p class="plan-note">
-        Read from <a href="/yonkers-plan/">the training plan</a> at build time — the numbers here and there
-        can't disagree.
-      </p>
+      {
+        racePlans.map((r) => (
+          <div class="race-block">
+            <h2 class="sec">{r.race}</h2>
+            <p class="race-date num">{r.date}</p>
+            <div class="plan-cards">
+              {r.plans.map((p) => (
+                <a class="plan-card" href={p.href}>
+                  <span class="plan-name">{p.name} <i class="plan-arrow">→</i></span>
+                  <span class="plan-blurb">{p.blurb}</span>
+                  <span class="plan-meta num">{p.meta}</span>
+                </a>
+              ))}
+            </div>
+          </div>
+        ))
+      }
     </section>
   </div>
 
@@ -1382,33 +1296,15 @@ const chartData = {
     margin-top: 2px;
   }
 
-  .plan-focus {
-    display: inline-block;
-    padding: 2px 7px;
-    border-radius: 3px;
-    background: color-mix(in srgb, #ffb74d 20%, transparent);
-    color: #e65100;
+  .race-block + .race-block {
+    margin-top: 52px;
+  }
+
+  .race-date {
     font-family: var(--mono);
-    font-size: 10.5px;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    white-space: nowrap;
-  }
-
-  .plan-dates {
-    white-space: nowrap;
-    min-width: 108px;
-  }
-
-  .plan-long {
-    font-weight: 650;
-  }
-
-  .plan-note {
     font-size: 12.5px;
     color: var(--muted);
-    margin: 16px 0 0;
+    margin: -8px 0 20px;
   }
 
   .lib-phase-cell {
