@@ -146,6 +146,69 @@ const bikeLib = parseLibSection(libContent, 'Cycling', 'bike');
 const runLib = parseLibSection(libContent, 'Running', 'run');
 const allLib = [...swimLib, ...bikeLib, ...runLib];
 
+// ── Training plans ────────────────────────────────────────────────────────
+// Parsed from the plan page itself so the dashboard can't drift out of sync.
+const yonkersMd = readFileSync(new URL('./yonkers-plan.md', import.meta.url).pathname, 'utf-8');
+
+function parsePlanWeeks(md: string) {
+  const heads = [...md.matchAll(/^## Week (\d+) — (.+)$/gm)].map((m) => {
+    const parts = m[2].split('·').map((s) => s.trim());
+    return {
+      week: Number(m[1]),
+      focus: (parts[1] ?? '').replace(/\s*\(.+?\)\s*$/, '').trim(),
+    };
+  });
+
+  const tbl = md.match(/## Volume summary\s*\n([\s\S]*?)(?=\n## |$)/);
+  const rows = tbl
+    ? tbl[1].split('\n').filter((l) => {
+        const t = l.trim();
+        return t.startsWith('|') && !t.includes('---') && !l.includes('| Week |');
+      })
+    : [];
+
+  return rows.map((line, i) => {
+    const c = line
+      .split('|')
+      .map((s) => s.trim().replace(/\*\*/g, ''))
+      .filter(Boolean);
+    return {
+      week: heads[i]?.week ?? i + 1,
+      focus: heads[i]?.focus ?? '',
+      dates: c[0] ?? '',
+      run: c[1] ?? '',
+      bike: c[2] ?? '',
+      swim: c[3] ?? '',
+      lift: c[4] ?? '',
+      long: c[5] ?? '',
+    };
+  });
+}
+
+const planWeeks = parsePlanWeeks(yonkersMd);
+
+const raceDate = new Date(2026, 8, 20); // Sunday, Sep 20 2026
+const now = new Date();
+const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+const daysOut = Math.round((raceDate.getTime() - midnight.getTime()) / 86_400_000);
+
+const plans = [
+  {
+    href: '/yonkers-plan/',
+    name: 'Training Plan',
+    blurb:
+      'Six-week build — three build weeks, one sharpening week, two taper weeks. Every session, both weekend options, and pace targets.',
+    meta: '4:15–4:25/km target · peak 67 km/week',
+  },
+  {
+    href: '/yonkers-lifting/',
+    name: 'Lifting Plan',
+    blurb:
+      'Strength work sequenced against the post-Ironman back program. Two sessions a week plus a daily ten-minute reset.',
+    meta: '3 phases · 2 sessions/week',
+  },
+];
+
 // Payload for the client-side charts
 const chartData = {
   daily: td.daily,
@@ -177,6 +240,7 @@ const chartData = {
       <button class="tab" role="tab" id="tab-btn-trends" aria-selected="false" aria-controls="tab-trends">12-Month Trends</button>
       <button class="tab" role="tab" id="tab-btn-prs" aria-selected="false" aria-controls="tab-prs">Personal Records</button>
       <button class="tab" role="tab" id="tab-btn-library" aria-selected="false" aria-controls="tab-library">Workout Library</button>
+      <button class="tab" role="tab" id="tab-btn-plans" aria-selected="false" aria-controls="tab-plans">Training Plans</button>
     </div>
 
     <!-- ── TAB 1 · THIS WEEK ─────────────────────────────────── -->
@@ -434,6 +498,76 @@ const chartData = {
           </tbody>
         </table>
       </div>
+    </section>
+
+    <!-- ── TAB 5 · TRAINING PLANS ───────────────────────────── -->
+    <section id="tab-plans" role="tabpanel" aria-labelledby="tab-btn-plans" hidden>
+      <h2 class="sec">Yonkers Marathon</h2>
+      <div class="stat-row num">
+        <div class="stat">
+          <p class="micro-label"><span class="dot" style="background: var(--run)"></span>Race day</p>
+          <b>Sep 20</b>
+        </div>
+        <div class="stat">
+          <p class="micro-label">{daysOut >= 0 ? 'Days out' : 'Days since'}</p>
+          <b>{Math.abs(daysOut)}</b>
+        </div>
+        <div class="stat">
+          <p class="micro-label">Target pace</p>
+          <b>4:15–4:25</b>
+        </div>
+      </div>
+
+      <h2 class="sec">Plans</h2>
+      <div class="plan-cards">
+        {
+          plans.map((p) => (
+            <a class="plan-card" href={p.href}>
+              <span class="plan-name">{p.name} <i class="plan-arrow">→</i></span>
+              <span class="plan-blurb">{p.blurb}</span>
+              <span class="plan-meta num">{p.meta}</span>
+            </a>
+          ))
+        }
+      </div>
+
+      <h2 class="sec">Week by Week</h2>
+      <div class="table-scroll">
+        <table class="data-table num">
+          <thead>
+            <tr>
+              <th>Week</th>
+              <th>Dates</th>
+              <th>Focus</th>
+              <th>Run</th>
+              <th>Bike</th>
+              <th>Swim</th>
+              <th>Lift</th>
+              <th>Long run</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              planWeeks.map((w) => (
+                <tr>
+                  <td class="mono-cell">{w.week}</td>
+                  <td class="mono-cell plan-dates">{w.dates}</td>
+                  <td>{w.focus && <span class="plan-focus">{w.focus}</span>}</td>
+                  <td class="mono-cell">{w.run}</td>
+                  <td class="mono-cell">{w.bike}</td>
+                  <td class="mono-cell">{w.swim}</td>
+                  <td class="mono-cell">{w.lift}</td>
+                  <td class="mono-cell plan-long">{w.long}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+      <p class="plan-note">
+        Read from <a href="/yonkers-plan/">the training plan</a> at build time — the numbers here and there
+        can't disagree.
+      </p>
     </section>
   </div>
 
@@ -1191,6 +1325,91 @@ const chartData = {
 
   .lib-table td {
     vertical-align: top;
+  }
+
+  /* ── Training Plans tab ── */
+  .plan-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 18px;
+  }
+
+  .plan-card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 22px;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.15s;
+  }
+
+  .plan-card:hover {
+    border-color: var(--ink);
+  }
+
+  .plan-name {
+    font-size: 16px;
+    font-weight: 650;
+    letter-spacing: -0.01em;
+  }
+
+  .plan-arrow {
+    font-style: normal;
+    color: var(--muted);
+    transition: transform 0.15s;
+    display: inline-block;
+  }
+
+  .plan-card:hover .plan-arrow {
+    transform: translateX(3px);
+    color: var(--ink);
+  }
+
+  .plan-blurb {
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--muted);
+  }
+
+  .plan-meta {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .plan-focus {
+    display: inline-block;
+    padding: 2px 7px;
+    border-radius: 3px;
+    background: color-mix(in srgb, #ffb74d 20%, transparent);
+    color: #e65100;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .plan-dates {
+    white-space: nowrap;
+    min-width: 108px;
+  }
+
+  .plan-long {
+    font-weight: 650;
+  }
+
+  .plan-note {
+    font-size: 12.5px;
+    color: var(--muted);
+    margin: 16px 0 0;
   }
 
   .lib-phase-cell {
