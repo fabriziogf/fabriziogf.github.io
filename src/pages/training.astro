@@ -1,7 +1,11 @@
 ---
 import Base from '../layouts/Base.astro';
 import { loadTrainingData, SPORT_COLORS, SPORT_LABELS, type SportKey } from '../lib/training';
-import { readFileSync } from 'fs';
+// Inlined at build time by Vite. Do NOT switch these to readFileSync with a path
+// built from import.meta.url — in a production build that resolves inside dist/,
+// not the source tree, and the build fails with ENOENT.
+import libContent from '../../docs/workout-library.md?raw';
+import yonkersMd from './yonkers-plan.md?raw';
 
 const td = loadTrainingData();
 const sports = ['swim', 'bike', 'run', 'strength'] as const;
@@ -73,9 +77,6 @@ const prTables = [
 ];
 
 // Parse workout library from markdown
-const libPath = new URL('../../docs/workout-library.md', import.meta.url).pathname;
-const libContent = readFileSync(libPath, 'utf-8');
-
 type LibWorkout = {
   type: string;
   typeKey: string;
@@ -148,8 +149,6 @@ const allLib = [...swimLib, ...bikeLib, ...runLib];
 
 // ── Training plans ────────────────────────────────────────────────────────
 // Parsed from the plan page itself so the dashboard can't drift out of sync.
-const yonkersMd = readFileSync(new URL('./yonkers-plan.md', import.meta.url).pathname, 'utf-8');
-
 function parsePlanWeeks(md: string) {
   const heads = [...md.matchAll(/^## Week (\d+) — (.+)$/gm)].map((m) => {
     const parts = m[2].split('·').map((s) => s.trim());
