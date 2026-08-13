@@ -29,6 +29,26 @@ export interface Project {
 
 export const projects: Project[] = [
   {
+    tag: 'Personal Finance',
+    // --other (slate). Deliberately not --bike: the green --bike-ink is what the
+    // "Active" status pill uses, so a tag in that color reads as a status — the
+    // same reason the Triathlon tag avoids --run.
+    tagColor: 'var(--other-ink)',
+    dot: 'var(--other)',
+    status: 'In Progress',
+    title: 'Financial Advisor',
+    desc: 'A self-hosted advisor that holds the full picture — accounts, goals, risk capacity, benefits — and reasons about what to do next. Read-only by architecture, not by policy: it has no write path to any institution. Every figure comes from deterministic, unit-tested code; the model only explains and prioritizes.',
+    blurb: 'Goal-aware money guidance, read-only by architecture',
+    stack: 'Python · FastAPI · SQLite · SimpleFIN',
+    links: [
+      {
+        label: 'View code →',
+        href: 'https://github.com/fabriziogf/financial-advisor',
+        external: true,
+      },
+    ],
+  },
+  {
     tag: 'GenAI',
     tagColor: 'var(--strength-ink)',
     dot: 'var(--strength)',
