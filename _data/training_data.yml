@@ -6,8 +6,8 @@ window_start: "2026-08-07"
 window_end:   "2026-08-13"
 
 fitness:
-  ctl:  93.5
-  atl:  66.8
+  ctl:  94.3
+  atl:  71.1
   tsb:  25.6
 
 totals:
@@ -27,10 +27,10 @@ totals:
     distance_km: 48.6
     tss:         256
   strength:
-    sessions:    1
-    hours:       0.7
+    sessions:    2
+    hours:       1.7
     distance_km: 0.0
-    tss:         20
+    tss:         50
   other:
     sessions:    0
     hours:       0.0
@@ -78,7 +78,7 @@ daily:
     swim    : { hours: 0.0  , distance_km: 0.0   , tss: 0.0   , sessions: 0 }
     bike    : { hours: 0.0  , distance_km: 0.0   , tss: 0.0   , sessions: 0 }
     run     : { hours: 0.9  , distance_km: 11.0  , tss: 54.3  , sessions: 1 }
-    strength: { hours: 0.0  , distance_km: 0.0   , tss: 0.0   , sessions: 0 }
+    strength: { hours: 1.0  , distance_km: 0.0   , tss: 30.0  , sessions: 1 }
     other   : { hours: 0.0  , distance_km: 0.0   , tss: 0.0   , sessions: 0 }
 
 workouts:
@@ -154,6 +154,15 @@ workouts:
     hr_avg: 137
     power_avg: 339
     strava_id: 19725434184
+  - date: "2026-08-13"
+    sport: strength
+    title: "Strength"
+    hours: 1.0
+    distance_km: 0.0
+    tss: 30.0
+    hr_avg: null
+    power_avg: null
+    strava_id: 19731546132
 
 monthly:
   - month: "2025-08"
@@ -232,7 +241,7 @@ monthly:
     swim    : { sessions: 2, hours: 1.1   , distance_km: 3.4    , tss: 50 }
     bike    : { sessions: 3, hours: 5.4   , distance_km: 173.9  , tss: 240 }
     run     : { sessions: 8, hours: 7.5   , distance_km: 93.5   , tss: 490 }
-    strength: { sessions: 3, hours: 2.4   , distance_km: 0.0    , tss: 75 }
+    strength: { sessions: 4, hours: 3.4   , distance_km: 0.0    , tss: 105 }
     other   : { sessions: 0, hours: 0.0   , distance_km: 0.0    , tss: 0 }
 
 year_daily:
@@ -606,7 +615,7 @@ year_daily:
   - { date: "2026-08-10", hours: 1.27 , sports: "strength,swim" }
   - { date: "2026-08-11", hours: 1.88 , sports: "bike,run" }
   - { date: "2026-08-12", hours: 0.92 , sports: "run" }
-  - { date: "2026-08-13", hours: 0.92 , sports: "run" }
+  - { date: "2026-08-13", hours: 1.92 , sports: "run,strength" }
 
 ctl_trend:
   - { month: "2025-08", ctl: 105.1, atl: 34.2, tsb: 73.4 }
@@ -621,7 +630,7 @@ ctl_trend:
   - { month: "2026-05", ctl: 151.1, atl: 169.9, tsb: -15.2 }
   - { month: "2026-06", ctl: 135.4, atl: 122.5, tsb: 16.8 }
   - { month: "2026-07", ctl: 103.6, atl: 58.5, tsb: 51.4 }
-  - { month: "2026-08", ctl: 93.5, atl: 66.8, tsb: 25.6 }
+  - { month: "2026-08", ctl: 94.3, atl: 71.1, tsb: 25.6 }
 
 prs:
   bike:
