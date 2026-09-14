@@ -31,7 +31,7 @@ Before editing a page, confirm the file below is the one that renders it, and sa
 - A change is done only when `npm run build` passes. The dev server passing is not enough.
 - `.claude/hooks/pre-push-check.sh` runs on every `git push` from Claude. It blocks the push if the build fails or if a pushed file references an `/assets` or `/download` path that isn't committed under `public/`. Fix the cause and never work around the hook.
 - In build-time code, read data files through Vite imports (`?raw`) or `process.cwd()`-relative paths, as `training.astro` and `og.ts` do. A `readFileSync` path built from `import.meta.url` can resolve inside `dist/`. (`src/lib/training.ts` currently builds fine this way, but don't copy the pattern.)
-- After pushing, check the real Actions result (`gh run list --commit <sha>`) before reporting success. `/ship` does all of this.
+- After pushing, check the real Actions result for that commit (`gh run list --json headSha,databaseId,conclusion`, matched on `headSha`) before reporting success. `/ship` does all of this.
 
 ### Assets and images
 - When adding an image reference, commit the image file in the same commit. Run `git status` first and never commit a reference to an untracked file.
