@@ -6,10 +6,37 @@
 - Build: `npm run build` → `dist/`
 - Push to deploy: `git push origin main` → `.github/workflows/deploy.yml` builds and publishes (Pages source must be set to "GitHub Actions")
 - Posts stay in `_posts/` (Jekyll filename convention `YYYY-MM-DD-Slug.md`); the content loader in `src/content.config.ts` keeps the exact filename as the slug so Jekyll-era URLs (`/Slug/`) are preserved — do not let it slugify/lowercase ids
-- Pages: `src/pages/` (`index.astro`, `year-archive.astro`, `projects.astro`, `training.astro`, `about.md`, `[slug].astro` for posts); layouts in `src/layouts/`; design tokens in `src/styles/global.css`
+- Layouts in `src/layouts/`; design tokens in `src/styles/global.css`
 - Navigation lives in `src/layouts/Base.astro` (no more `_data/navigation.yml`)
-- Static files: `public/` (contains copies of `assets/` and `download/`; images are referenced as `/assets/images/...`)
-- Legacy Minimal Mistakes / Jekyll files (`_config.yml`, `_includes/`, `_layouts/`, `_sass/`, `docs/`, `test/`, `Gemfile`, top-level `assets/`, `_pages/`, etc.) are still in the repo pending cleanup after the Astro migration is confirmed live
+- Static files: `public/` (images are referenced as `/assets/images/...` and live in `public/assets/images/`)
+- The Jekyll files are gone from git. Untracked local leftovers (`_sass/`, top-level `assets/`) are **not** part of the build: never edit them, and never put new images there
+
+### Route → source file
+Before editing a page, confirm the file below is the one that renders it, and say which file you're editing.
+
+| Route | Source |
+|-------|--------|
+| `/` | `src/pages/index.astro` |
+| `/year-archive/` | `src/pages/year-archive.astro` |
+| `/projects/` | `src/pages/projects.astro` |
+| `/training/` | `src/pages/training.astro` (+ `src/lib/training.ts`, `docs/workout-library.md`) |
+| `/about/` | `src/pages/about.md` (layout `src/layouts/MarkdownPage.astro`) |
+| `/yonkers-plan/`, `/yonkers-lifting/` | `src/pages/yonkers-plan.md`, `src/pages/yonkers-lifting.md` |
+| `/<Slug>/` (posts) | `_posts/YYYY-MM-DD-<Slug>.md`, rendered by `src/pages/[slug].astro` |
+| `/og/<slug>.png` | `src/pages/og/[...slug].png.ts` + `src/lib/og.ts` |
+| `/feed.xml` | `src/pages/feed.xml.js` |
+| 404 | `src/pages/404.astro` |
+
+### Build verification
+- A change is done only when `npm run build` passes. The dev server passing is not enough.
+- `.claude/hooks/pre-push-check.sh` runs on every `git push` from Claude. It blocks the push if the build fails or if a pushed file references an `/assets` or `/download` path that isn't committed under `public/`. Fix the cause and never work around the hook.
+- In build-time code, read data files through Vite imports (`?raw`) or `process.cwd()`-relative paths, as `training.astro` and `og.ts` do. A `readFileSync` path built from `import.meta.url` can resolve inside `dist/`. (`src/lib/training.ts` currently builds fine this way, but don't copy the pattern.)
+- After pushing, check the real Actions result (`gh run list --commit <sha>`) before reporting success. `/ship` does all of this.
+
+### Assets and images
+- When adding an image reference, commit the image file in the same commit. Run `git status` first and never commit a reference to an untracked file.
+- Check the rendered image in the browser before reporting done.
+- Third-party embeds (Strava, etc.): copy the exact snippet from the provider, including domain and required attributes such as `data-token`. Don't retype it from memory.
 
 ---
 
