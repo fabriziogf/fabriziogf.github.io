@@ -6,8 +6,8 @@ window_start: "2026-09-09"
 window_end:   "2026-09-15"
 
 fitness:
-  ctl:  77.9
-  atl:  54.4
+  ctl:  78.7
+  atl:  59.1
   tsb:  16.3
 
 totals:
@@ -22,10 +22,10 @@ totals:
     distance_km: 76.3
     tss:         135
   run:
-    sessions:    3
-    hours:       3.9
-    distance_km: 49.1
-    tss:         252
+    sessions:    4
+    hours:       4.5
+    distance_km: 56.3
+    tss:         285
   strength:
     sessions:    0
     hours:       0.0
@@ -77,7 +77,7 @@ daily:
   - date: "2026-09-15"
     swim    : { hours: 0.0  , distance_km: 0.0   , tss: 0.0   , sessions: 0 }
     bike    : { hours: 0.0  , distance_km: 0.0   , tss: 0.0   , sessions: 0 }
-    run     : { hours: 0.0  , distance_km: 0.0   , tss: 0.0   , sessions: 0 }
+    run     : { hours: 0.6  , distance_km: 7.2   , tss: 32.9  , sessions: 1 }
     strength: { hours: 0.0  , distance_km: 0.0   , tss: 0.0   , sessions: 0 }
     other   : { hours: 0.0  , distance_km: 0.0   , tss: 0.0   , sessions: 0 }
 
@@ -127,6 +127,15 @@ workouts:
     hr_avg: 154
     power_avg: 380
     strava_id: 20162226100
+  - date: "2026-09-15"
+    sport: run
+    title: "Morning Run"
+    hours: 0.62
+    distance_km: 7.2
+    tss: 32.9
+    hr_avg: 140
+    power_avg: 341
+    strava_id: 20186397802
 
 monthly:
   - month: "2025-09"
@@ -204,7 +213,7 @@ monthly:
   - month: "2026-09"
     swim    : { sessions: 0, hours: 0.0   , distance_km: 0.0    , tss: 0 }
     bike    : { sessions: 6, hours: 10.0  , distance_km: 177.7  , tss: 336 }
-    run     : { sessions: 6, hours: 8.3   , distance_km: 105.0  , tss: 545 }
+    run     : { sessions: 7, hours: 8.9   , distance_km: 112.2  , tss: 578 }
     strength: { sessions: 0, hours: 0.0   , distance_km: 0.0    , tss: 0 }
     other   : { sessions: 0, hours: 0.0   , distance_km: 0.0    , tss: 0 }
 
@@ -579,7 +588,7 @@ year_daily:
   - { date: "2026-09-12", hours: 2.83 , sports: "bike" }
   - { date: "2026-09-13", hours: 1.58 , sports: "run" }
   - { date: "2026-09-14", hours: 0.0  , sports: "" }
-  - { date: "2026-09-15", hours: 0.0  , sports: "" }
+  - { date: "2026-09-15", hours: 0.62 , sports: "run" }
 
 ctl_trend:
   - { month: "2025-09", ctl: 65.1, atl: 44.4, tsb: 21.6 }
@@ -594,7 +603,7 @@ ctl_trend:
   - { month: "2026-06", ctl: 133.4, atl: 122.4, tsb: 14.9 }
   - { month: "2026-07", ctl: 102.6, atl: 58.5, tsb: 50.4 }
   - { month: "2026-08", ctl: 86.5, atl: 69.7, tsb: 16.2 }
-  - { month: "2026-09", ctl: 77.9, atl: 54.4, tsb: 16.3 }
+  - { month: "2026-09", ctl: 78.7, atl: 59.1, tsb: 16.3 }
 
 prs:
   bike:
