@@ -2,15 +2,15 @@
 title: "Building a World Cup Prediction Model — Part 6: First Predictions (And Why They're Wrong)"
 ---
 
-Five parts in, the pipeline is complete and — after the [Part 5](/World_Cup_prediction_model_part5/) performance fix — actually runnable. So I ran it.
+Five parts in, the pipeline is complete and, after the [Part 5](/World_Cup_prediction_model_part5/) performance fix, it actually runs. So I ran it.
 
-The results are interesting, but not in the way you'd want from a finished model. Japan comes out as the tournament favourite. Germany gets tipped for a group-stage exit. These numbers are what the model produces, and they're also clearly off. This post documents the first predictions, explains exactly why they don't make sense, and lays out the fixes currently in progress.
+The results are interesting, but not in the way you'd want from a finished model. Japan comes out as the tournament favourite. Germany gets tipped for a group-stage exit. That's what the model produces, and it's clearly off. This post shows the first predictions, explains why they don't make sense, and lays out the fixes in progress.
 
 The setup:
 
-- **Model**: Dixon-Coles, fitted on all ~11,900 international matches since 2014 with exponential time decay so recent form counts more
+- **Model**: Dixon-Coles, fit on all ~11,900 international matches since 2014, with exponential time decay so recent form counts more
 - **Bracket**: a 32-team, 8-group tournament
-- **Simulation**: 100,000 Monte Carlo runs of the full bracket — group stage, Round of 16, quarter-finals, semi-finals, final
+- **Simulation**: 100,000 Monte Carlo runs of the full bracket, from the group stage to the final
 
 ```bash
 python notebooks/predict_winner.py
@@ -18,9 +18,9 @@ python notebooks/predict_winner.py
 
 ---
 
-## Group stage: who advances?
+## Group stage
 
-Each group plays a round-robin; the top two advance to the Round of 16. The `p_r16` column is each team's probability of surviving its group. Within every group these sum to ~200% (two qualifiers per group).
+Each group plays a round-robin and the top two advance to the Round of 16. The `p_r16` column is each team's chance of getting out of its group. Within each group these sum to ~200% (two qualifiers per group).
 
 | Group | Favourite (advance %) | Runner-up (advance %) | Eliminated |
 |-------|----------------------|----------------------|------------|
@@ -33,19 +33,19 @@ Each group plays a round-robin; the top two advance to the Round of 16. The `p_r
 | **G** | Brazil (78%) | Switzerland (75%) | Cameroon (38%), Serbia (9%) |
 | **H** | Portugal (76%) | Uruguay (50%) | South Korea (48%), Ghana (27%) |
 
-A few things jump out:
+A few things stand out:
 
-**Group E is brutal.** Germany — a four-time world champion — is the model's pick to exit in the group stage at 51%, behind both Japan and Spain. That's the model's confederation bias showing through (more on that below).
+**Group E is brutal.** Germany, a four-time world champion, is the model's pick to go out in the group at 51%, behind Japan and Spain. That's the model's confederation bias showing (more below).
 
-**Group A has no dominant side.** Three teams between 59% and 69%. Qatar is essentially eliminated on arrival at 7%.
+**Group A has no clear favourite.** Three teams sit between 59% and 69%. Qatar is basically out on arrival at 7%.
 
-**Argentina (77%) and Brazil (78%)** are the most secure group-stage qualifiers in the field.
+**Argentina (77%) and Brazil (78%)** are the safest group-stage qualifiers in the field.
 
 ---
 
-## The knockout rounds
+## Knockout rounds
 
-As teams progress, the probabilities concentrate. Here are the top contenders at each stage.
+As teams advance, the probabilities concentrate. The top contenders at each stage:
 
 ### Quarter-finals
 
@@ -79,7 +79,7 @@ As teams progress, the probabilities concentrate. Here are the top contenders at
 | Portugal | 12% |
 | Spain | 12% |
 
-### Winning it all
+### Champion
 
 | Rank | Team | Win % |
 |------|------|-------|
@@ -94,38 +94,38 @@ As teams progress, the probabilities concentrate. Here are the top contenders at
 | 9 | Mexico | 5.7% |
 | 10 | France | 4.9% |
 
-Notice how the ordering shifts between rounds. Brazil is the most likely semi-finalist (30%) but only the third most likely champion (7.5%). Why? The bracket. Brazil's path into the latter rounds runs through tougher opposition than Japan's, so even though Brazil reaches the semis more often, it converts those appearances into trophies less often. That's exactly the kind of draw-dependent insight a simulator captures that a simple power ranking can't.
+The order shifts between rounds. Brazil is the most likely semi-finalist (30%) but only the third most likely champion (7.5%). Why? The bracket. Brazil's path through the later rounds is tougher than Japan's, so even though Brazil reaches the semis more often, it turns those runs into titles less often. **That's the kind of draw-dependent result a simulator captures and a simple power ranking can't.**
 
 ---
 
-## What this prediction gets wrong
+## What this gets wrong
 
-A model is only as honest as its caveats. The headline result — Japan as tournament favourite, Germany tipped for a group-stage exit — should make any football fan squint. It's not a bug in the simulator. It's a limitation of the underlying Dixon-Coles model, and it's worth being precise about why.
+A model is only as honest as its caveats. Japan as favourite and Germany out in the group should make any football fan squint. It isn't a simulator bug. It's a limitation of the Dixon-Coles model underneath, and it's worth being precise about why.
 
-**All matches are weighted equally.** Dixon-Coles fits attack and defense parameters from goals scored and conceded, but treats every fixture the same. A World Cup quarter-final and a meaningless September friendly contribute equally to a team's rating. Teams that pad their record with comfortable wins look stronger than they are when it counts.
+**Every match counts the same.** Dixon-Coles fits attack and defense parameters from goals scored and conceded, but treats all fixtures equally. A World Cup quarter-final and a meaningless September friendly carry the same weight. Teams that pad their record with easy wins look stronger than they are when it counts.
 
-**No adjustment for confederation strength.** This is the big one. The model has no concept that the European qualifying pool is far deeper than the Asian one. Japan racks up lopsided wins against weaker AFC opponents, inflating its attack parameter. Germany plays a gauntlet of strong European sides, so its goal difference looks more modest — and the model reads that as Germany being weaker. In reality it reflects strength of schedule, which the model is blind to.
+**No adjustment for confederation strength.** This is the big one. The model doesn't know that Europe's qualifying pool is far deeper than Asia's. Japan racks up lopsided wins against weaker AFC teams, which inflates its attack parameter. Germany plays a gauntlet of strong European sides, so its goal difference looks modest, and the model reads that as weakness. It's really strength of schedule, and the model can't see it.
 
-**No squad-level information.** Injuries, form, manager changes, an aging core, a golden generation — none of it enters the model. It sees only historical scorelines.
+**No squad information.** Injuries, form, manager changes, an aging core, a golden generation: none of it enters the model. It only sees historical scores.
 
-**Monte Carlo noise.** At 100,000 simulations the top probabilities are stable to a few tenths of a percent, but the long tail is noisier. Don't over-read the difference between a 0.06% and a 0.04% team.
-
----
-
-## What's being fixed
-
-The project already contains the tools to address the biggest flaws, and both fixes are currently in progress.
-
-**Match-importance weighting in the fit.** The `MATCH_WEIGHTS` table used by the Elo system and the `tournament_weight` feature from [Part 2](/World_Cup_prediction_model_part2/) already encode that a World Cup match matters more than a friendly. Feeding those weights into `fit_fast()` will down-weight the friendly-padded records that currently distort the ratings. This is the most direct fix for the confederation bias problem.
-
-**The XGBoost layer.** The whole point of the feature pipeline was to blend Elo (which does update by match importance and captures strength of schedule through its zero-sum dynamics), recent form, rest, and head-to-head history into a learned classifier. That ensemble will temper Dixon-Coles' confederation blind spot with Elo's relative-strength signal.
-
-Neither of these is guesswork. The [Part 3 evaluator](/World_Cup_prediction_model_part3/) lets us backtest any new model against the 2014, 2018, and 2022 World Cups and compare Brier scores directly. The fixes either improve the numbers or they don't — we'll know.
+**Monte Carlo noise.** At 100,000 runs the top probabilities are stable to a few tenths of a percent, but the long tail is noisier. Don't read much into 0.06% vs. 0.04%.
 
 ---
 
-## The takeaway
+## What I'm fixing
 
-The pipeline works end-to-end. It ingests a century of results, fits a probabilistic scoreline model in seconds, and simulates a full tournament 100,000 times to produce stage-by-stage probabilities for every team.
+The project already has the tools for the biggest flaws, and both fixes are in progress.
 
-But Japan as favourite and Germany going out in the group stage is a good reminder of why you don't stop at the first plausible-looking output. The simulator is doing its job correctly — it's faithfully propagating a strength estimate that has a known, explainable bias. The next post will show whether the fixes actually move the numbers in the right direction.
+**Match-importance weighting in the fit.** The `MATCH_WEIGHTS` table in the Elo system and the `tournament_weight` feature from [Part 2](/World_Cup_prediction_model_part2/) already encode that a World Cup match matters more than a friendly. Feeding those weights into `fit_fast()` will down-weight the friendly-padded records that distort the ratings. It's the most direct fix for the confederation bias.
+
+**The XGBoost layer.** The whole point of the feature pipeline was to combine Elo (which does weight by match importance and captures strength of schedule through its zero-sum updates), recent form, rest, and head-to-head history in a learned classifier. That ensemble should offset Dixon-Coles' confederation blind spot with Elo's relative-strength signal.
+
+Neither fix is guesswork. The [Part 3 evaluator](/World_Cup_prediction_model_part3/) can backtest any new model against the 2014, 2018, and 2022 World Cups and compare Brier scores directly. The fixes either improve the numbers or they don't, and I'll know which.
+
+---
+
+## Takeaway
+
+The pipeline works end to end. It takes in a century of results, fits a probabilistic scoreline model in seconds, and simulates a full tournament 100,000 times to give every team stage-by-stage probabilities.
+
+But Japan as favourite and Germany out in the group are a good reminder not to stop at the first plausible-looking output. **The simulator is doing its job. It's faithfully passing along a strength estimate with a known, explainable bias.** The next post will show whether the fixes move the numbers the right way.

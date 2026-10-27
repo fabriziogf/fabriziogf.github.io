@@ -2,34 +2,34 @@
 title: "Building a Daily-Updated Training Dashboard with Jekyll and TrainingPeaks"
 ---
 
-One of the things I wanted on this site was a way to see my current training load at a glance — without opening TrainingPeaks or Strava. A simple page that answers: what did I actually do this week, how fit am I right now, and how am I balancing load against recovery?
+I wanted a way to see my current training load on this site without opening TrainingPeaks or Strava. A simple page that answers three questions: what did I do this week, how fit am I right now, and how am I balancing load against recovery?
 
-The result is the [Training](/training/) tab — a rolling 7-day dashboard showing swim, bike, run, and strength stats alongside Chart.js visualizations and PMC fitness metrics (CTL, ATL, TSB). It updates daily via an automated script that pulls from the TrainingPeaks API and pushes a data file to GitHub.
+The result is the [Training](/training/) tab: a rolling 7-day dashboard with swim, bike, run, and strength stats, Chart.js charts, and PMC fitness metrics (CTL, ATL, TSB). A script pulls from the TrainingPeaks API every day and pushes a data file to GitHub.
 
-Here's how it was built, and the technical problems that came up along the way.
+This post covers how I built it and the problems I hit along the way.
 
 ---
 
-## The architecture
+## Architecture
 
-The site runs on Jekyll 3 (GitHub Pages) — no server-side code, no database. Everything has to be static at build time. That constraint shaped the whole approach:
+The site runs on Jekyll 3 (GitHub Pages). No server-side code, no database. Everything has to be static at build time, and that shaped the whole design:
 
-1. A Python script runs daily, fetches the past 7 days of workouts from TrainingPeaks, and writes the results to `_data/training_data.yml`
-2. The script commits and pushes that file to GitHub, triggering a Pages rebuild
-3. Jekyll reads the YAML at build time and injects it into the page via Liquid templating
-4. Chart.js (loaded from CDN) renders the visualizations client-side from data baked into the page
+1. A Python script runs daily, fetches the past 7 days of workouts from TrainingPeaks, and writes them to `_data/training_data.yml`
+2. The script commits and pushes that file, which triggers a Pages rebuild
+3. Jekyll reads the YAML at build time and injects it into the page with Liquid
+4. Chart.js (loaded from a CDN) renders the charts in the browser from data baked into the page
 
-No API calls from the browser, no tokens exposed, no server needed. The page is fully static — it just rebuilds itself every day.
+No API calls from the browser, no exposed tokens, no server. The page is fully static. It just rebuilds itself every day.
 
 ---
 
 ## Getting data out of TrainingPeaks
 
-TrainingPeaks has an MCP server I use for Claude Code integrations. But the relevant detail here is a subtlety in how the API returns workout data.
+I already use a TrainingPeaks MCP server with Claude Code. The detail that matters here is how the API labels workouts.
 
-Every workout has a `workoutTypeValueId` field — an integer that maps to the actual sport type (1 = Swim, 2 = Bike, 3 = Run, 9 = Strength, etc.). There's also a `workoutTypeFamilyId` field that would be cleaner to use, but it's always `null` in the list endpoint. If you rely on the family ID or try to infer sport from session title, you get misclassification.
+Every workout has a `workoutTypeValueId` field, an integer that maps to the sport (1 = Swim, 2 = Bike, 3 = Run, 9 = Strength, etc.). There's also a `workoutTypeFamilyId` field that would be cleaner, but it's always `null` in the list endpoint. If you rely on the family ID or guess the sport from the session title, workouts get misclassified.
 
-The canonical lookup table:
+The lookup table:
 
 | ID | Sport |
 |----|-------|
@@ -40,17 +40,17 @@ The canonical lookup table:
 | 9 | Strength |
 | 13 | Run/Walk |
 
-This matters more than it sounds. Session titles like "Ironman> 5×2000m Z3>4" contain distance notation that looks like swim yardage if you're pattern-matching on strings. A keyword-based classifier puts that in the swim column. The type ID always puts it correctly in run. Every classification decision in the script goes through the ID lookup, never through the title.
+This matters more than it sounds. A title like "Ironman> 5×2000m Z3>4" contains distance notation that looks like swim yardage. A keyword classifier puts it in the swim column. The type ID correctly puts it in run. **Every classification in the script goes through the ID, never the title.**
 
-The fitness metrics (CTL, ATL, TSB) come from a separate endpoint and get appended to the same YAML file so the dashboard can show the full picture alongside the weekly workout data.
+Fitness metrics (CTL, ATL, TSB) come from a separate endpoint and get added to the same YAML file, so the dashboard shows them next to the weekly workouts.
 
 ---
 
 ## The data file
 
-`_data/training_data.yml` is the bridge between the Python script and the Jekyll page. It gets overwritten daily and is never edited by hand.
+`_data/training_data.yml` connects the Python script to the Jekyll page. It's overwritten daily and never edited by hand.
 
-The structure covers three things: the rolling window metadata, per-sport totals for the week, and a day-by-day breakdown for the charts:
+It holds three things: the window dates, per-sport totals for the week, and a day-by-day breakdown for the charts:
 
 ```yaml
 generated_at: "2026-06-04"
@@ -79,29 +79,29 @@ daily:
 
 ## Two Jekyll 3 gotchas
 
-Building the page template exposed two non-obvious limitations of Jekyll 3 that are worth documenting.
+Building the template exposed two limitations of Jekyll 3 worth writing down.
 
-**1. Inline filter in a `for` loop silently fails.**
+**1. An inline filter in a `for` loop silently fails.**
 
-In Jekyll 4, you can write:
+In Jekyll 4 you can write:
 
 ```
 {% for sport in "swim,bike,run,strength" | split: "," %}
 ```
 
-In Jekyll 3 (which GitHub Pages still uses), this silently produces no iterations. No error, no warning — it just skips the loop entirely. The fix is to write explicit HTML for each sport rather than looping over a static list.
+In Jekyll 3 (which GitHub Pages still uses), this runs zero iterations. No error, no warning. It just skips the loop. The fix is to write explicit HTML for each sport instead of looping over a static list.
 
 **2. Liquid blocks inside Markdown tables break the table.**
 
-Conditionals like `{% if %}` inside a Markdown table row emit newlines that the Markdown parser treats as paragraph breaks, collapsing the table entirely. The fix is to use an HTML `<table>` for any table that needs Liquid logic inside its rows. HTML is whitespace-tolerant; Markdown is not.
+Conditionals like `{% if %}` inside a Markdown table row emit newlines that the Markdown parser reads as paragraph breaks, and the table collapses. The fix is to use an HTML `<table>` whenever a row needs Liquid logic. HTML tolerates whitespace; Markdown doesn't.
 
-Both of these fail quietly — the page renders without error but shows nothing. That makes them harder to diagnose than a loud crash.
+Both fail quietly. The page renders without errors but shows nothing, which makes them harder to track down than a crash.
 
 ---
 
 ## The daily update script
 
-`scripts/update_training_data.py` is a standalone Python script that runs against the TrainingPeaks API using the same venv as the MCP server. It:
+`scripts/update_training_data.py` is a standalone Python script that calls the TrainingPeaks API using the same venv as the MCP server. It:
 
 1. Computes the 7-day window (yesterday − 6 days → yesterday)
 2. Fetches raw workouts and classifies each by `workoutTypeValueId`
@@ -110,32 +110,30 @@ Both of these fail quietly — the page renders without error but shows nothing.
 5. Writes the YAML file
 6. Runs `git add`, `git commit`, and `git push`
 
-The window ends at yesterday — not today — because today's workouts may not be complete yet. Using yesterday as the anchor guarantees a fully closed window.
+The window ends yesterday, not today, because today's workouts may not be done yet. Anchoring on yesterday guarantees a complete window.
 
-Authentication is handled via the macOS keyring. The TrainingPeaks credentials are stored there and the script inherits them as long as it runs as the same user. No environment variables or secrets files needed.
+Authentication goes through the macOS keyring. The TrainingPeaks credentials live there, and the script picks them up as long as it runs as the same user. No environment variables or secrets files.
 
-A Cowork recurring job runs the script once per day, keeps the dashboard current, and triggers a GitHub Pages rebuild automatically via the push.
+A recurring Cowork job runs the script once a day. The push keeps the dashboard current and triggers the Pages rebuild.
 
 ---
 
 ## What the dashboard shows
 
-The final page has four sections:
-
 - **PMC cards**: CTL (fitness), ATL (fatigue), TSB (form), color-coded so positive TSB reads green and negative reads red
-- **7-day sport summary**: sessions, hours, distance, and TSS per sport for the rolling window
-- **Stacked bar charts**: daily TSS by sport and daily hours by sport — useful for seeing how the week was distributed across disciplines
-- **TSS donut**: proportion of total load by sport for the week
-- **Sessions table**: each individual workout with date, sport, title, hours, distance, and TSS
+- **7-day sport summary**: sessions, hours, distance, and TSS per sport
+- **Stacked bar charts**: daily TSS and daily hours by sport, to see how the week was spread across disciplines
+- **TSS donut**: each sport's share of the week's load
+- **Sessions table**: every workout with date, sport, title, hours, distance, and TSS
 
-The charts use Chart.js 4.4.0 loaded from CDN. The data is injected from the YAML file at build time via Liquid, so the charts render entirely from static markup — no runtime API calls.
+The charts use Chart.js 4.4.0 from a CDN. Liquid injects the YAML data at build time, so the charts render from static markup with no runtime API calls.
 
 ---
 
-## What this is actually for
+## What it's for
 
-The dashboard isn't a replacement for TrainingPeaks. TrainingPeaks has a real PMC, calendar view, structured workout builder, and everything else a serious training log needs.
+The dashboard doesn't replace TrainingPeaks. TrainingPeaks has a real PMC, a calendar, a workout builder, and everything else a serious training log needs.
 
-What this gives me is a public-facing snapshot that lives alongside the training analysis posts and makes the data tangible. When I write that a month ended with CTL 140 and TSB +22, there's now a page that shows what that looks like — updated daily — rather than just a number in a table.
+What this gives me is a public snapshot that sits next to the monthly training posts and makes the data concrete. When I write that a month ended with CTL 140 and TSB +22, there's now a page that shows what that looks like, updated daily.
 
-It's also a useful exercise in building a constrained data pipeline: fetch, transform, serialize, commit, deploy — fully automated, no moving parts visible to the user.
+It was also good practice in building a small, constrained data pipeline: fetch, transform, serialize, commit, deploy. Fully automated, with nothing for the reader to see but the result.

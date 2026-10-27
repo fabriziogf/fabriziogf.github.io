@@ -4,17 +4,17 @@ title: "Ironman Lake Placid Race Report"
 
 I DNF'd at Lake Placid.
 
-Six months of training, a swim PR, and a bike best on that course — and I didn't finish the marathon. Knowing it was the right call doesn't make it easier to write. But here's what happened.
+Six months of training, a swim PR, my best bike split on that course, and I didn't finish the marathon. Knowing it was the right call doesn't make this easier to write. But here's what happened.
 
 ---
 
 ## The Setup
 
-I came to Lake Placid with one goal: qualify for Kona. Not just finish — qualify. That changes how you race. You can't ride conservatively and hope something works out on the run. You have to push, accept the risk, and see what happens.
+I came to Lake Placid with one goal: qualify for Kona. Not just finish. Qualify. That changes how you race. You can't ride conservatively and hope it works out on the run. You have to push, accept the risk, and see what happens.
 
-I went into race morning knowing something was off with my stomach. It had been bothering me in the days before, and I was hoping it would settle once I got moving. It didn't. But with a Kona slot on the line, I wasn't going to pull out at the start line.
+I went into race morning knowing something was off with my stomach. It had bothered me for a few days, and I hoped it would settle once I got moving. It didn't. But with a Kona slot on the line, I wasn't going to pull out at the start.
 
-My back is also a recurring issue — it tightens up on long rides and gets significantly worse on hilly terrain. Lake Placid's bike course has 2,500m of climbing. I knew that was a risk going in. I took it anyway.
+My back is also a recurring problem. It tightens on long rides and gets much worse on hilly terrain. Lake Placid's bike course has 2,500m of climbing. I knew that was a risk. I took it anyway.
 
 ---
 
@@ -30,52 +30,52 @@ My back is also a recurring issue — it tightens up on long rides and gets sign
 
 ## Swim
 
-59:16 — a personal best. Sub-hour for the first time.
+59:16, a personal best and my first sub-hour swim.
 
-I've been building swim fitness all year and it showed. Clean exit, felt in control, came out of the water ready to race. If the day had ended there it would have been one of the best swims I've had.
+I've been building swim fitness all year and it showed. Clean exit, in control, out of the water ready to race. If the day had ended there, it would have been one of my best swims.
 
 ---
 
 ## Bike
 
-5:04:11 on a windy day — my best time on this course.
+5:04:11 on a windy day, my best time on this course.
 
-That's worth sitting with for a second. Lake Placid's bike course is not easy. 2,500m of climbing, long rollers, and on this day real wind to deal with on top of it. And I put down my fastest time ever on it.
+That's worth a moment. Lake Placid's bike course isn't easy: 2,500m of climbing, long rollers, and on this day real wind on top. And I rode my fastest time on it.
 
-The fitness from the January-through-June block was real. All those long Z2 rides, the Z4 interval sessions, the brick combos — it was there on race day.
+The fitness from the January-to-June block was real. All the long Z2 rides, the Z4 intervals, the bricks: it showed up on race day.
 
-My back started tightening up significantly in the second half of the bike. By the time I got to T2, it was already a concern.
+My back started tightening badly in the second half of the ride. By T2 it was already a concern.
 
 ---
 
 ## Run
 
-I ran through the halfway mark. 1:38:31 for the first 25 km, which is a solid Ironman marathon split if you're going to finish.
+I made it past halfway. 1:38:31 for the first 25 km, a solid split for an Ironman marathon if you're going to finish.
 
-But the stomach issues that had been present all morning got worse on the run, and my back pain reached the point where maintaining form was a real problem. At around 25 km I made the call to stop.
+But the stomach problems that had been there all morning got worse on the run, and my back pain got to the point where holding form was a real problem. Around 25 km, I stopped.
 
 DNF.
 
-It's the right call when continuing would mean serious injury risk or something worse. I know that. But knowing it doesn't make standing at mile 15 of an Ironman marathon — chasing a Kona slot — and deciding not to finish any easier.
+It's the right call when continuing means a real risk of serious injury or worse. I know that. But knowing it doesn't make it easier to stand at mile 15 of an Ironman marathon, chasing a Kona slot, and decide not to finish.
 
 ---
 
 ## What Went Wrong
 
-Two things, and they compounded each other.
+Two things, and they made each other worse.
 
-**Stomach**: I knew going into race morning there was a problem. In hindsight, that was probably enough information to make a different decision. Racing through a GI issue that's already present before the start is a difficult proposition — the exertion makes it worse, and a full Ironman is a very long time to manage something that's already off the rails.
+**Stomach**: I knew on race morning there was a problem. In hindsight, that was probably enough to make a different decision. Racing through a GI issue that's already there before the start is hard. The effort makes it worse, and a full Ironman is a very long time to manage something that's already gone wrong.
 
-**Back**: The hills on the Lake Placid bike course are exactly the kind of prolonged climbing that aggravates my back. It's a recurring issue and I underestimated how much 5+ hours of hilly riding would load it before the run even started.
+**Back**: The long climbs on the Lake Placid bike course are exactly what aggravates my back. It's a recurring issue, and I underestimated how much 5+ hours of hilly riding would load it before the run even started.
 
-Neither of these is a fitness problem. The fitness was clearly there — the swim PR and the bike best time on a windy day prove that. I'm proud of how the first two disciplines went. These are body management problems, and they're worth taking seriously going into whatever comes next.
+Neither is a fitness problem. The swim PR and the bike best on a windy day show the fitness was there, and I'm proud of how the first two legs went. **These are body management problems**, and they're worth taking seriously for whatever comes next.
 
 ---
 
 ## What's Next
 
-For now: Kona. My father earned a slot earlier this year and I'll be there to support him. That's a good reason to be in Hawaii and a good way to stay connected to the sport while I figure out what direction I want to go next.
+For now: Kona. My father earned a slot earlier this year, and I'll be there to support him. That's a good reason to be in Hawaii and a good way to stay connected to the sport while I figure out where to go next.
 
-The harder question is what my next athletic target looks like. Ironman training gives me structure — a clear goal, a training plan with purpose, a reason to get on the bike at 5am. Without it, I need to find something that does the same thing.
+The harder question is what my next athletic target looks like. Ironman training gives me structure: a clear goal, a plan with purpose, a reason to get on the bike at 5am. Without it, I need something that does the same.
 
-I don't have the answer yet. But the swim PR and the bike best time tell me the fitness is there. Whatever comes next, the base doesn't disappear.
+I don't have the answer yet. But the swim PR and the bike best tell me the fitness is there. Whatever comes next, the base doesn't go away.

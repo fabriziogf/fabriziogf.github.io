@@ -2,30 +2,30 @@
 title: "Building a World Cup Prediction Model — Part 4: Testing the Models"
 ---
 
-Over the first three parts of this series I built the full predictive pipeline: the [Monte Carlo tournament simulator](/World_Cup_prediction_model_part1/), the [feature engineering pipeline](/World_Cup_prediction_model_part2/), and the [backtesting and calibration framework](/World_Cup_prediction_model_part3/).
+In the first three parts I built the full pipeline: the [Monte Carlo tournament simulator](/World_Cup_prediction_model_part1/), the [feature pipeline](/World_Cup_prediction_model_part2/), and the [backtesting and calibration framework](/World_Cup_prediction_model_part3/).
 
-Every one of those modules came with an ad-hoc smoke test — a one-off script to confirm it runs and the numbers look sane. That's fine for initial development. But it doesn't protect against regressions. The moment someone tweaks a K-factor or refactors the bracket seeding, those smoke tests are gone and nothing catches the break.
+Each module came with an ad-hoc smoke test, a one-off script to check that it runs and the numbers look sane. That's fine during early development, but it doesn't catch regressions. Once someone tweaks a K-factor or refactors bracket seeding, those scripts are long gone and nothing flags the break.
 
-Part 4 turns those informal checks into a permanent, automated safety net: a pytest suite that runs in seconds and verifies the mathematical guarantees each model is supposed to uphold.
-
----
-
-## Testing philosophy for statistical models
-
-Testing probabilistic models is different from testing ordinary application code. You usually can't assert exact output values — a Monte Carlo simulation gives slightly different numbers every run, and a fitted model's parameters depend on optimisation details.
-
-Instead, you test **invariants** — properties that must hold no matter what:
-
-- **Structural invariants**: probabilities sum to 1, score matrices normalise, every team appears exactly once
-- **Directional invariants**: a stronger team must have a higher win probability than a weaker one; a higher-stakes match must move ratings more than a friendly
-- **Conservation laws**: Elo is zero-sum, so total points in the system never change
-- **Boundary behaviour**: edge cases like the Dixon-Coles tau correction return exact, known values
-
-These hold regardless of the random seed or the exact fitted parameters, which makes them reliable test targets.
+Part 4 turns those informal checks into an automated safety net: a pytest suite that verifies the mathematical guarantees each model is supposed to keep.
 
 ---
 
-## The suite at a glance
+## Testing statistical models
+
+Testing probabilistic models isn't like testing regular application code. You usually can't assert exact outputs. A Monte Carlo simulation gives slightly different numbers each run, and fitted parameters depend on optimizer details.
+
+So you test **invariants**, properties that must hold no matter what:
+
+- **Structural**: probabilities sum to 1, score matrices normalize, every team appears exactly once
+- **Directional**: a stronger team has a higher win probability than a weaker one; a high-stakes match moves ratings more than a friendly
+- **Conservation**: Elo is zero-sum, so total points in the system never change
+- **Boundaries**: edge cases like the Dixon-Coles tau correction return exact, known values
+
+These hold regardless of random seed or fitted parameters, which makes them reliable test targets.
+
+---
+
+## The suite
 
 ```
 tests/
@@ -34,7 +34,7 @@ tests/
 └── test_simulate.py   # 8 tests — bracket simulator
 ```
 
-25 tests total, all passing in ~87 seconds.
+25 tests, all passing in about 87 seconds.
 
 ```
 ======================== 25 passed in 86.73s (0:01:26) =========================
@@ -42,9 +42,9 @@ tests/
 
 ---
 
-## `test_elo.py` — Rating dynamics
+## `test_elo.py`: rating dynamics
 
-The Elo system is deterministic, so these tests can assert precise behaviour.
+Elo is deterministic, so these tests can assert exact behavior.
 
 | Test | What it verifies |
 |------|------------------|
@@ -57,7 +57,7 @@ The Elo system is deterministic, so these tests can assert precise behaviour.
 | `test_predict_probabilities_sum_to_one` | `predict()` home/draw/away probabilities sum to 1 |
 | `test_stronger_team_higher_win_prob` | A team with several wins is favoured over its victims |
 
-The zero-sum test is the most important — it's the mathematical heart of Elo. If a refactor ever broke the symmetry of the rating update, this catches it immediately:
+The zero-sum test matters most. It's the mathematical core of Elo. If a refactor ever breaks the symmetry of the update, this catches it right away:
 
 ```python
 def test_total_elo_is_constant(simple_matches):
@@ -70,9 +70,9 @@ def test_total_elo_is_constant(simple_matches):
 
 ---
 
-## `test_poisson.py` — The scoreline model
+## `test_poisson.py`: the scoreline model
 
-The Dixon-Coles model is fitted via maximum likelihood, which is the slow part of the suite. To keep things fast, the fitted model is built **once** as a module-scoped fixture and shared across all nine tests:
+Dixon-Coles is fit by maximum likelihood, the slow part of the suite. To keep it fast, the model is fit **once** as a module-scoped fixture and shared by all nine tests:
 
 ```python
 @pytest.fixture(scope="module")
@@ -84,7 +84,7 @@ def fitted_model():
     return model
 ```
 
-The synthetic data is generated with known latent strengths (Brazil > Germany > France > Chile), which lets us assert the model *recovers* that ordering.
+The synthetic data uses known strengths (Brazil > Germany > France > Chile), so I can check that the model *recovers* that order.
 
 | Test | What it verifies |
 |------|------------------|
@@ -98,7 +98,7 @@ The synthetic data is generated with known latent strengths (Brazil > Germany > 
 | `test_tau_edge_cases` | The Dixon-Coles correction returns exact values |
 | `test_predict_unfitted_raises` | Predicting before fitting raises a clear error |
 
-The tau correction test is a good example of testing exact boundary behaviour. The Dixon-Coles low-score adjustment has a precise closed form for each of the four corrected scorelines:
+The tau test is a good example of checking exact boundary behavior. The Dixon-Coles low-score adjustment has a closed form for each of the four corrected scorelines:
 
 ```python
 def test_tau_edge_cases():
@@ -112,11 +112,11 @@ def test_tau_edge_cases():
 
 ---
 
-## `test_simulate.py` — The bracket simulator
+## `test_simulate.py`: the bracket simulator
 
-Testing the simulator had a performance problem: it needs a fitted Dixon-Coles model covering all 32 teams, and fitting that via MLE on a full round-robin would take minutes — too slow for a test suite.
+The simulator tests had a speed problem. They need a fitted Dixon-Coles model covering all 32 teams, and fitting that by MLE on a full round-robin takes minutes. Too slow for a test suite.
 
-The solution was to **bypass the fit entirely and inject hand-crafted parameters**. The simulator only ever reads `params_`, `teams_`, and `is_fitted_`, so you can construct a model with engineered attack/defense values directly:
+The fix was to **skip the fit and inject hand-made parameters**. The simulator only reads `params_`, `teams_`, and `is_fitted_`, so I can build a model with engineered attack and defense values directly:
 
 ```python
 def _engineered_model() -> DixonColes:
@@ -130,7 +130,7 @@ def _engineered_model() -> DixonColes:
     return model
 ```
 
-This makes the simulator tests fast and deterministic (via a fixed seed), while still exercising the full bracket logic.
+That keeps the simulator tests fast and deterministic (with a fixed seed) while still running the full bracket logic.
 
 | Test | What it verifies |
 |------|------------------|
@@ -143,7 +143,7 @@ This makes the simulator tests fast and deterministic (via a fixed seed), while 
 | `test_mid_tournament_update_changes_probabilities` | A team that loses all group games collapses to 0% |
 | `test_known_result_respected_in_group` | A team handed 9 points reliably advances (>90%) |
 
-The mid-tournament test is the most valuable. It validates the `simulate_from_current()` feature from Part 1 — the one that lets the model update live as results come in. By feeding in three group-stage losses for the favourite, we confirm its championship probability drops to exactly zero:
+The mid-tournament test is the most valuable. It checks `simulate_from_current()` from Part 1, the feature that updates the model live as results come in. Feeding in three group-stage losses for the favourite should drop its title chances to exactly zero:
 
 ```python
 def test_mid_tournament_update_changes_probabilities():
@@ -156,21 +156,21 @@ def test_mid_tournament_update_changes_probabilities():
 
 ---
 
-## Lessons from writing these tests
+## Lessons
 
-**Inject, don't fit.** When the expensive part of a system isn't what you're testing, construct the object's state directly. The simulator tests run in seconds because they never touch the optimiser.
+**Inject, don't fit.** When the expensive part of a system isn't what you're testing, build the object's state directly. The simulator tests run in seconds because they never touch the optimizer.
 
-**Test invariants, not values.** You can't assert "Brazil wins 18.3% of the time" — that's seed-dependent. But you can assert "Brazil wins more than Tonga" and "all probabilities sum to 1." Those hold forever.
+**Test invariants, not values.** You can't assert "Brazil wins 18.3% of the time." That depends on the seed. But you can assert "Brazil wins more than Tonga" and "all probabilities sum to 1." Those always hold.
 
-**Seed everything random.** Every simulator test passes a fixed seed, so a failure is reproducible rather than a flaky once-in-ten event.
+**Seed everything random.** Every simulator test uses a fixed seed, so a failure is reproducible instead of a flaky one-in-ten event.
 
-**Share expensive fixtures.** The module-scoped `fitted_model` fixture fits Dixon-Coles once and reuses it across nine tests, instead of paying the fit cost nine times.
+**Share expensive fixtures.** The module-scoped `fitted_model` fits Dixon-Coles once and reuses it across nine tests instead of paying for the fit nine times.
 
 ---
 
-## The project, complete
+## Where the project stands
 
-With the test suite in place, all four modules are built, verified, and on `main`:
+With the tests in place, every module is built, verified, and on `main`:
 
 ```
 ✅ src/elo.py         — Elo ratings
@@ -181,4 +181,4 @@ With the test suite in place, all four modules are built, verified, and on `main
 ✅ tests/             — 25 passing tests
 ```
 
-The foundation is solid enough to build on. The natural next step is the **XGBoost prediction layer** that consumes the `FeatureBuilder` output — and when that lands, it'll come with its own tests validated against the same Brier-score backtests from Part 3.
+The foundation is solid enough to build on. The next step is the **XGBoost layer** that consumes `FeatureBuilder` output. When it lands, it'll come with its own tests, checked against the same Brier-score backtests from Part 3.

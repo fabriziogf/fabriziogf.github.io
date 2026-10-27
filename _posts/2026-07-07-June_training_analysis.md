@@ -2,11 +2,11 @@
 title: "June 2026 Training Analysis"
 ---
 
-June was structured around one fixed point: Rockford 70.3 on June 14. Everything before it was a short pre-race taper. Everything after was the final build into Ironman Lake Placid on July 19.
+June was built around one fixed point: Rockford 70.3 on June 14. Everything before it was a short pre-race taper. Everything after was the final build to Ironman Lake Placid on July 19.
 
-The month went roughly as planned. I raced Rockford in 4:08:01 (4th AG, 12th overall), felt flat in the way you feel flat when you're mid-Ironman-build, recovered quickly, and put in the last big training week before the taper started. CTL is now dropping toward race day, TSB is climbing, and nothing is broken.
+The month went roughly to plan. I raced Rockford in 4:08:01 (4th AG, 12th overall), felt flat the way you do mid-Ironman build, recovered quickly, and put in the last big week before the taper. CTL is now easing toward race day, TSB is climbing, and nothing is broken.
 
-Two weeks out from Lake Placid.
+Two weeks to Lake Placid.
 
 ---
 
@@ -22,7 +22,7 @@ Two weeks out from Lake Placid.
 | End-of-month ATL | 107.9 |
 | End-of-month TSB | +17.2 |
 
-TSS was down from the previous two months, which is the point. The block peaked in April and May; June was about maintaining fitness while absorbing the race and transitioning into taper mode. The positive TSB at month end — +17.2 — is the first time form has been positive since early in the year. The body is starting to feel fresh again.
+TSS was down from the previous two months, and that's the point. The block peaked in April and May. June was about holding fitness while absorbing the race and moving into the taper. The +17.2 TSB at month end is the first positive form since early in the year. I'm starting to feel fresh again.
 
 ---
 
@@ -36,18 +36,18 @@ TSS was down from the previous two months, which is the point. The block peaked 
 | Jun 22–28 | 844 |
 | Jun 29–Jul 4 | 584 |
 
-The Jun 8–14 week looks like a big week but that's Rockford (419 TSS in a single day) plus the pre-race tune-up sessions. The real last hard week was Jun 22–28 at 844 TSS — long rides, brick sessions, and two long runs. That was the final training stimulus before taper began.
+Jun 8–14 looks big, but that's Rockford (419 TSS in one day) plus pre-race tune-up sessions. The real last hard week was Jun 22–28 at 844 TSS: long rides, bricks, and two long runs. That was the final training stimulus before the taper.
 
 ---
 
 ## Swim
 
-Twelve sessions, consistent aerobic work throughout. Nothing dramatic — which is exactly right when bike and run are carrying the load heading into an Ironman.
+Twelve sessions of steady aerobic work. Nothing dramatic, which is right when the bike and run carry the load into an Ironman.
 
-- **Pre-race sessions**: reduced intensity in the week before Rockford (Intensidade reduzida), then a short warm-up swim at the race venue on June 13
-- **Rockford swim**: 1,900m in 22:19 — clean race execution
-- **Post-race return**: back in the water June 16, two days after the race, at reduced effort
-- **Build sessions**: Progressivo A1→A2→A3 (Jun 24), 2×10×100m A3 and A1→A2 (Jul 1), 12×150m varying intensity (Jul 3) — keeping speed work in the schedule through taper
+- **Pre-race**: reduced intensity the week before Rockford (Intensidade reduzida), then a short warm-up swim at the venue on June 13
+- **Rockford swim**: 1,900m in 22:19, clean execution
+- **Back in the water**: June 16, two days after the race, at easy effort
+- **Build sessions**: Progressivo A1→A2→A3 (Jun 24), 2×10×100m A3 and A1→A2 (Jul 1), 12×150m varying intensity (Jul 3), keeping some speed work through the taper
 
 Swim fitness is where it needs to be for Lake Placid.
 
@@ -55,49 +55,49 @@ Swim fitness is where it needs to be for Lake Placid.
 
 ## Bike
 
-The bike was the dominant discipline this month, as it should be for Ironman prep. 15 sessions, 33.8 hours, 1,188 km.
+The bike was the main discipline this month, as it should be for Ironman prep. 15 sessions, 33.8 hours, 1,188 km.
 
-The structure broke into three clear phases:
+It broke into clear phases:
 
-**Pre-race taper** (Jun 8–13): a structured pre-race bike on Jun 12 (40 km) and active recovery only. Legs fresh for the start line.
+**Pre-race taper** (Jun 8–13): a structured pre-race ride on Jun 12 (40 km) and active recovery only. Fresh legs for the start line.
 
-**Rockford** (Jun 14): 90.4 km in 2:15, IF 0.80 — deliberately conservative to protect the run and leave room for training the following week.
+**Rockford** (Jun 14): 90.4 km in 2:15, IF 0.80. Deliberately conservative to protect the run and leave room to train the next week.
 
-**Final build** (Jun 20–28): this is where the real work happened.
-- Jun 20: 160 km, 4:49h Z2 — the longest ride of the block, "Retomando as 5 horas"
+**Final build** (Jun 20–28): where the real work happened.
+- Jun 20: 160 km, 4:49h Z2, the longest ride of the block ("Retomando as 5 horas")
 - Jun 23: intervals with a brick run
-- Jun 26: 104 km Z2→Z3 with a brick run off the back
+- Jun 26: 104 km Z2→Z3 with a brick run off the bike
 
-The long rides in the final build week are the ones that matter most for Lake Placid. The bike course there has 2,500m of climbing. Time in the saddle, especially on hilly terrain, is the specific prep that doesn't have a shortcut.
+The long rides in that final week matter most for Lake Placid. The bike course has 2,500m of climbing, and time in the saddle on hilly terrain is prep with no shortcut.
 
-**Taper** (Jun 29–Jul 4): rides dropping to 60–70 km at Zone 2. Easy cadence work on Jul 2, a recovery spin on Jul 4. Effort coming down, freshness coming up.
+**Taper** (Jun 29–Jul 4): rides down to 60–70 km in Zone 2. Easy cadence work on Jul 2, a recovery spin on Jul 4. Effort coming down, freshness coming up.
 
 ---
 
 ## Run
 
-Fifteen sessions, 15.1h, 190 km. Two big long runs anchored the final build week.
+Fifteen sessions, 15.1h, 190 km. Two long runs anchored the final build week.
 
-- **Jun 21: 27.8 km long run** — the first proper long run since the race, three days after Rockford. A good sign that recovery was fast.
-- **Jun 27: 28.2 km long run** ("Longão") — the last long run before Lake Placid. This one matters. Running 28 km in training, fresh enough to hold form, is the proof of work that shows up in the back half of an Ironman marathon.
-- **Brick runs**: Jun 23, Jun 26, Jun 30 all included runs off the bike — 10–11 km each, practicing the T2 transition and the specific fatigue pattern of running on tired legs.
-- **Post-race recovery**: a light 5 km jog on Jun 17, two days after Rockford, keeping the legs moving without digging a hole.
+- **Jun 21: 27.8 km long run**: the first proper long run since the race, a week after Rockford. A good sign that recovery was quick.
+- **Jun 27: 28.2 km long run** ("Longão"): the last long run before Lake Placid. This one matters. Running 28 km in training while holding form is the proof of work that shows up in the back half of an Ironman marathon.
+- **Brick runs**: Jun 23, Jun 26, and Jun 30 all had runs off the bike, 10–11 km each, practicing T2 and running on tired legs.
+- **Post-race recovery**: an easy 5 km jog on Jun 17, three days after Rockford, to keep the legs moving without digging a hole.
 
-The taper runs in early July are genuinely easy — short, relaxed pace. The work is done.
+The taper runs in early July are truly easy: short and relaxed. The work is done.
 
 ---
 
 ## Strength
 
-Four sessions across the month. Frequency dropped compared to April and May, which is intentional during taper. The goal shifts from building capacity to maintaining what's there without adding unnecessary fatigue.
+Four sessions. Fewer than April and May, on purpose during the taper. The goal shifts from building capacity to keeping it without adding fatigue.
 
 ---
 
 ## Fitness Metrics at End of Month
 
-CTL dropped from 140.5 in May to 131.6 at month end. That's the taper working as intended — a small drop in fitness in exchange for a meaningful rise in freshness. TSB moving from -20 in April to +17 now shows the full arc: deep fatigue during the build, then a controlled recovery as the target race approaches.
+CTL dropped from 140.5 in May to 131.6. That's the taper working: a small loss of fitness for a real gain in freshness. TSB going from -20 in April to +17 now shows the full arc, deep fatigue during the build, then controlled recovery as the target race gets close.
 
-The CTL progression across six months:
+CTL across six months:
 
 | Month end | CTL |
 |-----------|-----|
@@ -108,14 +108,14 @@ The CTL progression across six months:
 | May | 140.5 |
 | June | 131.6 |
 
-The slight drop in June is fine. At 131, the fitness is still well above what most age-groupers race Ironman at. The difference between 131 and 140 matters less than the TSB — and right now the TSB is telling a good story.
+The small drop in June is fine. At 131, fitness is still well above what most age-groupers race Ironman on. **The gap between 131 and 140 matters less than TSB, and TSB looks good right now.**
 
 ---
 
 ## What's Next
 
-Ironman Lake Placid is July 19. Two weeks away.
+Ironman Lake Placid is July 19, two weeks away.
 
-This week is the final taper week — easy sessions, short efforts, no intensity. The goal is to let ATL keep dropping while CTL holds as long as possible. By race morning, the plan is to have a TSB somewhere in the +20 to +30 range: rested enough to feel sharp, but not so tapered that the legs feel dead from inactivity.
+This is the last taper week: easy sessions, short efforts, no intensity. The goal is to let ATL keep falling while CTL holds as long as possible. By race morning I want TSB somewhere between +20 and +30: rested enough to feel sharp, not so tapered that my legs feel dead.
 
 Six months of work comes down to one day.
