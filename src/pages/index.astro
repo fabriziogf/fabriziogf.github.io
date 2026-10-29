@@ -150,6 +150,11 @@ const trainingDays = calSource.map((d) => ({
       </div>
     </section>
 
+    <section class="listening">
+      <p class="micro-label"><span class="dot" style="background: var(--ink)"></span>Listening to</p>
+      <iframe style="border-radius: 12px" width="100%" height="152" title="Spotify Embed: Frontier AI Brief" frameborder="0" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" src="https://open.spotify.com/embed/playlist/0M3oHqLkZxNA9EPu6Nl02d?utm_source=oembed"></iframe>
+    </section>
+
   </div>
 </Base>
 
@@ -314,6 +319,14 @@ const trainingDays = calSource.map((d) => ({
     font-size: 15px;
     font-weight: 700;
     color: var(--ink);
+  }
+
+  .listening {
+    padding: 28px 0 30px;
+  }
+
+  .listening iframe {
+    display: block;
   }
 
   @media (max-width: 860px) {
