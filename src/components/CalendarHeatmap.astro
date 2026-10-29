@@ -63,17 +63,22 @@ for (const c of cells) {
   if (!held || c.date < held) firstDayOfWeek.set(c.week, c.date);
 }
 
-const monthTicks: { x: number; label: string }[] = [];
-let labelled = -1;
+const starts: { week: number; month: number }[] = [];
 for (let w = 0; w < weeks; w++) {
   const date = firstDayOfWeek.get(w);
   if (!date) continue;
   const month = Number(date.slice(5, 7)) - 1;
-  if (month === labelled) continue;
-  labelled = month;
-  const x = w * PITCH;
-  if (x < gridW - PITCH) monthTicks.push({ x, label: MONTHS[month] });
+  if (month !== starts[starts.length - 1]?.month) starts.push({ week: w, month });
 }
+
+// A label is ~25 units wide at MONTH_FONT, nearly two columns. Interior months
+// always span 4+ columns, but the partial months at either edge of the rolling
+// window can get one or two, so their label would run into the next one (or
+// off the end). Those edge months go unlabelled until they have room.
+const MIN_LABEL_WEEKS = 3;
+const monthTicks = starts
+  .filter((s, i) => (starts[i + 1]?.week ?? weeks) - s.week >= MIN_LABEL_WEEKS)
+  .map((s) => ({ x: s.week * PITCH, label: MONTHS[s.month] }));
 ---
 
 <div class="cal-wrap">
